@@ -1,4 +1,3 @@
-import form.FormularioUsuario;
 import lib.basic.Alignment;
 import lib.basic.Style;
 import lib.img.Image;
@@ -12,14 +11,24 @@ import lib.shapes.Cross;
 import lib.tables.Cell;
 import lib.tables.Column;
 import lib.text.MultipleParagraph;
+import services.GeneradorFormulariosService;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
 public class Main {
+    public static GeneradorFormulariosService service = new GeneradorFormulariosService();
+
     public static void main(String ...args) throws IOException {
-        prueba();
+        //service.FormularioInformacionUsuario();
+        //"\u21B5"
+        //service.FormularioInformacionSucursal();
+        //service.FormularioAjustesSistema();
+        //service.FormularioAfiliacion();
+        //service.FormularioDesafiliacion();
+
+        //service.FormularioInformacionPerfil();
     }
 
     public static void prueba() throws IOException {

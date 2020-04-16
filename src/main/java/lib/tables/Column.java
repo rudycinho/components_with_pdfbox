@@ -98,10 +98,11 @@ public class Column implements Component {
 
             cell.setDX(dx);
             cell.setDY(-dy);
-
             cell.rebuild();
+
             column.cells.add(cell);
             column.width += cell.getWidth();
+
             return this;
         }
 

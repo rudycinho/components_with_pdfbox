@@ -26,6 +26,22 @@ public class Cell implements Component {
     private float dX = 0;
     private float dY = 0;
 
+    public void setHasMargin(boolean hasMargin) {
+        this.hasMargin = hasMargin;
+    }
+
+    public void setHasFilling(boolean hasFilling) {
+        this.hasFilling = hasFilling;
+    }
+
+    public void setColorMargin(Color colorMargin) {
+        this.colorMargin = colorMargin;
+    }
+
+    public void setColorFilling(Color colorFilling) {
+        this.colorFilling = colorFilling;
+    }
+
     private Cell(){ }
 
     public void setHeight(float height) {

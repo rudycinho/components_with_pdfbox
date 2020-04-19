@@ -1,3 +1,4 @@
+import com.lowagie.text.DocumentException;
 import lib.basic.Alignment;
 import lib.basic.Style;
 import lib.img.Image;
@@ -20,15 +21,19 @@ import java.io.IOException;
 public class Main {
     public static GeneradorFormulariosService service = new GeneradorFormulariosService();
 
-    public static void main(String ...args) throws IOException {
-        //service.FormularioInformacionUsuario();
+    public static void main(String ...args) throws IOException, DocumentException {
         //"\u21B5"
-        //service.FormularioInformacionSucursal();
-        //service.FormularioAjustesSistema();
-        //service.FormularioAfiliacion();
-        //service.FormularioDesafiliacion();
+        service.FormularioInformacionUsuario();
+        service.FormularioInformacionSucursal();
+        service.FormularioAjustesSistema();
+        service.FormularioAfiliacion();
+        service.FormularioDesafiliacion();
+        service.FormularioInformacionPerfil();
+        service.FormularioPrecalificadorPrestamos();
+        service.FormularioPlanPagos();
+        service.FormularioRequisitosSolicitudCredito();
+        service.FormularioDefinicionCredito();
 
-        //service.FormularioInformacionPerfil();
     }
 
     public static void prueba() throws IOException {

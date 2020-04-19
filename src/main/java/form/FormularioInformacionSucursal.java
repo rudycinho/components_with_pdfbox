@@ -41,7 +41,8 @@ public class FormularioInformacionSucursal {
 
 		contentStream.close();
 
-		doc.save(new File("/home/rudy/example.pdf"));
+		doc.save(new File(ruta));
+		doc.close();
 	}
 
 

@@ -19,7 +19,7 @@ public class Fecha{
 		int mes = calendario.get(Calendar.MONTH) + 1;
 		int anio = calendario.get(Calendar.YEAR);
 		
-		int hora = calendario.get(Calendar.HOUR);
+		int hora = calendario.get(Calendar.HOUR_OF_DAY);
 		int minuto = calendario.get(Calendar.MINUTE);
 		int segundo = calendario.get(Calendar.SECOND);
 		

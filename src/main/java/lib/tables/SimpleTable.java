@@ -108,6 +108,12 @@ public class SimpleTable implements Component {
             return this;
         }
 
+        public SimpleTable.SimpleTableBuilder addColumns(List<Column> columns){
+            for(Column column : columns)
+                addColumn(column);
+            return this;
+        }
+
         public SimpleTable build(){
             float auxY = 0;
 

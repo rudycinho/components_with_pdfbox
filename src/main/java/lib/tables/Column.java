@@ -36,6 +36,9 @@ public class Column implements Component {
         return height;
     }
 
+    public List<Cell> getCells() {
+        return cells;
+    }
     @Override
     public void setDX(float dX) {
         this.dX = dX;
@@ -103,6 +106,12 @@ public class Column implements Component {
             column.cells.add(cell);
             column.width += cell.getWidth();
 
+            return this;
+        }
+
+        public ColumnBuilder addCells(List<Cell> cells){
+            for(Cell cell : cells)
+                addCell(cell);
             return this;
         }
 

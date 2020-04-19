@@ -1,7 +1,8 @@
-package form;
+package form.complex;
 
 import dto.SucursalDTO;
 import dto.UsuarioDTO;
+import dto.complex.DefinicionCreditoDTO;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -12,13 +13,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
-public class FormularioInformacionUsuario {
+public class FormularioDefinicionCredito {
 
-    public FormularioInformacionUsuario(String ruta,
-                                        UsuarioDTO usuarioEditado,
-                                        UsuarioDTO usuarioEditor,
-                                        SucursalDTO sucursal,
-                                        Date fechaExportacion) throws IOException {
+    public FormularioDefinicionCredito(
+            String ruta,
+            DefinicionCreditoDTO definicion,
+            UsuarioDTO usuarioEditor,
+            SucursalDTO sucursal,
+            Date fechaExportacion) throws IOException {
 
         PDDocument doc = new PDDocument();
         PDPage page = new PDPage(new PDRectangle(PDRectangle.LETTER.getWidth(),PDRectangle.LETTER.getHeight()));
@@ -33,18 +35,15 @@ public class FormularioInformacionUsuario {
         GeneradorFormularioFactory.crearInfo(contentStream,sucursal);
         GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion);
         GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor);
-        GeneradorFormularioFactory.crearTitulo(contentStream,"DATOS DE REGISTRO\nDE USUARIO DEL SISTEMA");
+        GeneradorFormularioFactory.crearTitulo(contentStream,"DOCUMENTOS INICIALES\nRECEPCIONADOS");
 
-        GeneradorFormularioFactory.crearSubTituloUsuario(contentStream);
-        GeneradorFormularioFactory.crearFechaRegistroUsuario(contentStream, usuarioEditado);
-        GeneradorFormularioFactory.crearDatosUsuario(contentStream,usuarioEditado);
 
-        GeneradorFormularioFactory.crearObservacionesUsuario(contentStream, usuarioEditado);
+        GeneradorFormularioFactory.crearDatosAfiliadoDefinicion(contentStream, definicion);
+        GeneradorFormularioFactory.crearDetallesDefinicion(contentStream, definicion);
 
         contentStream.close();
 
         doc.save(new File(ruta));
         doc.close();
     }
-
 }

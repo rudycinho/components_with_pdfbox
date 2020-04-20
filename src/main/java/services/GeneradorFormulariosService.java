@@ -9,7 +9,7 @@ import form.*;
 import form.FormularioPlanPagos;
 import form.FormularioPrecalificadorPrestamos;
 import form.FormularioRequisitosSolicitudCredito;
-import form.complex.FormularioDefinicionCredito;
+import form.FormularioDefinicionCredito;
 import utils.Fecha;
 
 import java.io.IOException;
@@ -19,7 +19,7 @@ import java.util.List;
 
 public class GeneradorFormulariosService {
 	
-	private final String DEST = "/home/rudy/times";
+	private final String DEST = "/home/rudy/empresasim/docs";
 
 	public String FormularioInformacionUsuario() throws IOException {
 

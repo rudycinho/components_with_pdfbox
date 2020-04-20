@@ -12,7 +12,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 
-import utils.GeneradorFormularioFactory;
+import utils.factories.GeneradorFormularioFactory;
 
 public class FormularioSolicitudCreditoVivienda {
 	public FormularioSolicitudCreditoVivienda(

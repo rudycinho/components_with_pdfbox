@@ -1,4 +1,4 @@
-package utils;
+package utils.factories;
 
 import dto.*;
 import dto.PlanDePagosDTO;
@@ -20,6 +20,8 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import utils.Fecha;
+import utils.factories.EasyComponentsFactory;
 
 import java.awt.Color;
 import java.io.IOException;
@@ -30,7 +32,6 @@ public class GeneradorFormularioFactory {
     private static float maxX = 0;
 
     private static float thickness         = 15f;
-    private static int thickness2          = 10;
 
     private static float marginStartX      = 50f;
     private static float marginEndX        = 25f;
@@ -47,10 +48,9 @@ public class GeneradorFormularioFactory {
     private static final String imagenCovipol =
             "/home/rudy/covipol.png";
 
-    public GeneradorFormularioFactory() throws IOException {
-    }
     // private static final String flechaNorte =
     //        "./src/main/resources/north_arrow.png";
+
 
     // METODOS BASICOS
     public static void setDimensiones(float width, float height) {

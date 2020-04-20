@@ -1,6 +1,6 @@
 package utils;
 
 public enum TipoGarantiaEnum {
-	REAL,
-	PERSONAL
+    REAL,
+    PERSONAL
 }

@@ -8,7 +8,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import utils.GeneradorFormularioFactory;
+import utils.factories.GeneradorFormularioFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +33,7 @@ public class FormularioPlanPagos {
         List<PDPageContentStream> contentStreams = new LinkedList<>();
 
         GeneradorFormularioFactory.setDimensiones(PDRectangle.LETTER.getHeight(),PDRectangle.LETTER.getWidth());
-        GeneradorFormularioFactory.setMarginStartX(25);
+        GeneradorFormularioFactory.setMarginStartX(25f);
 
         GeneradorFormularioFactory.crearCabecera(contentStream,doc);
         GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion);

@@ -11,7 +11,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import utils.GeneradorFormularioFactory;
+import utils.factories.GeneradorFormularioFactory;
 
 public class FormularioAjustesSistema {
 
@@ -27,6 +27,7 @@ public class FormularioAjustesSistema {
 		PDPageContentStream contentStream = new PDPageContentStream(doc, page);
 
 		GeneradorFormularioFactory.setDimensiones(PDRectangle.LETTER.getWidth(),PDRectangle.LETTER.getHeight());
+		GeneradorFormularioFactory.setMarginStartX(50f);
 
 		GeneradorFormularioFactory.crearMargen(contentStream);
 		GeneradorFormularioFactory.crearCabecera(contentStream,doc);

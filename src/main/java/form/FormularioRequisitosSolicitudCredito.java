@@ -7,7 +7,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import utils.GeneradorFormularioFactory;
+import utils.factories.GeneradorFormularioFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,6 +24,7 @@ public class FormularioRequisitosSolicitudCredito {
         new ArchivoPDFConDatosHTML(ruta,porcion);
 
         GeneradorFormularioFactory.setDimensiones(PDRectangle.LETTER.getWidth(),PDRectangle.LETTER.getHeight());
+        GeneradorFormularioFactory.setMarginStartX(50f);
 
         File       file= new File(ruta);
         PDDocument doc = PDDocument.load(file);

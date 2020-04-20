@@ -8,7 +8,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import utils.GeneradorFormularioFactory;
+import utils.factories.GeneradorFormularioFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +31,7 @@ public class FormularioAfiliacion {
 		PDPageContentStream contentStream1 = new PDPageContentStream(doc, page1);
 
 		GeneradorFormularioFactory.setDimensiones(PDRectangle.LETTER.getWidth(),PDRectangle.LETTER.getHeight());
+		GeneradorFormularioFactory.setMarginStartX(50f);
 
 		GeneradorFormularioFactory.crearMargen(contentStream1);
 		GeneradorFormularioFactory.crearCabecera(contentStream1,doc);

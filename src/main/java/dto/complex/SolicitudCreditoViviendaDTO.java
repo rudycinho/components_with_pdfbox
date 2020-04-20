@@ -2,9 +2,7 @@ package dto.complex;
 
 import lombok.Getter;
 import lombok.Setter;
-import utils.TipoCreditoEnum;
-import utils.TipoGarantiaEnum;
-import utils.TipoViviendaEnum;
+import utils.enums;
 
 import java.util.Date;
 
@@ -17,10 +15,10 @@ public class SolicitudCreditoViviendaDTO {
 	private String numeroRegistro;
 	
 	// TIPO CREDITO
-	private TipoCreditoEnum tipoCreditoODestinoPrestamoSolicitado;
+	private enums.TipoCreditoEnum tipoCreditoODestinoPrestamoSolicitado;
 	
 	// TIPO GARANTIA
-	private TipoGarantiaEnum tipoGarantia;
+	private enums.TipoGarantiaEnum tipoGarantia;
 	
 	// MONTO PRESTAMO SOLICITADO
 
@@ -69,7 +67,7 @@ public class SolicitudCreditoViviendaDTO {
 
 	private boolean tieneTerrenoPropioSolicitanteDestinoActual;
 	private boolean tieneViviendaPropiaSolicitanteDestinoActual;
-	private TipoViviendaEnum habitaEnViviendaSolicitanteDestinoActual;
+	private enums.TipoViviendaEnum habitaEnViviendaSolicitanteDestinoActual;
 
 	private boolean tienePrestamosTerrenoPropioSolicitanteDestinoActual;
 	private boolean tienePrestamosViviendaPropiaSolicitanteDestinoActual;
@@ -144,10 +142,10 @@ public class SolicitudCreditoViviendaDTO {
 		solicitudDTO.numeroRegistro="1364";
 		
 		// TIPO CREDITO
-		solicitudDTO.tipoCreditoODestinoPrestamoSolicitado = TipoCreditoEnum.COMPRA_TERRENO_VIVIENDA_DEPARTAMENTO;
+		solicitudDTO.tipoCreditoODestinoPrestamoSolicitado = enums.TipoCreditoEnum.COMPRA_TERRENO_VIVIENDA_DEPARTAMENTO;
 		
 		// TIPO GARANTIA
-		solicitudDTO.tipoGarantia = TipoGarantiaEnum.REAL;
+		solicitudDTO.tipoGarantia = enums.TipoGarantiaEnum.REAL;
 		
 		// MONTO PRESTAMO SOLICITADO
 		solicitudDTO.montoPrestamoSolicitadoBs = 10000.00f;
@@ -196,7 +194,7 @@ public class SolicitudCreditoViviendaDTO {
 
 		solicitudDTO.tieneTerrenoPropioSolicitanteDestinoActual = false;
 		solicitudDTO.tieneViviendaPropiaSolicitanteDestinoActual= false; 
-		solicitudDTO.habitaEnViviendaSolicitanteDestinoActual   = TipoViviendaEnum.ALQUILADA;
+		solicitudDTO.habitaEnViviendaSolicitanteDestinoActual   = enums.TipoViviendaEnum.ALQUILADA;
 
 		solicitudDTO.tienePrestamosTerrenoPropioSolicitanteDestinoActual = false;
 		solicitudDTO.tienePrestamosViviendaPropiaSolicitanteDestinoActual= false;

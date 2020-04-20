@@ -18,6 +18,22 @@ public class Cross implements Component {
     private int thickness = 1;
     private Color color   = Color.BLACK;
 
+    public Cross(){ }
+
+    public Cross(Rectangle rectangle) {
+        this.startX = rectangle.getStartX();
+        this.startY = rectangle.getStartY();
+        this.width  = rectangle.getWidth();
+        this.height = rectangle.getHeight();
+    }
+
+    public Cross(float startX, float startY, float width, float height) {
+        this.startX = startX;
+        this.startY = startY;
+        this.width  = width;
+        this.height = height;
+    }
+
     @Override
     public float getStartX() {
         return startX;
@@ -84,6 +100,14 @@ public class Cross implements Component {
 
     public static class CrossBuilder{
         private Cross cross = new Cross();
+
+        public Cross.CrossBuilder addRectangle(Rectangle rectangle){
+            cross.startX = rectangle.getStartX();
+            cross.startY = rectangle.getStartY();
+            cross.width  = rectangle.getWidth();
+            cross.height = rectangle.getHeight();
+            return this;
+        }
 
         public Cross.CrossBuilder addStartX(float startX){
             cross.startX = startX;

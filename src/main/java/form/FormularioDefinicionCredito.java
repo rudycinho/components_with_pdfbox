@@ -2,7 +2,7 @@ package form;
 
 import dto.SucursalDTO;
 import dto.UsuarioDTO;
-import dto.complex.DefinicionCreditoDTO;
+import dto.DefinicionCreditoDTO;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;

@@ -23,7 +23,7 @@ public class Main {
 
     public static void main(String ...args) throws IOException, DocumentException {
         //"\u21B5"
-        service.FormularioInformacionUsuario();
+        /*service.FormularioInformacionUsuario();
         service.FormularioInformacionSucursal();
         service.FormularioAjustesSistema();
         service.FormularioAfiliacion();
@@ -33,6 +33,8 @@ public class Main {
         service.FormularioPlanPagos();
         service.FormularioRequisitosSolicitudCredito();
         service.FormularioDefinicionCredito();
+        */
+        service.FormularioSolicitudCreditoVivienda();
 
     }
 

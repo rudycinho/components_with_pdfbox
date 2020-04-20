@@ -19,6 +19,15 @@ public class Rectangle implements Component {
     private int thickness = 1;
     private Color color   = Color.BLACK;
 
+    public Rectangle(){ }
+
+    public Rectangle(float startX, float startY, float width, float height) {
+        this.startX = startX;
+        this.startY = startY;
+        this.width  = width;
+        this.height = height;
+    }
+
     @Override
     public float getStartX() {
         return startX;

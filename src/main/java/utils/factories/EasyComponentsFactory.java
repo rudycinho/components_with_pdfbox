@@ -186,6 +186,40 @@ import java.util.List;
             return Column.builder().addCells(cells).build();
         }
 
+        public static Column getSimpleColumnFromTextAndWidthsAndStyleAndRelativePosition(
+                List<String> texts,
+                List<Float> widths,
+                Style style,
+                float relativePositionX,
+                float relativePositionY,
+                Alignment alignment, boolean hasMargin) throws IOException {
+
+            java.util.List<Cell> cells = new LinkedList<>();
+            int size = widths.size();
+            for(int i=0; i < size; i++)
+                cells.add(getSimpleCellFromText(texts.get(i),style,widths.get(i), relativePositionX,relativePositionY,alignment,hasMargin));
+
+            return Column.builder().addCells(cells).build();
+        }
+
+        public static Column getSimpleColumnFromTextAndWidthsAndStylesAndRelativePosition(
+                List<String> texts,
+                List<Float> widths,
+                List<Style> styles,
+                float relativePositionX,
+                float relativePositionY,
+                Alignment alignment, boolean hasMargin) throws IOException {
+
+            java.util.List<Cell> cells = new LinkedList<>();
+            int size = widths.size();
+            for(int i=0; i < size; i++)
+                cells.add(getSimpleCellFromText(texts.get(i),styles.get(i),widths.get(i), relativePositionX,relativePositionY,alignment,hasMargin));
+
+            return Column.builder().addCells(cells).build();
+        }
+
+
+
         public static java.util.List<RecursiveTable> getHeaderTable(
                 float startX,
                 float startY,

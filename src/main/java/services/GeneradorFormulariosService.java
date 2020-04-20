@@ -4,7 +4,8 @@ import com.lowagie.text.DocumentException;
 import dto.*;
 import dto.PlanDePagosDTO;
 import dto.EstadoAfiliacionDTO;
-import dto.complex.DefinicionCreditoDTO;
+import dto.DefinicionCreditoDTO;
+import dto.SolicitudCreditoViviendaDTO;
 import form.*;
 import form.FormularioPlanPagos;
 import form.FormularioPrecalificadorPrestamos;
@@ -228,99 +229,23 @@ public class GeneradorFormulariosService {
 
 		return ruta;
 	}
-    /*
-	public String FormularioRequisitosSolicitudCredito(
-			String htmlLiteral,
-			Usuario usuarioEditor) {
 
+	public String FormularioSolicitudCreditoVivienda() throws IOException {
 		Date fechaCreacion = new Date();
-
-		String nombreArchivo = String.format("Formulario_Plan_Pagos_%s_%s.pdf",
-				usuarioEditor.getNombreCompleto().trimñ().replaceAll(" ", "_"),
-				convertirDateToString(fechaCreacion));
-
-		String ruta = String.format("%s%s%s",DEST,"/",nombreArchivo);
-
-		new FormularioRequisitosCredito(ruta,htmlLiteral,usuarioEditor,fechaCreacion);
-		return ruta;
-	}
-
-
-	/*public String FormularioSolicitudCreditoVivienda(
-			Usuario usuarioEditado, 
-			Usuario usuarioEditor) throws IOException {
-		
-		Date fechaCreacion = new Date();
-		
-		String nombreArchivo = String.format("Formulario_Solicitud_Credito_%s_%s_%s.pdf",
-				usuarioEditor.getNombreCompleto().trim().replaceAll(" ", "_"),
-				usuarioEditado.getId(),
-				convertirDateToString(fechaCreacion));
-		
-		String ruta = String.format("%s%s%s",DEST,"/",nombreArchivo);
-		
-		new FormularioUsuario(ruta,usuarioEditado,usuarioEditor,fechaCreacion);
-		
-		new FormularioSolicitudCreditoVivienda(ruta,usuarioEditor,fechaCreacion);
-        return ruta;
-	}
-
-
-
-	// 	COMPLEX
-
-	public String FormularioPlanPagos(
-			PlanDePagos planDePagos,
-			Usuario usuarioEditor) {
-
-		Date fechaCreacion = new Date();
-		String ci = planDePagos.getDictamen().getCi();
-
-		String nombreArchivo = String.format("Formulario_Plan_Pagos_%s_%s_%s.pdf",
-				usuarioEditor.getNombreCompleto().trim().replaceAll(" ", "_"),
-				ci==null ? "no_carnet" : ci.toString().trim().replace(" " , "_"),
-				convertirDateToString(fechaCreacion));
-
-		String ruta = String.format("%s%s%s",DEST,"/",nombreArchivo);
-
-		new FormularioPlanPagos(ruta,planDePagos,usuarioEditor,fechaCreacion);
-        return ruta;
-	}
-
-
-
-	public String FormularioSolicitudCreditoVivienda(
-			Usuario usuarioEditado,
-			Usuario usuarioEditor) throws IOException {
-
-		Date fechaCreacion = new Date();
+		SolicitudCreditoViviendaDTO solicitud = SolicitudCreditoViviendaDTO.getFake();
+		UsuarioDTO usuarioEditor              = UsuarioDTO.getFake();
+		SucursalDTO sucursal                  = SucursalDTO.getFake();
 
 		String nombreArchivo = String.format("Formulario_Solicitud_Credito_%s_%s_%s.pdf",
+				solicitud.getCedulaIdentidadSolicitante().trim().replaceAll(" ", "_"),
 				usuarioEditor.getNombreCompleto().trim().replaceAll(" ", "_"),
-				usuarioEditado.getId(),
-				convertirDateToString(fechaCreacion));
+				new Fecha(fechaCreacion).getFormatoTitulo());
 
 		String ruta = String.format("%s%s%s",DEST,"/",nombreArchivo);
 
-		new FormularioUsuario(ruta,usuarioEditado,usuarioEditor,fechaCreacion);
+		new FormularioSolicitudCreditoVivienda(ruta,solicitud,usuarioEditor,sucursal,fechaCreacion);
 
-		new FormularioSolicitudCreditoVivienda(ruta,usuarioEditor,fechaCreacion);
         return ruta;
 	}
 
-	public String FormularioSolicitudCreditoVivienda(
-			Usuario usuarioEditado,
-			Usuario usuarioEditor) throws IOException {
-
-		Date fechaCreacion = new Date();
-
-		String ruta = String.format("%s%s%s",DEST,"/","form.pdf");
-
-		new FormularioUsuario(ruta,usuarioEditado,usuarioEditor,fechaCreacion);
-
-		new FormularioSolicitudCreditoVivienda(ruta,usuarioEditor,fechaCreacion);
-		return ruta;
-	}
-
- */
 }

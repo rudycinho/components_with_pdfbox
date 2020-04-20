@@ -1,8 +1,10 @@
-package dto.complex;
+package dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import utils.enums;
+import utils.enums.TipoCreditoEnum;
+import utils.enums.TipoGarantiaEnum;
+import utils.enums.TipoViviendaEnum;
 
 import java.util.Date;
 
@@ -15,10 +17,10 @@ public class SolicitudCreditoViviendaDTO {
 	private String numeroRegistro;
 	
 	// TIPO CREDITO
-	private enums.TipoCreditoEnum tipoCreditoODestinoPrestamoSolicitado;
+	private TipoCreditoEnum tipoCreditoODestinoPrestamoSolicitado;
 	
 	// TIPO GARANTIA
-	private enums.TipoGarantiaEnum tipoGarantia;
+	private TipoGarantiaEnum tipoGarantia;
 	
 	// MONTO PRESTAMO SOLICITADO
 
@@ -67,7 +69,7 @@ public class SolicitudCreditoViviendaDTO {
 
 	private boolean tieneTerrenoPropioSolicitanteDestinoActual;
 	private boolean tieneViviendaPropiaSolicitanteDestinoActual;
-	private enums.TipoViviendaEnum habitaEnViviendaSolicitanteDestinoActual;
+	private TipoViviendaEnum habitaEnViviendaSolicitanteDestinoActual;
 
 	private boolean tienePrestamosTerrenoPropioSolicitanteDestinoActual;
 	private boolean tienePrestamosViviendaPropiaSolicitanteDestinoActual;
@@ -142,10 +144,10 @@ public class SolicitudCreditoViviendaDTO {
 		solicitudDTO.numeroRegistro="1364";
 		
 		// TIPO CREDITO
-		solicitudDTO.tipoCreditoODestinoPrestamoSolicitado = enums.TipoCreditoEnum.COMPRA_TERRENO_VIVIENDA_DEPARTAMENTO;
+		solicitudDTO.tipoCreditoODestinoPrestamoSolicitado = TipoCreditoEnum.COMPRA_TERRENO_VIVIENDA_DEPARTAMENTO;
 		
 		// TIPO GARANTIA
-		solicitudDTO.tipoGarantia = enums.TipoGarantiaEnum.REAL;
+		solicitudDTO.tipoGarantia = TipoGarantiaEnum.REAL;
 		
 		// MONTO PRESTAMO SOLICITADO
 		solicitudDTO.montoPrestamoSolicitadoBs = 10000.00f;
@@ -194,7 +196,7 @@ public class SolicitudCreditoViviendaDTO {
 
 		solicitudDTO.tieneTerrenoPropioSolicitanteDestinoActual = false;
 		solicitudDTO.tieneViviendaPropiaSolicitanteDestinoActual= false; 
-		solicitudDTO.habitaEnViviendaSolicitanteDestinoActual   = enums.TipoViviendaEnum.ALQUILADA;
+		solicitudDTO.habitaEnViviendaSolicitanteDestinoActual   = TipoViviendaEnum.ALQUILADA;
 
 		solicitudDTO.tienePrestamosTerrenoPropioSolicitanteDestinoActual = false;
 		solicitudDTO.tienePrestamosViviendaPropiaSolicitanteDestinoActual= false;

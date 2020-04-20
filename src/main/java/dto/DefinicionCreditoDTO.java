@@ -1,4 +1,4 @@
-package dto.complex;
+package dto;
 
 import lombok.Getter;
 import lombok.Setter;

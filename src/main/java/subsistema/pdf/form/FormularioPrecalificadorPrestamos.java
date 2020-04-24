@@ -12,9 +12,9 @@ import subsistema.pdf.lib.basic.Alignment;
 import subsistema.pdf.lib.basic.Style;
 import subsistema.pdf.lib.tables.Cell;
 import subsistema.pdf.lib.tables.SimpleTable;
-import subsistema.pdf.utils.Data;
 import subsistema.pdf.utils.factories.EasyComponentsFactory;
 import subsistema.pdf.utils.factories.GeneradorFormularioFactory;
+import subsistema.pdf.utils.settings.Model;
 
 import java.awt.*;
 import java.io.File;
@@ -23,16 +23,16 @@ import java.util.Date;
 
 public class FormularioPrecalificadorPrestamos {
 
-	private final float maxY         = Data.MAX_LETTER_X;
-	private final float maxX         = Data.MAX_LETTER_Y;
-	private final float thickness    = Data.THICKNESS_MODEL_1;
-	private final float marginStartX = Data.MARGIN_START_X_MODEL_2;
-	private final float marginEndX   = Data.MARGIN_END_X_MODEL_1;
+	private final float maxY         = Model.MODEL_2.getMaxY();
+	private final float maxX         = Model.MODEL_2.getMaxX();
+	private final float thickness    = Model.MODEL_2.getThickness();
+	private final float marginStartX = Model.MODEL_2.getMarginStartX();
+	private final float marginEndX   = Model.MODEL_2.getMarginEndX();
 	private final float relativePositionX = 5f;
 	private final float relativePositionY = 5f;
 
-	private final PDFont fuenteBasica        = Data.BASIC_FONT;
-	private final PDFont fuenteBasicaNegrita = Data.BASIC_BOLD_FONT;
+	private final PDFont fuenteBasica        = Model.MODEL_2.getFuenteBasica();
+	private final PDFont fuenteBasicaNegrita = Model.MODEL_2.getFuenteBasicaNegrita();
 
 	private final Style fuenteSubtitulo = Style.builder()
 			.addTextFont(fuenteBasicaNegrita)
@@ -73,15 +73,12 @@ public class FormularioPrecalificadorPrestamos {
 		doc.addPage(page);
 		PDPageContentStream contentStream = new PDPageContentStream(doc, page);
 
-		GeneradorFormularioFactory.setDimensiones(PDRectangle.LETTER.getHeight(),PDRectangle.LETTER.getWidth());
-		GeneradorFormularioFactory.setMarginStartX(25f);
-
-		GeneradorFormularioFactory.crearMargen(contentStream);
-		GeneradorFormularioFactory.crearCabecera(contentStream,doc);
-		GeneradorFormularioFactory.crearInfo(contentStream,sucursal);
-		GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion);
-		GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor);
-		GeneradorFormularioFactory.crearTitulo(contentStream,"PRECALIFICADOR DE PRESTAMOS");
+		GeneradorFormularioFactory.crearMargen(contentStream, Model.MODEL_2);
+		GeneradorFormularioFactory.crearCabecera(contentStream,doc, Model.MODEL_2);
+		GeneradorFormularioFactory.crearInfo(contentStream,sucursal, Model.MODEL_2);
+		GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Model.MODEL_2);
+		GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Model.MODEL_2);
+		GeneradorFormularioFactory.crearTitulo(contentStream,"PRECALIFICADOR DE PRESTAMOS", Model.MODEL_2);
 
 		crearPlanPagosSeccionDictamen(contentStream, dictamen);
 		crearPrecalicacionSeccionDictamen(contentStream, dictamen);

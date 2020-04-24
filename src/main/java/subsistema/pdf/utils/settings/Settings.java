@@ -1,7 +1,6 @@
-package subsistema.pdf.utils.factories;
+package subsistema.pdf.utils.settings;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import subsistema.pdf.utils.Data;
 
 public class Settings {
     private float maxY;
@@ -46,10 +45,16 @@ public class Settings {
     }
     public static Settings MODEL_3(){
         Settings settings = new Settings();
+        settings.maxY         = Data.MAX_OFFICE_Y;
+        settings.maxX         = Data.MAX_OFFICE_X;
+        settings.thickness    = Data.THICKNESS_MODEL_1;
+        settings.marginStartX = Data.MARGIN_START_X_MODEL_1;
+        settings.marginEndX   = Data.MARGIN_END_X_MODEL_1;
 
+        settings.fuenteBasica        = Data.BASIC_FONT;
+        settings.fuenteBasicaNegrita = Data.BASIC_BOLD_FONT;
         return settings;
     }
-
 
 
     public float getMaxY() {

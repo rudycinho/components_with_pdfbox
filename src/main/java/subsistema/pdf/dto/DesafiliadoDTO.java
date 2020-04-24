@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import subsistema.pdf.utils.Fecha;
 
-import java.util.Date;
+import java.util.Calendar;
 
 @Getter
 @Setter
@@ -30,13 +30,15 @@ public class DesafiliadoDTO {
 
 		desafiliadoDTO.Id                = 204L;
 
-		desafiliadoDTO.fechaSolicitud    = new Fecha(new Date(2018,5,8)).getFormatoFecha();
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(2015, Calendar.MAY,28);
+		desafiliadoDTO.fechaSolicitud  = new Fecha(calendar.getTime()).getFormatoFecha();
 
-		desafiliadoDTO.grado             = "CORONEL";
-		desafiliadoDTO.nombreCompleto    = "JUAN JOSE PEREZ CAMACHO DE LA SANTISIMA TRINIDAD";
-		desafiliadoDTO.carnetIdentidad   = "9977761 CB";
-		desafiliadoDTO.unidadPolicial    = "EPI NORTE";
-		desafiliadoDTO.departamento      = "COCHABAMBA";
+		desafiliadoDTO.grado           = "CORONEL";
+		desafiliadoDTO.nombreCompleto  = "JUAN JOSE PEREZ CAMACHO DE LA SANTISIMA TRINIDAD";
+		desafiliadoDTO.carnetIdentidad = "9977761 CB";
+		desafiliadoDTO.unidadPolicial  = "EPI NORTE";
+		desafiliadoDTO.departamento    = "COCHABAMBA";
 
 		desafiliadoDTO.causaDesafiliacion= "Quisque in tincidunt felis, quis faucibus tortor.\n"+
 				"Vestibulum malesuada arcu sit amet neque pulvinar, vehicula facilisis nisl semper.\n"+

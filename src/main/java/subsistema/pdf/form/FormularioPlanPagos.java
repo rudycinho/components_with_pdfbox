@@ -16,10 +16,9 @@ import subsistema.pdf.lib.tables.Column;
 import subsistema.pdf.lib.tables.RecursiveTable;
 import subsistema.pdf.lib.tables.SimpleTable;
 import subsistema.pdf.lib.text.MultipleParagraph;
-import subsistema.pdf.utils.Data;
 import subsistema.pdf.utils.factories.EasyComponentsFactory;
 import subsistema.pdf.utils.factories.GeneradorFormularioFactory;
-import subsistema.pdf.utils.factories.Model;
+import subsistema.pdf.utils.settings.Model;
 
 import java.awt.Color;
 import java.io.File;
@@ -80,13 +79,10 @@ public class FormularioPlanPagos {
         PDPageContentStream contentStream = new PDPageContentStream(doc, page);
         List<PDPageContentStream> contentStreams = new LinkedList<>();
 
-        GeneradorFormularioFactory.setDimensiones(maxX,maxY);
-        GeneradorFormularioFactory.setMarginStartX(25f);
-
-        GeneradorFormularioFactory.crearCabecera(contentStream,doc);
-        GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion);
-        GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor);
-        GeneradorFormularioFactory.crearTitulo(contentStream,"PLAN DE PAGOS");
+        GeneradorFormularioFactory.crearCabecera(contentStream,doc, Model.MODEL_2);
+        GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Model.MODEL_2);
+        GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Model.MODEL_2);
+        GeneradorFormularioFactory.crearTitulo(contentStream,"PLAN DE PAGOS", Model.MODEL_2);
 
         crearClienteSeccionPlanDePagos(contentStream, dictamen);
         crearResumenDatosSeccionPlanDePagos(contentStream, dictamen);
@@ -95,8 +91,8 @@ public class FormularioPlanPagos {
         int index=1;
         int total=contentStreams.size();
         for(PDPageContentStream contentStream1 : contentStreams){
-            GeneradorFormularioFactory.crearMargen(contentStream1);
-            GeneradorFormularioFactory.enumerarPaginas(contentStream1,index,total);
+            GeneradorFormularioFactory.crearMargen(contentStream1, Model.MODEL_2);
+            GeneradorFormularioFactory.enumerarPaginas(contentStream1,index,total,Model.MODEL_2);
             index+=1;
         }
 

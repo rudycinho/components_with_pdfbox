@@ -15,12 +15,11 @@ import subsistema.pdf.lib.shapes.Rectangle;
 import subsistema.pdf.lib.tables.Cell;
 import subsistema.pdf.lib.tables.Column;
 import subsistema.pdf.lib.tables.SimpleTable;
-import subsistema.pdf.utils.Data;
-import subsistema.pdf.utils.Fecha;
 import subsistema.pdf.utils.enums.TipoCreditoEnum;
 import subsistema.pdf.utils.enums.TipoGarantiaEnum;
 import subsistema.pdf.utils.factories.EasyComponentsFactory;
 import subsistema.pdf.utils.factories.GeneradorFormularioFactory;
+import subsistema.pdf.utils.settings.Model;
 
 import java.awt.Color;
 import java.io.File;
@@ -31,17 +30,17 @@ import java.util.Date;
 
 public class FormularioSolicitudCreditoVivienda {
 
-	private final float maxY         = Data.MAX_OFFICE_Y;
-	private final float maxX         = Data.MAX_OFFICE_X;
-	private final float thickness    = Data.THICKNESS_MODEL_1;
-	private final float marginStartX = Data.MARGIN_START_X_MODEL_1;
-	private final float marginEndX   = Data.MARGIN_END_X_MODEL_1;
+	private final float maxY         = Model.MODEL_3.getMaxY();
+	private final float maxX         = Model.MODEL_3.getMaxX();
+	private final float thickness    = Model.MODEL_3.getThickness();
+	private final float marginStartX = Model.MODEL_3.getMarginStartX();
+	private final float marginEndX   = Model.MODEL_3.getMarginEndX();
 	private final float relativePositionX = 5f;
 	private final float relativePositionY = 5f;
 
-	private final PDFont fuenteBasica        = Data.BASIC_FONT;
-	private final PDFont fuenteBasicaOblicua = Data.BASIC_OBLIQUE_FONT;
-	private final PDFont fuenteBasicaNegrita = Data.BASIC_BOLD_FONT;
+	private final PDFont fuenteBasica        = Model.MODEL_3.getFuenteBasica();
+	private final PDFont fuenteBasicaNegrita = Model.MODEL_3.getFuenteBasicaNegrita();
+	private final PDFont fuenteBasicaOblicua = Model.MODEL_3.getFuenteBasicaNegrita();
 
 	/*private final Style fuenteSubtitulo = Style.builder()
 			.addTextFont(fuenteBasicaNegrita)
@@ -120,7 +119,6 @@ public class FormularioSolicitudCreditoVivienda {
 			SucursalDTO sucursal,
 			Date fechaExportacion) throws IOException {
 
-
 		PDDocument doc = new PDDocument();
 
 		PDPage page1 = new PDPage(new PDRectangle(maxX,maxY));
@@ -132,18 +130,15 @@ public class FormularioSolicitudCreditoVivienda {
 		PDPageContentStream contentStream1 = new PDPageContentStream(doc, page1);
 		PDPageContentStream contentStream2 = new PDPageContentStream(doc, page2);
 
-		GeneradorFormularioFactory.setDimensiones(maxX,maxY);
-		GeneradorFormularioFactory.setMarginStartX(50f);
+		GeneradorFormularioFactory.crearMargen(contentStream1, Model.MODEL_3);
+		GeneradorFormularioFactory.crearCabecera(contentStream1, doc, Model.MODEL_3);
+		GeneradorFormularioFactory.crearInfo(contentStream1, sucursal, Model.MODEL_3);
+		GeneradorFormularioFactory.crearFechaExportacion(contentStream1, fechaExportacion, Model.MODEL_3);
+		GeneradorFormularioFactory.crearUsuarioExportador(contentStream1, usuarioEditor, Model.MODEL_3);
+		GeneradorFormularioFactory.crearTitulo(contentStream1, "FORMULARIO Nro. B-01\nSOLICITUD DE CREDITO PARA VIVIENDA", Model.MODEL_3);
 
-		GeneradorFormularioFactory.crearMargen(contentStream1);
-		GeneradorFormularioFactory.crearCabecera(contentStream1, doc);
-		GeneradorFormularioFactory.crearInfo(contentStream1, sucursal);
-		GeneradorFormularioFactory.crearFechaExportacion(contentStream1, fechaExportacion);
-		GeneradorFormularioFactory.crearUsuarioExportador(contentStream1, usuarioEditor);
-		GeneradorFormularioFactory.crearTitulo(contentStream1, "FORMULARIO Nro. B-01\nSOLICITUD DE CREDITO PARA VIVIENDA");
-
-		GeneradorFormularioFactory.crearMargen(contentStream2);
-		GeneradorFormularioFactory.crearInfo(contentStream2, sucursal);
+		GeneradorFormularioFactory.crearMargen(contentStream2, Model.MODEL_3);
+		GeneradorFormularioFactory.crearInfo(contentStream2, sucursal, Model.MODEL_3);
 
 		crearCuadroCarpeta(solicitud,contentStream1);
 		
@@ -152,7 +147,7 @@ public class FormularioSolicitudCreditoVivienda {
 		crearMontoPrestamoSolicitado(solicitud, contentStream1);
 		crearDatosSolicitado(solicitud, contentStream1);
 
-		GeneradorFormularioFactory.crearMargen(contentStream2);
+		GeneradorFormularioFactory.crearMargen(contentStream2, Model.MODEL_3);
 		crearDatosGarantesPersonales(solicitud, contentStream2);
 		crearCroquis(contentStream2,doc);
         crearNotas(contentStream2);
@@ -1025,8 +1020,6 @@ public class FormularioSolicitudCreditoVivienda {
 		borde.draw(contentStream);
 	}
 
-
-
 	private void crearDatosGarantesPersonales(
 			SolicitudCreditoViviendaDTO solicitud,
 			PDPageContentStream contentStream) throws IOException {
@@ -1380,7 +1373,6 @@ public class FormularioSolicitudCreditoVivienda {
 		Rectangle borde = new Rectangle(tabla.getStartX(), tabla.getStartY(), tabla.getWidth(), tabla.getHeight());
 		borde.draw(contentStream);
 	}
-
 
 	private void crearCroquis(
 			PDPageContentStream contentStream,

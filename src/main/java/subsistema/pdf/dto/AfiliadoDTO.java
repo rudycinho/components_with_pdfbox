@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import subsistema.pdf.utils.Fecha;
 
-import java.util.Date;
+import java.util.Calendar;
 
 @Getter
 @Setter
@@ -31,12 +31,18 @@ public class AfiliadoDTO{
 
 		afiliadoDTO.Id                = 204L;
 
-		afiliadoDTO.fechaSolicitud    = new Fecha(new Date(2018,5,8)).getFormatoFecha();
+		Calendar calendar1 = Calendar.getInstance();
+		calendar1.set(2010, Calendar.MAY,2);
+		afiliadoDTO.fechaSolicitud    = new Fecha(calendar1.getTime()).getFormatoFecha();
 
 		afiliadoDTO.grado             = "CORONEL";
 		afiliadoDTO.nombreCompleto    = "JUAN JOSE PEREZ CAMACHO DE LA SANTISIMA TRINIDAD";
 		afiliadoDTO.carnetIdentidad   = "9977761 CB";
-		afiliadoDTO.fechaNacimiento   = new Fecha(new Date(1984,12,18)).getFormatoFecha();
+
+		Calendar calendar2 = Calendar.getInstance();
+		calendar2.set(2000, Calendar.OCTOBER,8);
+		afiliadoDTO.fechaNacimiento   = new Fecha(calendar2.getTime()).getFormatoFecha();
+
 		afiliadoDTO.telefono          = "44546474";
 		afiliadoDTO.celular           = "77476787";
 		afiliadoDTO.correoElectronico = "juan.perez@gmail.com";

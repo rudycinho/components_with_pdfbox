@@ -1,4 +1,4 @@
-package subsistema.pdf.utils.factories;
+package subsistema.pdf.utils.settings;
 
 public class Model {
     public static Settings MODEL_1 = Settings.MODEL_1();

@@ -8,16 +8,13 @@ import subsistema.pdf.dto.DefinicionCreditoDTO;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import subsistema.pdf.lib.basic.Alignment;
 import subsistema.pdf.lib.basic.Style;
 import subsistema.pdf.lib.tables.Cell;
 import subsistema.pdf.lib.text.MultipleParagraph;
-import subsistema.pdf.utils.Data;
-import subsistema.pdf.utils.Fecha;
 import subsistema.pdf.utils.factories.EasyComponentsFactory;
 import subsistema.pdf.utils.factories.GeneradorFormularioFactory;
-import subsistema.pdf.utils.factories.Model;
+import subsistema.pdf.utils.settings.Model;
 
 import java.awt.*;
 import java.io.File;
@@ -72,10 +69,7 @@ public class FormularioDefinicionCredito {
 
         new ArchivoDefinicionCreditoPDFConDatosHTML(ruta,definicion.getDetallesHTML());
 
-        GeneradorFormularioFactory.setDimensiones(PDRectangle.LETTER.getWidth(),PDRectangle.LETTER.getHeight());
-        GeneradorFormularioFactory.setMarginStartX(50f);
-
-        File       file= new File(ruta);
+        File file      = new File(ruta);
         PDDocument doc = PDDocument.load(file);
         int totalPages = doc.getNumberOfPages();
         PDPage page;
@@ -84,13 +78,13 @@ public class FormularioDefinicionCredito {
         for(int i=0;i<totalPages;i++) {
             page = doc.getPage(i);
             contentStream = new PDPageContentStream(doc, page, true, true);
-            GeneradorFormularioFactory.crearInfo(contentStream, sucursal);
-            GeneradorFormularioFactory.crearMargen(contentStream);
+            GeneradorFormularioFactory.crearInfo(contentStream, sucursal, Model.MODEL_1);
+            GeneradorFormularioFactory.crearMargen(contentStream, Model.MODEL_1);
             if(i==0) {
-                GeneradorFormularioFactory.crearCabecera(contentStream, doc);
-                GeneradorFormularioFactory.crearFechaExportacion(contentStream, fechaExportacion);
-                GeneradorFormularioFactory.crearUsuarioExportador(contentStream, usuarioEditor);
-                GeneradorFormularioFactory.crearTitulo(contentStream, "REQUISITOS PARA\nSOLITICITUD DE CREDITO");
+                GeneradorFormularioFactory.crearCabecera(contentStream, doc, Model.MODEL_1);
+                GeneradorFormularioFactory.crearFechaExportacion(contentStream, fechaExportacion, Model.MODEL_1);
+                GeneradorFormularioFactory.crearUsuarioExportador(contentStream, usuarioEditor, Model.MODEL_1);
+                GeneradorFormularioFactory.crearTitulo(contentStream, "DOCUMENTOS INICIALES\nRECEPCIONADOS", Model.MODEL_1);
 
                 crearSubTitulosDatos(contentStream);
                 crearDatosAfiliadoDefinicion(contentStream, definicion);
@@ -137,12 +131,12 @@ public class FormularioDefinicionCredito {
             DefinicionCreditoDTO definicion) throws IOException {
 
         String gradoNombreAfiliado = definicion.getGradoNombreAfiliado();
-        String carnetIdentidad = definicion.getCarnetIdentidad();
-        String numeroCarpeta = definicion.getNumeroCarpeta();
-        String fechaCreacion = new Fecha(definicion.getFechaCreacion()).getFormatoFecha();
-        String modalidadCredito = definicion.getModalidadCredito();
-        String tipoDeGarantia = definicion.getTipoDeGarantia();
-        String origenTramite = definicion.getOrigenTramite();
+        String carnetIdentidad     = definicion.getCarnetIdentidad();
+        String numeroCarpeta       = definicion.getNumeroCarpeta();
+        String fechaCreacion       = definicion.getFechaCreacion();
+        String modalidadCredito    = definicion.getModalidadCredito();
+        String tipoDeGarantia      = definicion.getTipoDeGarantia();
+        String origenTramite       = definicion.getOrigenTramite();
 
         Style fuenteNormal = Style.builder()
                 .addTextFont(fuenteBasica)

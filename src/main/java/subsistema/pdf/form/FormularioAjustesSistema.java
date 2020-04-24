@@ -18,10 +18,9 @@ import subsistema.pdf.lib.basic.Style;
 import subsistema.pdf.lib.tables.Cell;
 import subsistema.pdf.lib.tables.SimpleTable;
 import subsistema.pdf.lib.text.MultipleParagraph;
-import subsistema.pdf.utils.Data;
 import subsistema.pdf.utils.factories.EasyComponentsFactory;
 import subsistema.pdf.utils.factories.GeneradorFormularioFactory;
-import subsistema.pdf.utils.factories.Model;
+import subsistema.pdf.utils.settings.Model;
 
 public class FormularioAjustesSistema {
 	private final float maxY         = Model.MODEL_1.getMaxY();
@@ -62,20 +61,17 @@ public class FormularioAjustesSistema {
 									SucursalDTO sucursal,
 									Date fechaExportacion) throws IOException {
 		PDDocument doc = new PDDocument();
-		PDPage page = new PDPage(new PDRectangle(PDRectangle.LETTER.getWidth(),PDRectangle.LETTER.getHeight()));
+		PDPage page = new PDPage(new PDRectangle(maxX,maxY));
 
 		doc.addPage(page);
 		PDPageContentStream contentStream = new PDPageContentStream(doc, page);
 
-		GeneradorFormularioFactory.setDimensiones(PDRectangle.LETTER.getWidth(),PDRectangle.LETTER.getHeight());
-		GeneradorFormularioFactory.setMarginStartX(50f);
-
-		GeneradorFormularioFactory.crearMargen(contentStream);
-		GeneradorFormularioFactory.crearCabecera(contentStream,doc);
-		GeneradorFormularioFactory.crearInfo(contentStream,sucursal);
-		GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion);
-		GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor);
-		GeneradorFormularioFactory.crearTitulo(contentStream,"AJUSTES DEL SISTEMA");
+		GeneradorFormularioFactory.crearMargen(contentStream, Model.MODEL_1);
+		GeneradorFormularioFactory.crearCabecera(contentStream,doc, Model.MODEL_1);
+		GeneradorFormularioFactory.crearInfo(contentStream,sucursal, Model.MODEL_1);
+		GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Model.MODEL_1);
+		GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Model.MODEL_1);
+		GeneradorFormularioFactory.crearTitulo(contentStream,"AJUSTES DEL SISTEMA", Model.MODEL_1);
 
 		crearSubTituloAjustesSistema(contentStream);
 		crearDatosAjustesSistema(contentStream,ajustes);

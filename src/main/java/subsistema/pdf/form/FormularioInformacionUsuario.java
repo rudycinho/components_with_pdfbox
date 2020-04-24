@@ -14,7 +14,7 @@ import subsistema.pdf.lib.tables.SimpleTable;
 import subsistema.pdf.lib.text.MultipleParagraph;
 import subsistema.pdf.utils.factories.EasyComponentsFactory;
 import subsistema.pdf.utils.factories.GeneradorFormularioFactory;
-import subsistema.pdf.utils.factories.Model;
+import subsistema.pdf.utils.settings.Model;
 
 import java.awt.*;
 import java.io.File;
@@ -74,20 +74,17 @@ public class FormularioInformacionUsuario {
                                         Date fechaExportacion) throws IOException {
 
         PDDocument doc = new PDDocument();
-        PDPage page = new PDPage(new PDRectangle(PDRectangle.LETTER.getWidth(),PDRectangle.LETTER.getHeight()));
+        PDPage page = new PDPage(new PDRectangle(maxX,maxY));
 
         doc.addPage(page);
         PDPageContentStream contentStream = new PDPageContentStream(doc, page);
 
-        GeneradorFormularioFactory.setDimensiones(PDRectangle.LETTER.getWidth(),PDRectangle.LETTER.getHeight());
-        GeneradorFormularioFactory.setMarginStartX(50f);
-
-        GeneradorFormularioFactory.crearMargen(contentStream);
-        GeneradorFormularioFactory.crearCabecera(contentStream,doc);
-        GeneradorFormularioFactory.crearInfo(contentStream,sucursal);
-        GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion);
-        GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor);
-        GeneradorFormularioFactory.crearTitulo(contentStream,"DATOS DE REGISTRO\nDE USUARIO DEL SISTEMA");
+        GeneradorFormularioFactory.crearMargen(contentStream, Model.MODEL_1);
+        GeneradorFormularioFactory.crearCabecera(contentStream,doc, Model.MODEL_1);
+        GeneradorFormularioFactory.crearInfo(contentStream,sucursal, Model.MODEL_1);
+        GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Model.MODEL_1);
+        GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Model.MODEL_1);
+        GeneradorFormularioFactory.crearTitulo(contentStream,"DATOS DE REGISTRO\nDE USUARIO DEL SISTEMA", Model.MODEL_1);
 
         crearSubTituloUsuario(contentStream);
         crearFechaRegistroUsuario(contentStream, usuarioEditado);

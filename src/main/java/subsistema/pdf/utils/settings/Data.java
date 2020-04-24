@@ -1,4 +1,4 @@
-package subsistema.pdf.utils;
+package subsistema.pdf.utils.settings;
 
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;

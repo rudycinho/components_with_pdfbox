@@ -17,10 +17,9 @@ import subsistema.pdf.lib.tables.Column;
 import subsistema.pdf.lib.tables.RecursiveTable;
 import subsistema.pdf.lib.tables.SimpleTable;
 import subsistema.pdf.lib.text.MultipleParagraph;
-import subsistema.pdf.utils.Data;
 import subsistema.pdf.utils.factories.EasyComponentsFactory;
 import subsistema.pdf.utils.factories.GeneradorFormularioFactory;
-import subsistema.pdf.utils.factories.Model;
+import subsistema.pdf.utils.settings.Model;
 
 import java.awt.Color;
 import java.io.File;
@@ -80,15 +79,12 @@ public class FormularioAfiliacion {
 		doc.addPage(page1);
 		PDPageContentStream contentStream1 = new PDPageContentStream(doc, page1);
 
-		GeneradorFormularioFactory.setDimensiones(PDRectangle.LETTER.getWidth(),PDRectangle.LETTER.getHeight());
-		GeneradorFormularioFactory.setMarginStartX(50f);
-
-		GeneradorFormularioFactory.crearMargen(contentStream1);
-		GeneradorFormularioFactory.crearCabecera(contentStream1,doc);
-		GeneradorFormularioFactory.crearInfo(contentStream1,sucursal);
-		GeneradorFormularioFactory.crearFechaExportacion(contentStream1,fechaExportacion);
-		GeneradorFormularioFactory.crearUsuarioExportador(contentStream1,usuarioEditor);
-		GeneradorFormularioFactory.crearTitulo(contentStream1,"FORMULARIO A-01\nSOLICITUD DE AFILIACION");
+		GeneradorFormularioFactory.crearMargen(contentStream1,Model.MODEL_1);
+		GeneradorFormularioFactory.crearCabecera(contentStream1,doc,Model.MODEL_1);
+		GeneradorFormularioFactory.crearInfo(contentStream1,sucursal,Model.MODEL_1);
+		GeneradorFormularioFactory.crearFechaExportacion(contentStream1,fechaExportacion,Model.MODEL_1);
+		GeneradorFormularioFactory.crearUsuarioExportador(contentStream1,usuarioEditor,Model.MODEL_1);
+		GeneradorFormularioFactory.crearTitulo(contentStream1,"FORMULARIO A-01\nSOLICITUD DE AFILIACION",Model.MODEL_1);
 
 		crearSubTitulosAfiliado(contentStream1);
 		crearFechaRegistroAfiliado(contentStream1, afiliado);
@@ -118,8 +114,8 @@ public class FormularioAfiliacion {
 					estados);
 
 			for(PDPageContentStream contentStream : contentStreams){
-				GeneradorFormularioFactory.crearMargen(contentStream);
-				GeneradorFormularioFactory.crearInfo(contentStream,sucursal);
+				GeneradorFormularioFactory.crearMargen(contentStream, Model.MODEL_1);
+				GeneradorFormularioFactory.crearInfo(contentStream,sucursal, Model.MODEL_1);
 			}
 
 			for(PDPageContentStream e : contentStreams)
@@ -430,7 +426,6 @@ public class FormularioAfiliacion {
 
 		Iterator<RecursiveTable> it = tables.iterator();
 		it.next().draw(contentStream);
-
 
 		while (it.hasNext()) {
 			PDPage page = new PDPage(new PDRectangle(PDRectangle.LETTER.getWidth(), PDRectangle.LETTER.getHeight()));

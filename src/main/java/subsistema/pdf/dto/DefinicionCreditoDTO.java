@@ -2,8 +2,9 @@ package subsistema.pdf.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import subsistema.pdf.utils.Fecha;
 
-import java.util.Date;
+import java.util.Calendar;
 
 @Getter
 @Setter
@@ -11,7 +12,7 @@ public class DefinicionCreditoDTO {
     private String gradoNombreAfiliado;
     private String carnetIdentidad;
     private String numeroCarpeta;
-    private Date fechaCreacion;
+    private String fechaCreacion;
     private String modalidadCredito;
     private String tipoDeGarantia;
     private String origenTramite;
@@ -24,7 +25,11 @@ public class DefinicionCreditoDTO {
         definicionCredito.gradoNombreAfiliado ="POLICIA ROBERTO JUAN ZENTENO APAZA";
         definicionCredito.carnetIdentidad     ="34567789";
         definicionCredito.numeroCarpeta       ="CP00000011";
-        definicionCredito.fechaCreacion       =new Date(3,03,2020);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2011, Calendar.NOVEMBER,9);
+        definicionCredito.fechaCreacion = new Fecha(calendar.getTime()).getFormatoFecha();
+
         definicionCredito.modalidadCredito    ="ANTICRETICO";
         definicionCredito.tipoDeGarantia      ="Personal (Garantia de haberes y presentacion de dos garantes)";
         definicionCredito.origenTramite       ="Local";

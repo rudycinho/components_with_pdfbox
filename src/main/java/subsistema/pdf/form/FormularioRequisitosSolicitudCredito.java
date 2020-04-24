@@ -6,14 +6,17 @@ import subsistema.pdf.dto.UsuarioDTO;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import subsistema.pdf.utils.factories.GeneradorFormularioFactory;
+import subsistema.pdf.utils.settings.Model;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
 public class FormularioRequisitosSolicitudCredito {
+
+
+
     public FormularioRequisitosSolicitudCredito(
             String ruta,
             String porcion,
@@ -23,10 +26,7 @@ public class FormularioRequisitosSolicitudCredito {
 
         new ArchivoRequisitosPDFConDatosHTML(ruta,porcion);
 
-        GeneradorFormularioFactory.setDimensiones(PDRectangle.LETTER.getWidth(),PDRectangle.LETTER.getHeight());
-        GeneradorFormularioFactory.setMarginStartX(50f);
-
-        File       file= new File(ruta);
+        File file      = new File(ruta);
         PDDocument doc = PDDocument.load(file);
         int totalPages = doc.getNumberOfPages();
         PDPage page;
@@ -35,13 +35,13 @@ public class FormularioRequisitosSolicitudCredito {
         for(int i=0;i<totalPages;i++) {
             page = doc.getPage(i);
             contentStream = new PDPageContentStream(doc, page, true, true);
-            GeneradorFormularioFactory.crearInfo(contentStream, sucursal);
-            GeneradorFormularioFactory.crearMargen(contentStream);
+            GeneradorFormularioFactory.crearInfo(contentStream, sucursal, Model.MODEL_1);
+            GeneradorFormularioFactory.crearMargen(contentStream, Model.MODEL_1);
             if(i==0) {
-                GeneradorFormularioFactory.crearCabecera(contentStream, doc);
-                GeneradorFormularioFactory.crearFechaExportacion(contentStream, fechaExportacion);
-                GeneradorFormularioFactory.crearUsuarioExportador(contentStream, usuarioEditor);
-                GeneradorFormularioFactory.crearTitulo(contentStream, "REQUISITOS PARA\nSOLITICITUD DE CREDITO");
+                GeneradorFormularioFactory.crearCabecera(contentStream, doc, Model.MODEL_1);
+                GeneradorFormularioFactory.crearFechaExportacion(contentStream, fechaExportacion, Model.MODEL_1);
+                GeneradorFormularioFactory.crearUsuarioExportador(contentStream, usuarioEditor, Model.MODEL_1);
+                GeneradorFormularioFactory.crearTitulo(contentStream, "REQUISITOS PARA\nSOLITICITUD DE CREDITO", Model.MODEL_1);
             }
             contentStream.close();
         }

@@ -16,10 +16,9 @@ import subsistema.pdf.lib.tables.Column;
 import subsistema.pdf.lib.tables.RecursiveTable;
 import subsistema.pdf.lib.tables.SimpleTable;
 import subsistema.pdf.lib.text.MultipleParagraph;
-import subsistema.pdf.utils.Data;
 import subsistema.pdf.utils.factories.EasyComponentsFactory;
 import subsistema.pdf.utils.factories.GeneradorFormularioFactory;
-import subsistema.pdf.utils.factories.Model;
+import subsistema.pdf.utils.settings.Model;
 
 import java.awt.*;
 import java.io.File;
@@ -80,19 +79,16 @@ public class FormularioInformacionPerfil {
                                        Date fechaExportacion) throws IOException {
 
         PDDocument doc = new PDDocument();
-        PDPage page = new PDPage(new PDRectangle(PDRectangle.LETTER.getWidth(),PDRectangle.LETTER.getHeight()));
+        PDPage page = new PDPage(new PDRectangle(maxX,maxY));
 
         doc.addPage(page);
         PDPageContentStream contentStream = new PDPageContentStream(doc, page);
         List<PDPageContentStream> contentStreams = new LinkedList<>();
 
-        GeneradorFormularioFactory.setDimensiones(PDRectangle.LETTER.getWidth(),PDRectangle.LETTER.getHeight());
-        GeneradorFormularioFactory.setMarginStartX(50f);
-
-        GeneradorFormularioFactory.crearCabecera(contentStream,doc);
-        GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion);
-        GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor);
-        GeneradorFormularioFactory.crearTitulo(contentStream,"INFORMACION DE PERMISOS\nPOR PERFIL");
+        GeneradorFormularioFactory.crearCabecera(contentStream,doc, Model.MODEL_1);
+        GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Model.MODEL_1);
+        GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Model.MODEL_1);
+        GeneradorFormularioFactory.crearTitulo(contentStream,"INFORMACION DE PERMISOS\nPOR PERFIL", Model.MODEL_1);
 
         crearSubTitulosPerfil(contentStream);
         crearDatosPerfil(contentStream,perfil);
@@ -105,8 +101,8 @@ public class FormularioInformacionPerfil {
                 perfil);
 
         for(PDPageContentStream contentStream1 : contentStreams){
-            GeneradorFormularioFactory.crearMargen(contentStream1);
-            GeneradorFormularioFactory.crearInfo(contentStream1,sucursal);
+            GeneradorFormularioFactory.crearMargen(contentStream1, Model.MODEL_1);
+            GeneradorFormularioFactory.crearInfo(contentStream1,sucursal, Model.MODEL_1);
         }
 
         for(PDPageContentStream e : contentStreams)

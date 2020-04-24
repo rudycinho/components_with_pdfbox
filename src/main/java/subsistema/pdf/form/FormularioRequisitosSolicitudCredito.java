@@ -1,8 +1,8 @@
 package subsistema.pdf.form;
 
 import com.lowagie.text.DocumentException;
-import subsistema.pdf.dto.SucursalDTO;
-import subsistema.pdf.dto.UsuarioDTO;
+import subsistema.pdf.dto.SucursalDTOPDF;
+import subsistema.pdf.dto.UsuarioDTOPDF;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -20,8 +20,8 @@ public class FormularioRequisitosSolicitudCredito {
     public FormularioRequisitosSolicitudCredito(
             String ruta,
             String porcion,
-            UsuarioDTO usuarioEditor,
-            SucursalDTO sucursal,
+            UsuarioDTOPDF usuarioEditor,
+            SucursalDTOPDF sucursal,
             Date fechaExportacion) throws IOException, DocumentException {
 
         new ArchivoRequisitosPDFConDatosHTML(ruta,porcion);

@@ -8,7 +8,7 @@ import java.util.Calendar;
 
 @Getter
 @Setter
-public class SucursalDTO{
+public class SucursalDTOPDF {
     private Long Id;
 
     private String fechaRegistro;
@@ -25,10 +25,10 @@ public class SucursalDTO{
 
     private String observaciones;
 
-    public SucursalDTO(){ }
+    public SucursalDTOPDF(){ }
 
-    public static SucursalDTO getFake(){
-        SucursalDTO sucursalDTO = new SucursalDTO();
+    public static SucursalDTOPDF getFake(){
+        SucursalDTOPDF sucursalDTO = new SucursalDTOPDF();
 
         sucursalDTO.Id           = 450L;
 

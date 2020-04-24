@@ -8,7 +8,7 @@ import java.util.Calendar;
 
 @Getter
 @Setter
-public class DefinicionCreditoDTO {
+public class DefinicionCreditoDTOPDF {
     private String gradoNombreAfiliado;
     private String carnetIdentidad;
     private String numeroCarpeta;
@@ -19,8 +19,8 @@ public class DefinicionCreditoDTO {
     private String detallesHTML;
 
 
-    public static DefinicionCreditoDTO getFake(){
-        DefinicionCreditoDTO definicionCredito = new DefinicionCreditoDTO();
+    public static DefinicionCreditoDTOPDF getFake(){
+        DefinicionCreditoDTOPDF definicionCredito = new DefinicionCreditoDTOPDF();
 
         definicionCredito.gradoNombreAfiliado ="POLICIA ROBERTO JUAN ZENTENO APAZA";
         definicionCredito.carnetIdentidad     ="34567789";

@@ -117,7 +117,7 @@ public class GeneradorFormularioFactory {
 
     public static void crearInfo(
             PDPageContentStream contentStream,
-            SucursalDTO sucursalDTO, Settings model) throws IOException {
+            SucursalDTOPDF sucursalDTO, Settings model) throws IOException {
 
         PDFont fuenteBasica = model.getFuenteBasica();
         float marginStartX = model.getMarginStartX();
@@ -182,7 +182,7 @@ public class GeneradorFormularioFactory {
 
     public static void crearUsuarioExportador(
             PDPageContentStream contentStream,
-            UsuarioDTO usuarioEditor, Settings model) throws IOException {
+            UsuarioDTOPDF usuarioEditor, Settings model) throws IOException {
 
         PDFont fuenteBasica = model.getFuenteBasica();
         PDFont fuenteBasicaNegrita = model.getFuenteBasicaNegrita();

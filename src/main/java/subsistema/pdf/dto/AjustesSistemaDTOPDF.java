@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AjustesSistemaDTO {
+public class AjustesSistemaDTOPDF {
 
     private String cambioUSD;
     private String cambioUFV;
@@ -20,10 +20,10 @@ public class AjustesSistemaDTO {
     private String correoNotificaciones;
     private String diasMaximoParaDescuentos;
 
-    public AjustesSistemaDTO(){ }
+    public AjustesSistemaDTOPDF(){ }
 
-    public static AjustesSistemaDTO getFake(){
-        AjustesSistemaDTO ajustesSistemaDTO = new AjustesSistemaDTO();
+    public static AjustesSistemaDTOPDF getFake(){
+        AjustesSistemaDTOPDF ajustesSistemaDTO = new AjustesSistemaDTOPDF();
         ajustesSistemaDTO.cambioUSD         = ""+6.89;
         ajustesSistemaDTO.cambioUFV         = ""+2.33958;
         ajustesSistemaDTO.amortizacionDias  = ""+30;

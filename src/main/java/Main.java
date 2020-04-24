@@ -12,28 +12,28 @@ public class Main {
     public static void main(String ...args) throws IOException, DocumentException {
         //"\u21B5"
 
-        SolicitudCreditoViviendaDTO solicitud  = SolicitudCreditoViviendaDTO.getFake();
-        DefinicionCreditoDTO definicionCredito = DefinicionCreditoDTO.getFake();
-        DictamenDTO dictamen                   = DictamenDTO.getFake();
-        PlanDePagosDTO planDePagos             = PlanDePagosDTO.getFake();
-        UsuarioDTO usuarioEditor               = UsuarioDTO.getFake();
-        SucursalDTO sucursal                   = SucursalDTO.getFake();
-        DesafiliadoDTO desafiliado             = DesafiliadoDTO.getFake();
-        UsuarioDTO usuarioEditado              = UsuarioDTO.getFake();
-        PerfilDTO perfil                       = PerfilDTO.getFake();
-        AjustesSistemaDTO ajustesSistemaDTO    = AjustesSistemaDTO.getFake();
-        AfiliadoDTO               afiliado     = AfiliadoDTO.getFake();
-        List<EstadoAfiliacionDTO> estados      = new LinkedList<>();
-        estados.add(EstadoAfiliacionDTO.getFake());
-        estados.add(EstadoAfiliacionDTO.getFake());
-        estados.add(EstadoAfiliacionDTO.getFake());
-        estados.add(EstadoAfiliacionDTO.getFake());
-        estados.add(EstadoAfiliacionDTO.getFake());
-        estados.add(EstadoAfiliacionDTO.getFake());
-        estados.add(EstadoAfiliacionDTO.getFake());
-        estados.add(EstadoAfiliacionDTO.getFake());
-        estados.add(EstadoAfiliacionDTO.getFake());
-        estados.add(EstadoAfiliacionDTO.getFake());
+        SolicitudCreditoViviendaDTOPDF solicitud  = SolicitudCreditoViviendaDTOPDF.getFake();
+        DefinicionCreditoDTOPDF definicionCredito = DefinicionCreditoDTOPDF.getFake();
+        DictamenDTOPDF dictamen                   = DictamenDTOPDF.getFake();
+        PlanDePagosDTOPDF planDePagos             = PlanDePagosDTOPDF.getFake();
+        UsuarioDTOPDF usuarioEditor               = UsuarioDTOPDF.getFake();
+        SucursalDTOPDF sucursal                   = SucursalDTOPDF.getFake();
+        DesafiliadoDTOPDF desafiliado             = DesafiliadoDTOPDF.getFake();
+        UsuarioDTOPDF usuarioEditado              = UsuarioDTOPDF.getFake();
+        PerfilDTOPDF perfil                       = PerfilDTOPDF.getFake();
+        AjustesSistemaDTOPDF ajustesSistemaDTO    = AjustesSistemaDTOPDF.getFake();
+        AfiliadoDTOPDF afiliado     = AfiliadoDTOPDF.getFake();
+        List<EstadoAfiliacionDTOPDF> estados      = new LinkedList<>();
+        estados.add(EstadoAfiliacionDTOPDF.getFake());
+        estados.add(EstadoAfiliacionDTOPDF.getFake());
+        estados.add(EstadoAfiliacionDTOPDF.getFake());
+        estados.add(EstadoAfiliacionDTOPDF.getFake());
+        estados.add(EstadoAfiliacionDTOPDF.getFake());
+        estados.add(EstadoAfiliacionDTOPDF.getFake());
+        estados.add(EstadoAfiliacionDTOPDF.getFake());
+        estados.add(EstadoAfiliacionDTOPDF.getFake());
+        estados.add(EstadoAfiliacionDTOPDF.getFake());
+        estados.add(EstadoAfiliacionDTOPDF.getFake());
 
         String porcionHTML           =
                 "<h3>Celephais</h3>\n" +

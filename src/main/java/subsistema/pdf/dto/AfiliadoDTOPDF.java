@@ -8,7 +8,7 @@ import java.util.Calendar;
 
 @Getter
 @Setter
-public class AfiliadoDTO{
+public class AfiliadoDTOPDF {
 	private Long Id;
 	private String fechaSolicitud;
 
@@ -24,10 +24,10 @@ public class AfiliadoDTO{
 
 	private String observaciones;
 
-	public AfiliadoDTO(){ }
+	public AfiliadoDTOPDF(){ }
 
-	public static AfiliadoDTO getFake(){
-		AfiliadoDTO afiliadoDTO = new AfiliadoDTO();
+	public static AfiliadoDTOPDF getFake(){
+		AfiliadoDTOPDF afiliadoDTO = new AfiliadoDTOPDF();
 
 		afiliadoDTO.Id                = 204L;
 

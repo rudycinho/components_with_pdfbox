@@ -15,9 +15,9 @@ public class GeneradorFormulariosService {
 	private final String DEST = "/home/rudy/forms";
 
 	public String FormularioInformacionUsuario(
-			UsuarioDTO usuarioEditado,
-			UsuarioDTO usuarioEditor,
-			SucursalDTO sucursal
+			UsuarioDTOPDF usuarioEditado,
+			UsuarioDTOPDF usuarioEditor,
+			SucursalDTOPDF sucursal
 	) throws IOException {
 
 		Date fechaExportacion        = new Date();
@@ -36,8 +36,8 @@ public class GeneradorFormulariosService {
 	}
 
 	public String FormularioInformacionSucursal(
-			UsuarioDTO usuarioEditor,
-			SucursalDTO sucursal
+			UsuarioDTOPDF usuarioEditor,
+			SucursalDTOPDF sucursal
 	) throws IOException {
 
 		Date fechaExportacion        = new Date();
@@ -56,9 +56,9 @@ public class GeneradorFormulariosService {
 	}
 
 	public String FormularioInformacionPerfil(
-			PerfilDTO perfil,
-			UsuarioDTO usuarioEditor,
-			SucursalDTO sucursal
+			PerfilDTOPDF perfil,
+			UsuarioDTOPDF usuarioEditor,
+			SucursalDTOPDF sucursal
 	) throws IOException {
 		Date fechaExportacion = new Date();
 
@@ -76,9 +76,9 @@ public class GeneradorFormulariosService {
 	}
 
 	public String FormularioAjustesSistema(
-			AjustesSistemaDTO ajustesSistema,
-			UsuarioDTO  usuarioEditor,
-			SucursalDTO sucursal
+			AjustesSistemaDTOPDF ajustesSistema,
+			UsuarioDTOPDF usuarioEditor,
+			SucursalDTOPDF sucursal
 	) throws IOException {
 		Date fechaExportacion               = new Date();
 
@@ -95,10 +95,10 @@ public class GeneradorFormulariosService {
 	}
 
 	public String FormularioAfiliacion(
-			AfiliadoDTO afiliado,
-			UsuarioDTO usuarioEditor,
-			SucursalDTO sucursal,
-			List<EstadoAfiliacionDTO> estados
+			AfiliadoDTOPDF afiliado,
+			UsuarioDTOPDF usuarioEditor,
+			SucursalDTOPDF sucursal,
+			List<EstadoAfiliacionDTOPDF> estados
 	) throws IOException {
 		Date fechaExportacion = new Date();
 
@@ -116,9 +116,9 @@ public class GeneradorFormulariosService {
 	}
 
 	public String FormularioDesafiliacion(
-			DesafiliadoDTO desafiliado,
-			UsuarioDTO usuarioEditor,
-			SucursalDTO sucursal
+			DesafiliadoDTOPDF desafiliado,
+			UsuarioDTOPDF usuarioEditor,
+			SucursalDTOPDF sucursal
 	) throws IOException {
 		Date fechaExportacion = new Date();
 
@@ -136,9 +136,9 @@ public class GeneradorFormulariosService {
 	}
 
     public String FormularioPrecalificadorPrestamos(
-			DictamenDTO dictamen,
-			UsuarioDTO  usuarioEditor,
-			SucursalDTO sucursal
+			DictamenDTOPDF dictamen,
+			UsuarioDTOPDF usuarioEditor,
+			SucursalDTOPDF sucursal
 	) throws IOException {
 		Date fechaExportacion = new Date();
 
@@ -158,10 +158,10 @@ public class GeneradorFormulariosService {
     }
 
 	public String FormularioPlanPagos(
-			DictamenDTO dictamen,
-			PlanDePagosDTO planDePagos,
-			UsuarioDTO usuarioEditor,
-			SucursalDTO sucursal
+			DictamenDTOPDF dictamen,
+			PlanDePagosDTOPDF planDePagos,
+			UsuarioDTOPDF usuarioEditor,
+			SucursalDTOPDF sucursal
 	) throws IOException {
 		Date fechaExportacion = new Date();
 
@@ -181,9 +181,9 @@ public class GeneradorFormulariosService {
 	}
 
 	public String FormularioDefinicionCredito(
-			DefinicionCreditoDTO definicionCredito,
-			UsuarioDTO usuarioEditor,
-			SucursalDTO sucursal
+			DefinicionCreditoDTOPDF definicionCredito,
+			UsuarioDTOPDF usuarioEditor,
+			SucursalDTOPDF sucursal
 	) throws IOException, DocumentException {
 
 		Date fechaExportacion                     = new Date();
@@ -203,8 +203,8 @@ public class GeneradorFormulariosService {
 
 	public String FormularioRequisitosSolicitudCredito(
 			String porcionHTML,
-			UsuarioDTO usuarioEditor,
-			SucursalDTO sucursal
+			UsuarioDTOPDF usuarioEditor,
+			SucursalDTOPDF sucursal
 	) throws IOException, DocumentException {
 		Date fechaExportacion        = new Date();
 
@@ -221,9 +221,9 @@ public class GeneradorFormulariosService {
 	}
 
 	public String FormularioSolicitudCreditoVivienda(
-			SolicitudCreditoViviendaDTO solicitud,
-			UsuarioDTO usuarioEditor,
-			SucursalDTO sucursal
+			SolicitudCreditoViviendaDTOPDF solicitud,
+			UsuarioDTOPDF usuarioEditor,
+			SucursalDTOPDF sucursal
 	) throws IOException {
 		Date fechaCreacion = new Date();
 

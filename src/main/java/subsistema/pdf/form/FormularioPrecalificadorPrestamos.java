@@ -1,9 +1,9 @@
 package subsistema.pdf.form;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import subsistema.pdf.dto.DictamenDTO;
-import subsistema.pdf.dto.SucursalDTO;
-import subsistema.pdf.dto.UsuarioDTO;
+import subsistema.pdf.dto.DictamenDTOPDF;
+import subsistema.pdf.dto.SucursalDTOPDF;
+import subsistema.pdf.dto.UsuarioDTOPDF;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -62,9 +62,9 @@ public class FormularioPrecalificadorPrestamos {
 
 	public FormularioPrecalificadorPrestamos(
 			String ruta,
-			DictamenDTO dictamen,
-			UsuarioDTO usuarioEditor,
-			SucursalDTO sucursal,
+			DictamenDTOPDF dictamen,
+			UsuarioDTOPDF usuarioEditor,
+			SucursalDTOPDF sucursal,
 			Date fechaExportacion) throws IOException {
 
 		PDDocument doc = new PDDocument();
@@ -92,7 +92,7 @@ public class FormularioPrecalificadorPrestamos {
 
 	private void crearPlanPagosSeccionDictamen(
 			PDPageContentStream contentStream,
-			DictamenDTO dictamen) throws IOException {
+			DictamenDTOPDF dictamen) throws IOException {
 
 		String montoAFinanciar = String.format("%s Bs", dictamen.getMontoSolicitadoBS());
 		String amortizacion = String.format("Cada %s dias", dictamen.getCantidadDiasDeAmortizacion());
@@ -180,7 +180,7 @@ public class FormularioPrecalificadorPrestamos {
 
 	private void crearPrecalicacionSeccionDictamen(
 			PDPageContentStream contentStream,
-			DictamenDTO dictamen) throws IOException {
+			DictamenDTOPDF dictamen) throws IOException {
 
 		String liquidoPagable = dictamen.getSueldoLiquidoPagable();
 		String dictamenLiteral = dictamen.getDictamenLiteral();
@@ -272,7 +272,7 @@ public class FormularioPrecalificadorPrestamos {
 
 	}
 
-	private void crearDatosSeccionDictamen(PDPageContentStream contentStream, DictamenDTO dictamen) throws IOException {
+	private void crearDatosSeccionDictamen(PDPageContentStream contentStream, DictamenDTOPDF dictamen) throws IOException {
 		String solicitante = dictamen.getNombreCliente();
 		String ci = dictamen.getCi();
 

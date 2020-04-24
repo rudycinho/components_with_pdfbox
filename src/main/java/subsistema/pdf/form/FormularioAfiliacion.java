@@ -1,10 +1,10 @@
 package subsistema.pdf.form;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import subsistema.pdf.dto.AfiliadoDTO;
-import subsistema.pdf.dto.SucursalDTO;
-import subsistema.pdf.dto.UsuarioDTO;
-import subsistema.pdf.dto.EstadoAfiliacionDTO;
+import subsistema.pdf.dto.AfiliadoDTOPDF;
+import subsistema.pdf.dto.SucursalDTOPDF;
+import subsistema.pdf.dto.UsuarioDTOPDF;
+import subsistema.pdf.dto.EstadoAfiliacionDTOPDF;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -67,10 +67,10 @@ public class FormularioAfiliacion {
 			.build();
 
 	public FormularioAfiliacion(String ruta,
-                                AfiliadoDTO afiliado,
-                                List<EstadoAfiliacionDTO> estados,
-								UsuarioDTO usuarioEditor,
-                                SucursalDTO sucursal,
+                                AfiliadoDTOPDF afiliado,
+                                List<EstadoAfiliacionDTOPDF> estados,
+								UsuarioDTOPDF usuarioEditor,
+                                SucursalDTOPDF sucursal,
                                 Date fechaExportacion) throws IOException {
 
 		PDDocument doc = new PDDocument();
@@ -142,7 +142,7 @@ public class FormularioAfiliacion {
 
 	private void crearFechaRegistroAfiliado(
 			PDPageContentStream contentStream,
-			AfiliadoDTO afiliado) throws IOException {
+			AfiliadoDTOPDF afiliado) throws IOException {
 
 		String fechaCreacion = afiliado.getFechaSolicitud();
 		float width1 = 140f;
@@ -171,7 +171,7 @@ public class FormularioAfiliacion {
 
 	private void crearDatosAfiliado(
 			PDPageContentStream contentStream,
-			AfiliadoDTO afiliado) throws IOException {
+			AfiliadoDTOPDF afiliado) throws IOException {
 
 		Style fuenteNormal = Style.builder()
 				.addTextFont(fuenteBasica)
@@ -224,7 +224,7 @@ public class FormularioAfiliacion {
 
 	private void crearObservacionesAfiliado(
 			PDPageContentStream contentStream,
-			AfiliadoDTO afiliado) throws IOException {
+			AfiliadoDTOPDF afiliado) throws IOException {
 
 		Style fuenteNormal = Style.builder()
 				.addTextFont(fuenteBasica)
@@ -379,12 +379,12 @@ public class FormularioAfiliacion {
 			PDPageContentStream contentStream,
 			List<PDPageContentStream> contentStreams,
 			PDDocument doc,
-			List<EstadoAfiliacionDTO> estados) throws IOException {
+			List<EstadoAfiliacionDTOPDF> estados) throws IOException {
 
 		List<List<String>> listOfList = new ArrayList<>();
 
 		int i = 0;
-		for (EstadoAfiliacionDTO estado : estados) {
+		for (EstadoAfiliacionDTOPDF estado : estados) {
 			List<String> auxList = new ArrayList<>();
 			auxList.add(String.format("%d", ++i));
 			auxList.add(estado.getCausa());

@@ -7,17 +7,17 @@ import java.util.stream.Collectors;
 import lombok.Getter;
 
 @Getter
-public class PlanDePagosDTO {
-	private final List<FilaPagoMensualDTO> planDePagosLista;
+public class PlanDePagosDTOPDF {
+	private final List<FilaPagoMensualDTOPDF> planDePagosLista;
 
-	public PlanDePagosDTO(){
+	public PlanDePagosDTOPDF(){
 		planDePagosLista = new LinkedList<>();
 	}
 
-	public static PlanDePagosDTO getFake(){
-		PlanDePagosDTO planDePagos = new PlanDePagosDTO();
+	public static PlanDePagosDTOPDF getFake(){
+		PlanDePagosDTOPDF planDePagos = new PlanDePagosDTOPDF();
 		for(int i=0; i<70; i++){
-			planDePagos.planDePagosLista.add(FilaPagoMensualDTO.getFake());
+			planDePagos.planDePagosLista.add(FilaPagoMensualDTOPDF.getFake());
 		}
 		return planDePagos;
 	}
@@ -25,7 +25,7 @@ public class PlanDePagosDTO {
 	public List<List<String>> getContenido(){
 		return planDePagosLista
 				.stream()
-				.map(FilaPagoMensualDTO::getContenido)
+				.map(FilaPagoMensualDTOPDF::getContenido)
 				.collect(Collectors.toList());
 	}
 
@@ -45,7 +45,7 @@ public class PlanDePagosDTO {
 	}
 
 	public List<String> getSumatoria(){
-		return FilaPagoMensualDTO.getFake2().getContenido();
+		return FilaPagoMensualDTOPDF.getFake2().getContenido();
 	}
 	
 }

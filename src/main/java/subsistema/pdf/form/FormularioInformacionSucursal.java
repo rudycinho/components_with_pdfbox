@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.util.Date;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import subsistema.pdf.dto.SucursalDTO;
-import subsistema.pdf.dto.UsuarioDTO;
+import subsistema.pdf.dto.SucursalDTOPDF;
+import subsistema.pdf.dto.UsuarioDTOPDF;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -68,8 +68,8 @@ public class FormularioInformacionSucursal {
 			.build();
 
 	public FormularioInformacionSucursal(String ruta,
-										 UsuarioDTO usuarioEditor,
-										 SucursalDTO sucursal,
+										 UsuarioDTOPDF usuarioEditor,
+										 SucursalDTOPDF sucursal,
 										 Date fechaExportacion) throws IOException {
 		PDDocument doc = new PDDocument();
 		PDPage page = new PDPage(new PDRectangle(maxX,maxY));
@@ -113,7 +113,7 @@ public class FormularioInformacionSucursal {
 
 	private void crearFechaRegistroSucursal(
 			PDPageContentStream contentStream,
-			SucursalDTO sucursal) throws IOException {
+			SucursalDTOPDF sucursal) throws IOException {
 
 		String fechaCreacion = sucursal.getFechaRegistro();
 		float width1 = 140f;
@@ -142,7 +142,7 @@ public class FormularioInformacionSucursal {
 
 	private void crearDatosSucursal(
 			PDPageContentStream contentStream,
-			SucursalDTO sucursal) throws IOException {
+			SucursalDTOPDF sucursal) throws IOException {
 
 		float width1 = 125f;
 		float width2 = 375f - 10f;
@@ -182,7 +182,7 @@ public class FormularioInformacionSucursal {
 
 	private void crearHorarioAtencionSucursal(
 			PDPageContentStream contentStream,
-			SucursalDTO sucursal) throws IOException {
+			SucursalDTOPDF sucursal) throws IOException {
 
 		MultipleParagraph.builder()
 				.addStartX(marginStartX + thickness + 2 * relativePositionX)
@@ -207,7 +207,7 @@ public class FormularioInformacionSucursal {
 
 	private void crearObservacionesSucursal(
 			PDPageContentStream contentStream,
-			SucursalDTO sucursal) throws IOException {
+			SucursalDTOPDF sucursal) throws IOException {
 
 		MultipleParagraph.builder()
 				.addStartX(marginStartX + thickness + 2 * relativePositionX)

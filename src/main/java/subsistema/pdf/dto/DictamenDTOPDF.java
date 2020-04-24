@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class DictamenDTO{
+public class DictamenDTOPDF {
 	private String nombreCliente;
 	private String ci;
 	private String montoSolicitadoUFV;
@@ -25,10 +25,10 @@ public class DictamenDTO{
 	private String dictamenLiteral;
 	private String porcentajeDestinadoAPago;
 
-	public DictamenDTO() { }
+	public DictamenDTOPDF() { }
 
-	public static DictamenDTO getFake() {
-		DictamenDTO dictamenDTO = new DictamenDTO();
+	public static DictamenDTOPDF getFake() {
+		DictamenDTOPDF dictamenDTO = new DictamenDTOPDF();
 
 		dictamenDTO.nombreCliente = "JORGE LUIS PATTY";
 		dictamenDTO.ci="3456656";

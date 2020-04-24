@@ -2,9 +2,9 @@ package subsistema.pdf.form;
 
 import com.lowagie.text.DocumentException;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import subsistema.pdf.dto.SucursalDTO;
-import subsistema.pdf.dto.UsuarioDTO;
-import subsistema.pdf.dto.DefinicionCreditoDTO;
+import subsistema.pdf.dto.SucursalDTOPDF;
+import subsistema.pdf.dto.UsuarioDTOPDF;
+import subsistema.pdf.dto.DefinicionCreditoDTOPDF;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -62,9 +62,9 @@ public class FormularioDefinicionCredito {
 
     public FormularioDefinicionCredito(
             String ruta,
-            DefinicionCreditoDTO definicion,
-            UsuarioDTO usuarioEditor,
-            SucursalDTO sucursal,
+            DefinicionCreditoDTOPDF definicion,
+            UsuarioDTOPDF usuarioEditor,
+            SucursalDTOPDF sucursal,
             Date fechaExportacion) throws IOException, DocumentException {
 
         new ArchivoDefinicionCreditoPDFConDatosHTML(ruta,definicion.getDetallesHTML());
@@ -128,7 +128,7 @@ public class FormularioDefinicionCredito {
 
     private void crearDatosAfiliadoDefinicion(
             PDPageContentStream contentStream,
-            DefinicionCreditoDTO definicion) throws IOException {
+            DefinicionCreditoDTOPDF definicion) throws IOException {
 
         String gradoNombreAfiliado = definicion.getGradoNombreAfiliado();
         String carnetIdentidad     = definicion.getCarnetIdentidad();

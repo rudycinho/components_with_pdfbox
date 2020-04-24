@@ -1,10 +1,10 @@
 package subsistema.pdf.form;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import subsistema.pdf.dto.DictamenDTO;
-import subsistema.pdf.dto.SucursalDTO;
-import subsistema.pdf.dto.UsuarioDTO;
-import subsistema.pdf.dto.PlanDePagosDTO;
+import subsistema.pdf.dto.DictamenDTOPDF;
+import subsistema.pdf.dto.SucursalDTOPDF;
+import subsistema.pdf.dto.UsuarioDTOPDF;
+import subsistema.pdf.dto.PlanDePagosDTOPDF;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -66,10 +66,10 @@ public class FormularioPlanPagos {
 
     public FormularioPlanPagos(
             String ruta,
-            DictamenDTO dictamen,
-            PlanDePagosDTO planDePagos,
-            UsuarioDTO usuarioEditor,
-            SucursalDTO sucursal,
+            DictamenDTOPDF dictamen,
+            PlanDePagosDTOPDF planDePagos,
+            UsuarioDTOPDF usuarioEditor,
+            SucursalDTOPDF sucursal,
             Date fechaExportacion) throws IOException {
 
         PDDocument doc = new PDDocument();
@@ -107,7 +107,7 @@ public class FormularioPlanPagos {
             PDPageContentStream contentStream,
             List<PDPageContentStream> contentStreams,
             PDDocument doc,
-            PlanDePagosDTO planDePagos) throws IOException {
+            PlanDePagosDTOPDF planDePagos) throws IOException {
 
         Style fuenteNormal = Style.builder()
                 .addTextFont(fuenteBasica)
@@ -180,7 +180,7 @@ public class FormularioPlanPagos {
 
     private void crearClienteSeccionPlanDePagos(
             PDPageContentStream contentStream,
-            DictamenDTO dictamen) throws IOException {
+            DictamenDTOPDF dictamen) throws IOException {
 
         String usuario = dictamen.getNombreCliente();
         String ci = dictamen.getCi();
@@ -277,7 +277,7 @@ public class FormularioPlanPagos {
 
     private void crearResumenDatosSeccionPlanDePagos(
             PDPageContentStream contentStream,
-            DictamenDTO dictamen) throws IOException {
+            DictamenDTOPDF dictamen) throws IOException {
 
         String capitalAPagar = dictamen.getCuotaTotal();
         String interesAPagar = dictamen.getTasaInteresFija();

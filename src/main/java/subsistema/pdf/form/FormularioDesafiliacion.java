@@ -1,9 +1,9 @@
 package subsistema.pdf.form;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import subsistema.pdf.dto.DesafiliadoDTO;
-import subsistema.pdf.dto.SucursalDTO;
-import subsistema.pdf.dto.UsuarioDTO;
+import subsistema.pdf.dto.DesafiliadoDTOPDF;
+import subsistema.pdf.dto.SucursalDTOPDF;
+import subsistema.pdf.dto.UsuarioDTOPDF;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -63,9 +63,9 @@ public class FormularioDesafiliacion {
 			.build();
 
 	public FormularioDesafiliacion(String ruta,
-								   DesafiliadoDTO desafiliado,
-								   UsuarioDTO usuarioEditor,
-								   SucursalDTO sucursal,
+								   DesafiliadoDTOPDF desafiliado,
+								   UsuarioDTOPDF usuarioEditor,
+								   SucursalDTOPDF sucursal,
 								   Date fechaExportacion) throws IOException {
 
 		PDDocument doc = new PDDocument();
@@ -115,7 +115,7 @@ public class FormularioDesafiliacion {
 
 	private void crearFechaRegistroDesafiliado(
 			PDPageContentStream contentStream,
-			DesafiliadoDTO desafiliado) throws IOException {
+			DesafiliadoDTOPDF desafiliado) throws IOException {
 
 		String fechaCreacion = desafiliado.getFechaSolicitud();
 		float width1 = 140f;
@@ -144,7 +144,7 @@ public class FormularioDesafiliacion {
 
 	private void crearDatosDesafiliado(
 			PDPageContentStream contentStream,
-			DesafiliadoDTO desafiliado) throws IOException {
+			DesafiliadoDTOPDF desafiliado) throws IOException {
 
 		Style fuenteNormal = Style.builder()
 				.addTextFont(fuenteBasica)
@@ -188,7 +188,7 @@ public class FormularioDesafiliacion {
 
 	private void crearCausaDesafiliado(
 			PDPageContentStream contentStream,
-			DesafiliadoDTO desafiliado) throws IOException {
+			DesafiliadoDTOPDF desafiliado) throws IOException {
 
 		MultipleParagraph.builder()
 				.addStartX(marginStartX + thickness + 2 * relativePositionX)
@@ -213,7 +213,7 @@ public class FormularioDesafiliacion {
 
 	private void crearObservacionesDesafiliado(
 			PDPageContentStream contentStream,
-			DesafiliadoDTO desafiliado) throws IOException {
+			DesafiliadoDTOPDF desafiliado) throws IOException {
 
 		Style fuenteNormal = Style.builder()
 				.addTextFont(fuenteBasica)

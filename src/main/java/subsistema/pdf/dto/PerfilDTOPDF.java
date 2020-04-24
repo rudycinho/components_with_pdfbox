@@ -8,19 +8,19 @@ import java.util.List;
 
 @Getter
 @Setter
-public class PerfilDTO {
+public class PerfilDTOPDF {
     private Long Id;
 
     private String nombre;
     private String rol;
     private String descripcion;
     private String estado;
-    private List<PermisoDTO> permisos;
+    private List<PermisoDTOPDF> permisos;
 
-    public PerfilDTO(){ }
+    public PerfilDTOPDF(){ }
 
-    public static PerfilDTO getFake(){
-        PerfilDTO perfilDTO = new PerfilDTO();
+    public static PerfilDTOPDF getFake(){
+        PerfilDTOPDF perfilDTO = new PerfilDTOPDF();
 
         perfilDTO.Id          = 342L;
 
@@ -34,16 +34,16 @@ public class PerfilDTO {
         perfilDTO.rol         = "SISTEMAS";
         perfilDTO.estado      = "HABILITADO";
         perfilDTO.permisos    = new LinkedList<>();
-        perfilDTO.permisos.add(PermisoDTO.getFake());
-        perfilDTO.permisos.add(PermisoDTO.getFake());
-        perfilDTO.permisos.add(PermisoDTO.getFake());
-        perfilDTO.permisos.add(PermisoDTO.getFake());
-        perfilDTO.permisos.add(PermisoDTO.getFake());
-        perfilDTO.permisos.add(PermisoDTO.getFake());
-        perfilDTO.permisos.add(PermisoDTO.getFake());
-        perfilDTO.permisos.add(PermisoDTO.getFake());
-        perfilDTO.permisos.add(PermisoDTO.getFake());
-        perfilDTO.permisos.add(PermisoDTO.getFake());
+        perfilDTO.permisos.add(PermisoDTOPDF.getFake());
+        perfilDTO.permisos.add(PermisoDTOPDF.getFake());
+        perfilDTO.permisos.add(PermisoDTOPDF.getFake());
+        perfilDTO.permisos.add(PermisoDTOPDF.getFake());
+        perfilDTO.permisos.add(PermisoDTOPDF.getFake());
+        perfilDTO.permisos.add(PermisoDTOPDF.getFake());
+        perfilDTO.permisos.add(PermisoDTOPDF.getFake());
+        perfilDTO.permisos.add(PermisoDTOPDF.getFake());
+        perfilDTO.permisos.add(PermisoDTOPDF.getFake());
+        perfilDTO.permisos.add(PermisoDTOPDF.getFake());
 
         return perfilDTO;
     }

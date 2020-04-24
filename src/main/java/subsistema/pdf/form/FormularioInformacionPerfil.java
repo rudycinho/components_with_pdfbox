@@ -1,10 +1,10 @@
 package subsistema.pdf.form;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import subsistema.pdf.dto.PerfilDTO;
-import subsistema.pdf.dto.PermisoDTO;
-import subsistema.pdf.dto.SucursalDTO;
-import subsistema.pdf.dto.UsuarioDTO;
+import subsistema.pdf.dto.PerfilDTOPDF;
+import subsistema.pdf.dto.PermisoDTOPDF;
+import subsistema.pdf.dto.SucursalDTOPDF;
+import subsistema.pdf.dto.UsuarioDTOPDF;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -73,9 +73,9 @@ public class FormularioInformacionPerfil {
             .build();
 
     public FormularioInformacionPerfil(String ruta,
-                                       PerfilDTO perfil,
-                                       UsuarioDTO usuarioEditor,
-                                       SucursalDTO sucursal,
+                                       PerfilDTOPDF perfil,
+                                       UsuarioDTOPDF usuarioEditor,
+                                       SucursalDTOPDF sucursal,
                                        Date fechaExportacion) throws IOException {
 
         PDDocument doc = new PDDocument();
@@ -130,7 +130,7 @@ public class FormularioInformacionPerfil {
 
     private void crearDatosPerfil(
             PDPageContentStream contentStream,
-            PerfilDTO perfil) throws IOException {
+            PerfilDTOPDF perfil) throws IOException {
 
         float width1 = 150f;
         float width2 = 350f - 10f;
@@ -174,12 +174,12 @@ public class FormularioInformacionPerfil {
             PDPageContentStream contentStream,
             List<PDPageContentStream> contentStreams,
             PDDocument doc,
-            PerfilDTO perfil) throws IOException {
+            PerfilDTOPDF perfil) throws IOException {
 
         List<List<String>> listOfList = new ArrayList<>();
 
         int i = 0;
-        for (PermisoDTO permiso : perfil.getPermisos()) {
+        for (PermisoDTOPDF permiso : perfil.getPermisos()) {
             List<String> auxList = new ArrayList<>();
             auxList.add(String.format("%d", ++i));
             auxList.add(permiso.getNombre());

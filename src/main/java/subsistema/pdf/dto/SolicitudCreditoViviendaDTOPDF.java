@@ -11,7 +11,7 @@ import java.util.Calendar;
 
 @Getter
 @Setter
-public class SolicitudCreditoViviendaDTO {
+public class SolicitudCreditoViviendaDTOPDF {
 
 	// INICIO
 	private String numeroCarpeta;
@@ -133,13 +133,13 @@ public class SolicitudCreditoViviendaDTO {
 	private String lugarGarante2;
 	private String fechaGarante2;
 	
-	public SolicitudCreditoViviendaDTO() {
+	public SolicitudCreditoViviendaDTOPDF() {
 		
 	}
 
-	public static SolicitudCreditoViviendaDTO getFake() {
+	public static SolicitudCreditoViviendaDTOPDF getFake() {
 		
-		SolicitudCreditoViviendaDTO solicitudDTO = new SolicitudCreditoViviendaDTO();
+		SolicitudCreditoViviendaDTOPDF solicitudDTO = new SolicitudCreditoViviendaDTOPDF();
 		
 		// INICIO
 		solicitudDTO.numeroCarpeta ="CP00000007";

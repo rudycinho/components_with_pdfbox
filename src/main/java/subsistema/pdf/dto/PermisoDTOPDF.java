@@ -5,17 +5,17 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PermisoDTO {
+public class PermisoDTOPDF {
     private Long Id;
 
     private String nombre;
     private String descripcion;
     private String estado;
 
-    public PermisoDTO(){ }
+    public PermisoDTOPDF(){ }
 
-    public static PermisoDTO getFake(){
-        PermisoDTO permisoDTO = new PermisoDTO();
+    public static PermisoDTOPDF getFake(){
+        PermisoDTOPDF permisoDTO = new PermisoDTOPDF();
 
         permisoDTO.Id          = 456L;
         permisoDTO.nombre      = "HABLAR EN LATIN";

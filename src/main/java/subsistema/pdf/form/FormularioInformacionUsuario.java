@@ -1,8 +1,8 @@
 package subsistema.pdf.form;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import subsistema.pdf.dto.SucursalDTO;
-import subsistema.pdf.dto.UsuarioDTO;
+import subsistema.pdf.dto.SucursalDTOPDF;
+import subsistema.pdf.dto.UsuarioDTOPDF;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -68,9 +68,9 @@ public class FormularioInformacionUsuario {
             .build();
 
     public FormularioInformacionUsuario(String ruta,
-                                        UsuarioDTO usuarioEditado,
-                                        UsuarioDTO usuarioEditor,
-                                        SucursalDTO sucursal,
+                                        UsuarioDTOPDF usuarioEditado,
+                                        UsuarioDTOPDF usuarioEditor,
+                                        SucursalDTOPDF sucursal,
                                         Date fechaExportacion) throws IOException {
 
         PDDocument doc = new PDDocument();
@@ -114,7 +114,7 @@ public class FormularioInformacionUsuario {
 
     private void crearFechaRegistroUsuario(
             PDPageContentStream contentStream,
-            UsuarioDTO usuarioEditado) throws IOException {
+            UsuarioDTOPDF usuarioEditado) throws IOException {
 
         String fechaCreacion = usuarioEditado.getFechaRegistro();
         float width1 = 140f;
@@ -144,7 +144,7 @@ public class FormularioInformacionUsuario {
 
     private void crearDatosUsuario(
             PDPageContentStream contentStream,
-            UsuarioDTO usuarioEditado) throws IOException {
+            UsuarioDTOPDF usuarioEditado) throws IOException {
 
         float width1 = 150f;
         float width2 = 350f - 10f;
@@ -190,7 +190,7 @@ public class FormularioInformacionUsuario {
 
     private void crearObservacionesUsuario(
             PDPageContentStream contentStream,
-            UsuarioDTO usuarioEditado) throws IOException {
+            UsuarioDTOPDF usuarioEditado) throws IOException {
 
         MultipleParagraph.builder()
                 .addStartX(marginStartX + thickness + 2 * relativePositionX)

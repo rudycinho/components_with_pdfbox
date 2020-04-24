@@ -1,9 +1,9 @@
 package subsistema.pdf.form;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import subsistema.pdf.dto.SucursalDTO;
-import subsistema.pdf.dto.UsuarioDTO;
-import subsistema.pdf.dto.SolicitudCreditoViviendaDTO;
+import subsistema.pdf.dto.SucursalDTOPDF;
+import subsistema.pdf.dto.UsuarioDTOPDF;
+import subsistema.pdf.dto.SolicitudCreditoViviendaDTOPDF;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -114,9 +114,9 @@ public class FormularioSolicitudCreditoVivienda {
 
 	public FormularioSolicitudCreditoVivienda(
 			String ruta,
-			SolicitudCreditoViviendaDTO solicitud,
-			UsuarioDTO usuarioEditor,
-			SucursalDTO sucursal,
+			SolicitudCreditoViviendaDTOPDF solicitud,
+			UsuarioDTOPDF usuarioEditor,
+			SucursalDTOPDF sucursal,
 			Date fechaExportacion) throws IOException {
 
 		PDDocument doc = new PDDocument();
@@ -160,7 +160,7 @@ public class FormularioSolicitudCreditoVivienda {
 	}
 
 	private void crearTipoCredito(
-			SolicitudCreditoViviendaDTO solicitudDTO,
+			SolicitudCreditoViviendaDTOPDF solicitudDTO,
 			PDPageContentStream contentStream) throws IOException {
 
 		float witdh = 500f;
@@ -224,7 +224,7 @@ public class FormularioSolicitudCreditoVivienda {
 	}
 
 	private void crearTipoGarantia(
-			SolicitudCreditoViviendaDTO solicitudDTO,
+			SolicitudCreditoViviendaDTOPDF solicitudDTO,
 			PDPageContentStream contentStream) throws IOException {
 
 		float witdh = 500f;
@@ -269,7 +269,7 @@ public class FormularioSolicitudCreditoVivienda {
 	}
 
 	private void crearMontoPrestamoSolicitado(
-			SolicitudCreditoViviendaDTO solicitudDTO,
+			SolicitudCreditoViviendaDTOPDF solicitudDTO,
 			PDPageContentStream contentStream) throws IOException {
 
 		float witdh = 500f;
@@ -315,7 +315,7 @@ public class FormularioSolicitudCreditoVivienda {
 	}
 
 	private void crearDatosSolicitado(
-			SolicitudCreditoViviendaDTO solicitud,
+			SolicitudCreditoViviendaDTOPDF solicitud,
 			PDPageContentStream contentStream) throws IOException {
 
 		float initX  = marginStartX+thickness;
@@ -1021,7 +1021,7 @@ public class FormularioSolicitudCreditoVivienda {
 	}
 
 	private void crearDatosGarantesPersonales(
-			SolicitudCreditoViviendaDTO solicitud,
+			SolicitudCreditoViviendaDTOPDF solicitud,
 			PDPageContentStream contentStream) throws IOException {
 
 		float initX  = marginStartX+thickness;
@@ -1457,7 +1457,7 @@ public class FormularioSolicitudCreditoVivienda {
 	}
 
 	private void crearCuadroCarpeta(
-			SolicitudCreditoViviendaDTO solicitud,
+			SolicitudCreditoViviendaDTOPDF solicitud,
 			PDPageContentStream contentStream) throws IOException {
 
 		float initX  = marginStartX+thickness;

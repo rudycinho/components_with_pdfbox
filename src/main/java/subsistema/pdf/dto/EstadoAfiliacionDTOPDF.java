@@ -6,15 +6,15 @@ import subsistema.pdf.utils.Fecha;
 import java.util.Calendar;
 
 @Getter
-public class EstadoAfiliacionDTO {
+public class EstadoAfiliacionDTOPDF {
     private String causa;
     private String observaciones;
     private String fechaSolicitud;
 
-    public EstadoAfiliacionDTO(){ }
+    public EstadoAfiliacionDTOPDF(){ }
 
-    public static EstadoAfiliacionDTO getFake(){
-        EstadoAfiliacionDTO estado = new EstadoAfiliacionDTO();
+    public static EstadoAfiliacionDTOPDF getFake(){
+        EstadoAfiliacionDTOPDF estado = new EstadoAfiliacionDTOPDF();
         estado.causa = "Quisque in tincidunt felis, quis faucibus tortor.\n"+
                 "Vestibulum malesuada arcu sit amet neque pulvinar, vehicula facilisis nisl semper.\n"+
                 "Nullam turpis lorem, ultrices sit amet malesuada a, condimentum quis eros.\n";

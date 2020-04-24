@@ -8,7 +8,7 @@ import java.util.Calendar;
 
 @Getter
 @Setter
-public class UsuarioDTO {
+public class UsuarioDTOPDF {
 	private Long Id;
 
 	private String fechaRegistro;
@@ -28,10 +28,10 @@ public class UsuarioDTO {
 
 	private String observaciones;
 	
-	public UsuarioDTO() {}
+	public UsuarioDTOPDF() {}
 
-	public static UsuarioDTO getFake(){
-		UsuarioDTO usuarioDTO        = new UsuarioDTO();
+	public static UsuarioDTOPDF getFake(){
+		UsuarioDTOPDF usuarioDTO        = new UsuarioDTOPDF();
 
 		usuarioDTO.Id                = 345L;
 

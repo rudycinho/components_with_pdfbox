@@ -6,7 +6,7 @@ import java.util.List;
 import lombok.Getter;
 
 @Getter
-public class FilaPagoMensualDTO {
+public class FilaPagoMensualDTOPDF {
 
 	private String numeroFila;
 	private String fechaPago;
@@ -21,10 +21,10 @@ public class FilaPagoMensualDTO {
 
 	private static int count=0;
 
-	public FilaPagoMensualDTO(){ }
+	public FilaPagoMensualDTOPDF(){ }
 
-	public static FilaPagoMensualDTO getFake(){
-		FilaPagoMensualDTO fila = new FilaPagoMensualDTO();
+	public static FilaPagoMensualDTOPDF getFake(){
+		FilaPagoMensualDTOPDF fila = new FilaPagoMensualDTOPDF();
 
 		fila.numeroFila       = String.format("%d",count++);
 		fila.fechaPago        = "";
@@ -40,8 +40,8 @@ public class FilaPagoMensualDTO {
 		return fila;
 	}
 
-	public static FilaPagoMensualDTO getFake2(){
-		FilaPagoMensualDTO fila = new FilaPagoMensualDTO();
+	public static FilaPagoMensualDTOPDF getFake2(){
+		FilaPagoMensualDTOPDF fila = new FilaPagoMensualDTOPDF();
 
 		fila.numeroFila       = "";
 		fila.fechaPago        = "TOTAL";

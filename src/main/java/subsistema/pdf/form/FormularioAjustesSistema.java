@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.util.Date;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import subsistema.pdf.dto.AjustesSistemaDTO;
-import subsistema.pdf.dto.SucursalDTO;
-import subsistema.pdf.dto.UsuarioDTO;
+import subsistema.pdf.dto.AjustesSistemaDTOPDF;
+import subsistema.pdf.dto.SucursalDTOPDF;
+import subsistema.pdf.dto.UsuarioDTOPDF;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -56,9 +56,9 @@ public class FormularioAjustesSistema {
 			.build();
 
 	public FormularioAjustesSistema(String ruta,
-									AjustesSistemaDTO ajustes,
-									UsuarioDTO usuarioEditor,
-									SucursalDTO sucursal,
+									AjustesSistemaDTOPDF ajustes,
+									UsuarioDTOPDF usuarioEditor,
+									SucursalDTOPDF sucursal,
 									Date fechaExportacion) throws IOException {
 		PDDocument doc = new PDDocument();
 		PDPage page = new PDPage(new PDRectangle(maxX,maxY));
@@ -99,7 +99,7 @@ public class FormularioAjustesSistema {
 
 	private void crearDatosAjustesSistema(
 			PDPageContentStream contentStream,
-			AjustesSistemaDTO ajustes) throws IOException {
+			AjustesSistemaDTOPDF ajustes) throws IOException {
 
 		float width1 = 200f;
 		float width2 = 300f - 10f;

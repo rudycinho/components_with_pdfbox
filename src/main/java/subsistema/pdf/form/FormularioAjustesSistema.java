@@ -21,18 +21,19 @@ import subsistema.pdf.lib.text.MultipleParagraph;
 import subsistema.pdf.utils.Data;
 import subsistema.pdf.utils.factories.EasyComponentsFactory;
 import subsistema.pdf.utils.factories.GeneradorFormularioFactory;
+import subsistema.pdf.utils.factories.Model;
 
 public class FormularioAjustesSistema {
-	private final float maxY         = Data.MAX_LETTER_Y;
-	private final float maxX         = Data.MAX_LETTER_X;
-	private final float thickness    = Data.THICKNESS_MODEL_1;
-	private final float marginStartX = Data.MARGIN_START_X_MODEL_1;
-	private final float marginEndX   = Data.MARGIN_END_X_MODEL_1;
+	private final float maxY         = Model.MODEL_1.getMaxY();
+	private final float maxX         = Model.MODEL_1.getMaxX();
+	private final float thickness    = Model.MODEL_1.getThickness();
+	private final float marginStartX = Model.MODEL_1.getMarginStartX();
+	private final float marginEndX   = Model.MODEL_1.getMarginEndX();
 	private final float relativePositionX = 5f;
 	private final float relativePositionY = 5f;
 
-	private final PDFont fuenteBasica        = Data.BASIC_FONT;
-	private final PDFont fuenteBasicaNegrita = Data.BASIC_BOLD_FONT;
+	private final PDFont fuenteBasica        = Model.MODEL_1.getFuenteBasica();
+	private final PDFont fuenteBasicaNegrita = Model.MODEL_1.getFuenteBasicaNegrita();
 
 	private final Style fuenteSubtitulo = Style.builder()
 			.addTextFont(fuenteBasicaNegrita)

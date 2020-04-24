@@ -8,7 +8,7 @@ import lombok.Getter;
 
 @Getter
 public class PlanDePagosDTO {
-	private List<FilaPagoMensualDTO> planDePagosLista;
+	private final List<FilaPagoMensualDTO> planDePagosLista;
 
 	public PlanDePagosDTO(){
 		planDePagosLista = new LinkedList<>();
@@ -25,7 +25,7 @@ public class PlanDePagosDTO {
 	public List<List<String>> getContenido(){
 		return planDePagosLista
 				.stream()
-				.map(s -> s.getContenido())
+				.map(FilaPagoMensualDTO::getContenido)
 				.collect(Collectors.toList());
 	}
 

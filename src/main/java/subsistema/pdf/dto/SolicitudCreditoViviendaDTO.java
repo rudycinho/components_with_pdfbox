@@ -2,11 +2,12 @@ package subsistema.pdf.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import subsistema.pdf.utils.Fecha;
 import subsistema.pdf.utils.enums.TipoCreditoEnum;
 import subsistema.pdf.utils.enums.TipoGarantiaEnum;
 import subsistema.pdf.utils.enums.TipoViviendaEnum;
 
-import java.util.Date;
+import java.util.Calendar;
 
 @Getter
 @Setter
@@ -24,9 +25,9 @@ public class SolicitudCreditoViviendaDTO {
 	
 	// MONTO PRESTAMO SOLICITADO
 
-	private float montoPrestamoSolicitadoBs;
-	private float montoPrestamoSolicitadoUFV;
-	private float tipoCambioOficialUFV;
+	private String montoPrestamoSolicitadoBs;
+	private String montoPrestamoSolicitadoUFV;
+	private String tipoCambioOficialUFV;
 
 	// DATOS SOLICITANTE
 
@@ -38,24 +39,27 @@ public class SolicitudCreditoViviendaDTO {
 	private String cedulaIdentidadSolicitante;
 	private String categoriaPorcentajeSolicitante;
 	private String unidadSolicitante;
-	private float liquidoPagableBsSueldoSolicitante;
-	private float antiguedadBsSolicitante;
-	private float postGradoBsSolicitante;
-	private float bonoBsSegSolicitante;
-	private int aniosServicioSolicitante;
+	private String liquidoPagableBsSueldoSolicitante;
+	private String antiguedadBsSolicitante;
+	private String postGradoBsSolicitante;
+	private String bonoBsSegSolicitante;
+	private String aniosServicioSolicitante;
 
-	private Date fechaNacimientoSolicitante;
+	private String fechaNacimientoSolicitanteDia;
+	private String fechaNacimientoSolicitanteMes;
+	private String fechaNacimientoSolicitanteAnio;
+
 	private String ciudadLocalidadSolicitante;
 	private String provinciaSolicitante;
 	private String departamentoSolicitante;
 	 
-	private int edadSolicitante;
+	private String edadSolicitante;
 	private String estadoCivilSolicitante;
-	private int dependientesSolicitante;
-	private int totalGrupoFamiliarSolicitante;
+	private String dependientesSolicitante;
+	private String totalGrupoFamiliarSolicitante;
 
 	private String calleAvenidaSolicitante;
-	private int numeroCasaSolicitante;
+	private String numeroCasaSolicitante;
 	private String zonaBarrioSolicitante;
 
 	private String numeroTelefonoDomicilioSolicitanteDomilicioActual;
@@ -74,19 +78,18 @@ public class SolicitudCreditoViviendaDTO {
 	private boolean tienePrestamosTerrenoPropioSolicitanteDestinoActual;
 	private boolean tienePrestamosViviendaPropiaSolicitanteDestinoActual;
 	private boolean tienePrestamosAnticreticoSolicitanteDestinoActual;
-	private int numeroCreditosAnteriores;
+	private String numeroCreditosAnteriores;
 
 	private String lugarInmuebleCalleAvenidaDestinoActual;
-	private int lugarInmuebleNumeroDomicilioDestinoActual;
+	private String lugarInmuebleNumeroDomicilioDestinoActual;
 	private String lugarInmuebleZonaBarrioDestinoActual;
 	private String lugarInmuebleCiudadLocalidadDestinoActual;
 	private String lugarInmuebleDeparmentoDestinoActual;
 
 	private String lugarSuscripcionFormularioDestinoActual;
-	private Date fechaSuscripcionFormularioDestinoActual;
+	private String fechaSuscripcionFormularioDestinoActual;
 
 	private String observaciones;
-
 
 	private String apellidoPaternoGarante1;
 	private String apellidoMaternoGarante1;
@@ -96,12 +99,12 @@ public class SolicitudCreditoViviendaDTO {
 	private String cedulaIdentidadGarante1;
 	private String categoriaPorcentajeGarante1;
 	private String unidadGarante1;
-	private float sueldoGarante1;
-	private float antiguedadGarante1;
-	private float postGradoEnBsGarante1;
-	private float bonoBSCBsGarante1;
+	private String sueldoGarante1;
+	private String antiguedadGarante1;
+	private String postGradoEnBsGarante1;
+	private String bonoBSCBsGarante1;
 
-	private int aniosServicioGarante1;
+	private String aniosServicioGarante1;
 	private String telefonoCelularGarante1;
 	private String destinoActualGarante1;
 	private String departamentoGarante1;
@@ -114,27 +117,26 @@ public class SolicitudCreditoViviendaDTO {
 	private String cedulaIdentidadGarante2;
 	private String categoriaPorcentajeGarante2;
 	private String unidadGarante2;
-	private float sueldoGarante2;
-	private float antiguedadGarante2;
-	private float postGradoEnBsGarante2;
-	private float bonoBSCBsGarante2;
+	private String sueldoGarante2;
+	private String antiguedadGarante2;
+	private String postGradoEnBsGarante2;
+	private String bonoBSCBsGarante2;
 
-	private int aniosServicioGarante2;
+	private String aniosServicioGarante2;
 	private String telefonoCelularGarante2;
 	private String destinoActualGarante2;
 	private String departamentoGarante2;
 
 	private String lugarGarante1;
-	private Date fechaGarante1;
+	private String fechaGarante1;
 
 	private String lugarGarante2;
-	private Date fechaGarante2;
+	private String fechaGarante2;
 	
 	public SolicitudCreditoViviendaDTO() {
 		
 	}
-	
-	@SuppressWarnings("deprecation")
+
 	public static SolicitudCreditoViviendaDTO getFake() {
 		
 		SolicitudCreditoViviendaDTO solicitudDTO = new SolicitudCreditoViviendaDTO();
@@ -150,9 +152,9 @@ public class SolicitudCreditoViviendaDTO {
 		solicitudDTO.tipoGarantia = TipoGarantiaEnum.REAL;
 		
 		// MONTO PRESTAMO SOLICITADO
-		solicitudDTO.montoPrestamoSolicitadoBs = 10000.00f;
-		solicitudDTO.montoPrestamoSolicitadoUFV= 49263.51f;
-		solicitudDTO.tipoCambioOficialUFV      = 2.0299f;
+		solicitudDTO.montoPrestamoSolicitadoBs = 10000.00f+"";
+		solicitudDTO.montoPrestamoSolicitadoUFV= 49263.51f+"";
+		solicitudDTO.tipoCambioOficialUFV      = 2.0299f+"";
 
 		// DATOS SOLICITANTE
 
@@ -165,24 +167,30 @@ public class SolicitudCreditoViviendaDTO {
 		solicitudDTO.cedulaIdentidadSolicitante = "4235678";
 		solicitudDTO.categoriaPorcentajeSolicitante = "045";
 		solicitudDTO.unidadSolicitante = "39A";
-		solicitudDTO.liquidoPagableBsSueldoSolicitante = 3000.00f;
-		solicitudDTO.antiguedadBsSolicitante = 139.54f;
-		solicitudDTO.postGradoBsSolicitante = 225.17f;
-		solicitudDTO.bonoBsSegSolicitante = 71.84f;
-		solicitudDTO.aniosServicioSolicitante = 16;
+		solicitudDTO.liquidoPagableBsSueldoSolicitante = 3000.00f+"";
+		solicitudDTO.antiguedadBsSolicitante = 139.54f+"";
+		solicitudDTO.postGradoBsSolicitante = 225.17f+"";
+		solicitudDTO.bonoBsSegSolicitante = 71.84f+"";
+		solicitudDTO.aniosServicioSolicitante = 16+"";
 
-		solicitudDTO.fechaNacimientoSolicitante = new Date(1982, 9, 1982);
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(2015, Calendar.MAY,28);
+
+		solicitudDTO.fechaNacimientoSolicitanteDia  = new Fecha(calendar.getTime()).getDiaLiteral()  + "";
+		solicitudDTO.fechaNacimientoSolicitanteMes  = new Fecha(calendar.getTime()).getMesLiteral()  + "";
+		solicitudDTO.fechaNacimientoSolicitanteAnio = new Fecha(calendar.getTime()).getAnioLiteral() + "";
+
 		solicitudDTO.ciudadLocalidadSolicitante = "COCHABAMBA";
 		solicitudDTO.provinciaSolicitante = "CERCADO";
 		solicitudDTO.departamentoSolicitante = "COCHABAMBA";
 		 
-		solicitudDTO.edadSolicitante = 37;
+		solicitudDTO.edadSolicitante = 37+"";
 		solicitudDTO.estadoCivilSolicitante = "CASADO";
-		solicitudDTO.dependientesSolicitante = 3;
-		solicitudDTO.totalGrupoFamiliarSolicitante = 4;
+		solicitudDTO.dependientesSolicitante = 3+"";
+		solicitudDTO.totalGrupoFamiliarSolicitante = 4+"";
 
 		solicitudDTO.calleAvenidaSolicitante = "AV. VILLANUEVA";
-		solicitudDTO.numeroCasaSolicitante = 123;
+		solicitudDTO.numeroCasaSolicitante = 123+"";
 		solicitudDTO.zonaBarrioSolicitante = "PAMPALINA";
 
 		solicitudDTO.numeroTelefonoDomicilioSolicitanteDomilicioActual = "4580956";
@@ -201,16 +209,16 @@ public class SolicitudCreditoViviendaDTO {
 		solicitudDTO.tienePrestamosTerrenoPropioSolicitanteDestinoActual = false;
 		solicitudDTO.tienePrestamosViviendaPropiaSolicitanteDestinoActual= false;
 		solicitudDTO.tienePrestamosAnticreticoSolicitanteDestinoActual   = false;
-		solicitudDTO.numeroCreditosAnteriores = 0;
+		solicitudDTO.numeroCreditosAnteriores = 0 + "";
 
 		solicitudDTO.lugarInmuebleCalleAvenidaDestinoActual   ="CALLE JUAN OSORIO";
-		solicitudDTO.lugarInmuebleNumeroDomicilioDestinoActual=17;
+		solicitudDTO.lugarInmuebleNumeroDomicilioDestinoActual=17+"";
 		solicitudDTO.lugarInmuebleZonaBarrioDestinoActual     ="ALTO HEROES";
 		solicitudDTO.lugarInmuebleCiudadLocalidadDestinoActual="LA PAZ";
 		solicitudDTO.lugarInmuebleDeparmentoDestinoActual     ="LA PAZ";
 
 		solicitudDTO.lugarSuscripcionFormularioDestinoActual="LA PAZ";
-		solicitudDTO.fechaSuscripcionFormularioDestinoActual= new Date();
+		solicitudDTO.fechaSuscripcionFormularioDestinoActual= "";
 
 		solicitudDTO.observaciones = "Tiene pendiente la veficacion de su carnet de identidad, Verificar con el comando";
 
@@ -222,12 +230,12 @@ public class SolicitudCreditoViviendaDTO {
 		solicitudDTO.cedulaIdentidadGarante1 = "44876532";
 		solicitudDTO.categoriaPorcentajeGarante1 = "055";
 		solicitudDTO.unidadGarante1 = "37";
-		solicitudDTO.sueldoGarante1 = 2770.45f;
-		solicitudDTO.antiguedadGarante1 = 121.89f;
-		solicitudDTO.postGradoEnBsGarante1 = 83.78f;
-		solicitudDTO.bonoBSCBsGarante1 = 109.55f;
+		solicitudDTO.sueldoGarante1 = 2770.45f+"";
+		solicitudDTO.antiguedadGarante1 = 121.89f+"";
+		solicitudDTO.postGradoEnBsGarante1 = 83.78f+"";
+		solicitudDTO.bonoBSCBsGarante1 = 109.55f+"";
 
-		solicitudDTO.aniosServicioGarante1  = 10;
+		solicitudDTO.aniosServicioGarante1  = 10+"";
 		solicitudDTO.telefonoCelularGarante1= "65434567";
 		solicitudDTO.destinoActualGarante1  = "BOMBEROS 37";
 		solicitudDTO.departamentoGarante1   = "TARIJA";
@@ -240,21 +248,21 @@ public class SolicitudCreditoViviendaDTO {
 		solicitudDTO.cedulaIdentidadGarante2 = "9876567";
 		solicitudDTO.categoriaPorcentajeGarante2 = "060";
 		solicitudDTO.unidadGarante2 = "16";
-		solicitudDTO.sueldoGarante2 = 4500.67f;
-		solicitudDTO.antiguedadGarante2 = 177.90f;
-		solicitudDTO.postGradoEnBsGarante2 = 98.05f;
-		solicitudDTO.bonoBSCBsGarante2 = 112.67f;
+		solicitudDTO.sueldoGarante2 = 4500.67f+"";
+		solicitudDTO.antiguedadGarante2 = 177.90f+"";
+		solicitudDTO.postGradoEnBsGarante2 = 98.05f+"";
+		solicitudDTO.bonoBSCBsGarante2 = 112.67f+"";
 
-		solicitudDTO.aniosServicioGarante2  = 8;
+		solicitudDTO.aniosServicioGarante2  = 8+"";
 		solicitudDTO.telefonoCelularGarante2= "7899876";
 		solicitudDTO.destinoActualGarante2  = "COMANDO LA PAZ";
 		solicitudDTO.departamentoGarante2   = "LA PAZ"; 
 
 		solicitudDTO.lugarGarante1 = "LA PAZ";
-		solicitudDTO.fechaGarante1 = new Date();
+		solicitudDTO.fechaGarante1 = "";
 
 		solicitudDTO.lugarGarante2 = "LA PAZ";
-		solicitudDTO.fechaGarante2 = new Date();
+		solicitudDTO.fechaGarante2 = "";
 		
 		return solicitudDTO;
 	}

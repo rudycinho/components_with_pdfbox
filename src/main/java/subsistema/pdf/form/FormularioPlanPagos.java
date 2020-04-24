@@ -19,25 +19,25 @@ import subsistema.pdf.lib.text.MultipleParagraph;
 import subsistema.pdf.utils.Data;
 import subsistema.pdf.utils.factories.EasyComponentsFactory;
 import subsistema.pdf.utils.factories.GeneradorFormularioFactory;
+import subsistema.pdf.utils.factories.Model;
 
-import java.awt.*;
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.List;
 
 public class FormularioPlanPagos {
 
-    private final float maxY         = Data.MAX_LETTER_X;
-    private final float maxX         = Data.MAX_LETTER_Y;
-    private final float thickness    = Data.THICKNESS_MODEL_1;
-    private final float marginStartX = Data.MARGIN_START_X_MODEL_2;
-    private final float marginEndX   = Data.MARGIN_END_X_MODEL_1;
+    private final float maxY         = Model.MODEL_2.getMaxY();
+    private final float maxX         = Model.MODEL_2.getMaxX();
+    private final float thickness    = Model.MODEL_2.getThickness();
+    private final float marginStartX = Model.MODEL_2.getMarginStartX();
+    private final float marginEndX   = Model.MODEL_2.getMarginEndX();
     private final float relativePositionX = 5f;
     private final float relativePositionY = 5f;
 
-    private final PDFont fuenteBasica        = Data.BASIC_FONT;
-    private final PDFont fuenteBasicaNegrita = Data.BASIC_BOLD_FONT;
+    private final PDFont fuenteBasica        = Model.MODEL_2.getFuenteBasica();
+    private final PDFont fuenteBasicaNegrita = Model.MODEL_2.getFuenteBasicaNegrita();
 
     private final Style fuenteSubtitulo = Style.builder()
             .addTextFont(fuenteBasicaNegrita)

@@ -1,5 +1,8 @@
 package subsistema.pdf.utils.factories;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import subsistema.pdf.lib.basic.Alignment;
 import subsistema.pdf.lib.basic.Component;
 import subsistema.pdf.lib.basic.Style;
@@ -14,7 +17,6 @@ import java.awt.Color;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-
 
     public class EasyComponentsFactory {
         public static MultipleParagraph getSimpleMultipleParagraph(String text,
@@ -393,4 +395,29 @@ import java.util.List;
                 cell.setColorFilling(color);
             }
         }
+
+        public static void createMargin(PDPageContentStream contentStream,
+                                        float startX, float startY, float witdh, float heigth) throws IOException {
+            Rectangle rectangle = Rectangle.builder()
+                    .addColor(Color.BLACK)
+                    .addThickness(2)
+                    .addStartX(startX)
+                    .addStartY(startY)
+                    .addWidth(witdh)
+                    .addHeight(heigth)
+                    .build();
+
+            rectangle.draw(contentStream);
+        }
+
+        public static void drawImage(
+                PDPageContentStream pageContentStream,
+                PDDocument document, String imagePath,
+                float offsetX, float offsetY, int width,
+                int height
+        ) throws IOException {
+            PDImageXObject pdImage = PDImageXObject.createFromFile(imagePath, document);
+            pageContentStream.drawImage(pdImage, offsetX, offsetY, width, height);
+        }
+
     }

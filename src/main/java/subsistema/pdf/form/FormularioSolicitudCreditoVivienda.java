@@ -26,6 +26,7 @@ import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 
 public class FormularioSolicitudCreditoVivienda {
@@ -287,11 +288,11 @@ public class FormularioSolicitudCreditoVivienda {
 				Arrays.asList(
 						"",
 						"BS.-",
-						String.format("%.2f",solicitudDTO.getMontoPrestamoSolicitadoBs()),
+						solicitudDTO.getMontoPrestamoSolicitadoBs(),
 						"En UFV.-",
-						String.format("%.4f",solicitudDTO.getMontoPrestamoSolicitadoUFV()),
+						solicitudDTO.getMontoPrestamoSolicitadoUFV(),
 						"Tipo de cambio oficial: UFV.-",
-						String.format("%f",solicitudDTO.getTipoCambioOficialUFV())
+						solicitudDTO.getTipoCambioOficialUFV()
 				),
 				Arrays.asList(25f,30f,80f,50f,70f,170f,65f),
 				Arrays.asList(
@@ -446,8 +447,8 @@ public class FormularioSolicitudCreditoVivienda {
 
 
 		Column columnTitulo = EasyComponentsFactory.getSimpleColumnFromTextAndWidthsAndStyleAndRelativePosition(
-				Arrays.asList("D. DATOS DEL SOLICITANTE: "),
-				Arrays.asList(witdh), fuenteNegrita, 5f, 2.5f, Alignment.LEFT, true);
+				Collections.singletonList("D. DATOS DEL SOLICITANTE: "),
+				Collections.singletonList(witdh), fuenteNegrita, 5f, 2.5f, Alignment.LEFT, true);
 
 		SimpleTable tabla = EasyComponentsFactory.getSimpleTable(initX, maxY - 395,
 				columnTitulo,
@@ -486,11 +487,11 @@ public class FormularioSolicitudCreditoVivienda {
 														solicitud.getCedulaIdentidadSolicitante(),
 														solicitud.getCategoriaPorcentajeSolicitante(),
 														solicitud.getUnidadSolicitante(),
-														String.format("%s",solicitud.getLiquidoPagableBsSueldoSolicitante()),
-														String.format("%s",solicitud.getAntiguedadBsSolicitante()),
-														String.format("%s",solicitud.getPostGradoBsSolicitante()),
-														String.format("%s",solicitud.getBonoBsSegSolicitante()),
-														String.format("%s",solicitud.getAniosServicioSolicitante())
+														solicitud.getLiquidoPagableBsSueldoSolicitante(),
+														solicitud.getAntiguedadBsSolicitante(),
+														solicitud.getPostGradoBsSolicitante(),
+														solicitud.getBonoBsSegSolicitante(),
+														solicitud.getAniosServicioSolicitante()
 												),
 												Arrays.asList(70f,60f,40f,80f,60f,65f,75f,50f),
 												fuenteMinimalNegrita,  Alignment.CENTER,
@@ -518,8 +519,8 @@ public class FormularioSolicitudCreditoVivienda {
 						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
 								EasyComponentsFactory.getSimpleTable(0, 0,
 										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
-												Arrays.asList("Llena de acuerdo a los datos de la boleta de pago"),
-												Arrays.asList(witdh),
+												Collections.singletonList("Llena de acuerdo a los datos de la boleta de pago"),
+												Collections.singletonList(witdh),
 												fuenteMinimal,  Alignment.CENTER,
 												5f, 1.5f,
 												true,true,Color.BLACK,colorGrisClaro)
@@ -536,9 +537,9 @@ public class FormularioSolicitudCreditoVivienda {
 														EasyComponentsFactory.getSimpleTable(0, 0,
 																EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
 																		Arrays.asList(
-																				new Fecha(solicitud.getFechaNacimientoSolicitante()).getDiaLiteral(),
-																				new Fecha(solicitud.getFechaNacimientoSolicitante()).getMesLiteral(),
-																				new Fecha(solicitud.getFechaNacimientoSolicitante()).getAnioLiteral()
+																				solicitud.getFechaNacimientoSolicitanteDia(),
+																				solicitud.getFechaNacimientoSolicitanteMes(),
+																				solicitud.getFechaNacimientoSolicitanteAnio()
 																		),
 																		Arrays.asList(40f,40f,40f),
 																		fuenteMinimalNegrita,  Alignment.CENTER,
@@ -593,10 +594,10 @@ public class FormularioSolicitudCreditoVivienda {
 								EasyComponentsFactory.getSimpleTable(0, 0,
 										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
 												Arrays.asList(
-														String.format("%s",solicitud.getEdadSolicitante()),
+														solicitud.getEdadSolicitante(),
 														solicitud.getEstadoCivilSolicitante(),
-														String.format("%s",solicitud.getDependientesSolicitante()),
-														String.format("%s",solicitud.getTotalGrupoFamiliarSolicitante())
+														solicitud.getDependientesSolicitante(),
+														solicitud.getTotalGrupoFamiliarSolicitante()
 												),
 												Arrays.asList(100f,120f,140f,140f),
 												fuenteMinimalNegrita,  Alignment.CENTER,
@@ -622,7 +623,7 @@ public class FormularioSolicitudCreditoVivienda {
 										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
 												Arrays.asList(
 														solicitud.getCalleAvenidaSolicitante(),
-														String.format("%s",solicitud.getNumeroCasaSolicitante()),
+														solicitud.getNumeroCasaSolicitante(),
 														solicitud.getZonaBarrioSolicitante(),
 														solicitud.getCiudadLocalidadSolicitante(),
 														solicitud.getDepartamentoSolicitante()
@@ -650,8 +651,8 @@ public class FormularioSolicitudCreditoVivienda {
 						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
 								EasyComponentsFactory.getSimpleTable(0, 0,
 										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
-												Arrays.asList("DATOS DEL DOMICILIO ACTUAL"),
-												Arrays.asList(witdh),
+												Collections.singletonList("DATOS DEL DOMICILIO ACTUAL"),
+												Collections.singletonList(witdh),
 												fuenteMinimal,  Alignment.CENTER,
 												5f, 1.5f,
 												true,true,Color.BLACK,colorGrisClaro)
@@ -663,7 +664,7 @@ public class FormularioSolicitudCreditoVivienda {
 								EasyComponentsFactory.getSimpleTable(0, 0,
 										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
 												Arrays.asList(
-														String.format("%s",solicitud.getLugarInmuebleNumeroDomicilioDestinoActual()),
+														solicitud.getLugarInmuebleNumeroDomicilioDestinoActual(),
 														solicitud.getNumeroCelularSolicitanteDomilicioActual(),
 														solicitud.getNumeroTelefonoDomicilioSolicitanteDomilicioActual(),
 														solicitud.getNumeroTelefonoReferenciaSolicitanteDomilicioActual()
@@ -716,8 +717,8 @@ public class FormularioSolicitudCreditoVivienda {
 						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
 								EasyComponentsFactory.getSimpleTable(0, 0,
 										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
-												Arrays.asList("DESTINO ACTUAL DEL SOLICITANTE"),
-												Arrays.asList(witdh),
+												Collections.singletonList("DESTINO ACTUAL DEL SOLICITANTE"),
+												Collections.singletonList(witdh),
 												fuenteMinimal,  Alignment.CENTER,
 												5f, 1.5f,
 												true,true,Color.BLACK,colorGrisClaro)
@@ -728,10 +729,8 @@ public class FormularioSolicitudCreditoVivienda {
 						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
 								EasyComponentsFactory.getSimpleTable(0, 0,
 										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
-												Arrays.asList(
-														"SITUACION HABITACIONAL DEL SOLICITANTE: (Marque con una x)"
-												),
-												Arrays.asList(500f),
+												Collections.singletonList("SITUACION HABITACIONAL DEL SOLICITANTE: (Marque con una x)"),
+												Collections.singletonList(500f),
 												fuenteMinimal,  Alignment.LEFT,
 												5f, 2.5f,
 												true,false,colorGrisClaro,colorGrisClaro),
@@ -827,8 +826,8 @@ public class FormularioSolicitudCreditoVivienda {
 						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
 								EasyComponentsFactory.getSimpleTable(0, 0,
 										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
-												Arrays.asList("PRESTAMOS ANTERIORES: (Marque con una x)"),
-												Arrays.asList(witdh),
+												Collections.singletonList("PRESTAMOS ANTERIORES: (Marque con una x)"),
+												Collections.singletonList(witdh),
 												fuenteMinimal,  Alignment.LEFT,
 												5f, 2.5f,
 												true,false,colorGrisClaro,colorGrisClaro),
@@ -888,7 +887,7 @@ public class FormularioSolicitudCreditoVivienda {
 														)
 												),
 												EasyComponentsFactory.getSimpleCellFromText(
-														String.format("%s",solicitud.getNumeroCreditosAnteriores()),
+														solicitud.getNumeroCreditosAnteriores(),
 														fuenteMinimalNegrita,140f,5f,2.5f,Alignment.CENTER,false,false,colorGrisClaro,Color.WHITE
 												)
 										)
@@ -925,7 +924,7 @@ public class FormularioSolicitudCreditoVivienda {
 										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
 												Arrays.asList(
 														solicitud.getCalleAvenidaSolicitante(),
-														String.format("%s",solicitud.getLugarInmuebleNumeroDomicilioDestinoActual()),
+														solicitud.getLugarInmuebleNumeroDomicilioDestinoActual(),
 														solicitud.getZonaBarrioSolicitante(),
 														solicitud.getCiudadLocalidadSolicitante(),
 														solicitud.getDepartamentoSolicitante()
@@ -958,8 +957,7 @@ public class FormularioSolicitudCreditoVivienda {
 														String.format(
 																"%s - %s",
 																solicitud.getCiudadLocalidadSolicitante(),
-																new Fecha(solicitud.getFechaSuscripcionFormularioDestinoActual())
-																		.getFormatoFecha())
+																solicitud.getFechaSuscripcionFormularioDestinoActual())
 												),
 												Arrays.asList(230f,270f),
 												Arrays.asList(fuenteMinimal,fuenteMinimalNegrita),  Alignment.LEFT,
@@ -1036,8 +1034,8 @@ public class FormularioSolicitudCreditoVivienda {
 		float initX  = marginStartX+thickness;
 		float witdh = 500f;
 
-		Fecha fechaGarante1 = new Fecha(solicitud.getFechaGarante1());
-		Fecha fechaGarante2 = new Fecha(solicitud.getFechaGarante1());
+		String fechaGarante1 = solicitud.getFechaGarante1();
+		String fechaGarante2 = solicitud.getFechaGarante2();
 
 		Color colorGris      = new Color(60,60,60);
 		Color colorGrisClaro = new Color(160,160,160);
@@ -1088,10 +1086,10 @@ public class FormularioSolicitudCreditoVivienda {
 														solicitud.getCedulaIdentidadGarante1(),
 														solicitud.getCategoriaPorcentajeGarante1(),
 														solicitud.getUnidadGarante1(),
-														String.format("%s",solicitud.getSueldoGarante1()),
-														String.format("%s",solicitud.getAntiguedadGarante1()),
-														String.format("%s",solicitud.getPostGradoEnBsGarante1()),
-														String.format("%s",solicitud.getBonoBSCBsGarante1())
+														solicitud.getSueldoGarante1(),
+														solicitud.getAntiguedadGarante1(),
+														solicitud.getPostGradoEnBsGarante1(),
+														solicitud.getBonoBSCBsGarante1()
 												),
 												Arrays.asList(75f,65f,45f,85f,70f,75f,85f),
 												fuenteMinimalNegrita,  Alignment.CENTER,
@@ -1131,7 +1129,7 @@ public class FormularioSolicitudCreditoVivienda {
 								EasyComponentsFactory.getSimpleTable(0, 0,
 										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
 												Arrays.asList(
-														String.format("%s",solicitud.getAniosServicioGarante1()),
+														solicitud.getAniosServicioGarante1(),
 														solicitud.getTelefonoCelularGarante1(),
 														solicitud.getDestinoActualGarante1(),
 														solicitud.getDepartamentoGarante1()
@@ -1194,10 +1192,10 @@ public class FormularioSolicitudCreditoVivienda {
 														solicitud.getCedulaIdentidadGarante2(),
 														solicitud.getCategoriaPorcentajeGarante2(),
 														solicitud.getUnidadGarante2(),
-														String.format("%s",solicitud.getSueldoGarante2()),
-														String.format("%s",solicitud.getAntiguedadGarante2()),
-														String.format("%s",solicitud.getPostGradoEnBsGarante2()),
-														String.format("%s",solicitud.getBonoBSCBsGarante2())
+														solicitud.getSueldoGarante2(),
+														solicitud.getAntiguedadGarante2(),
+														solicitud.getPostGradoEnBsGarante2(),
+														solicitud.getBonoBSCBsGarante2()
 												),
 												Arrays.asList(75f,65f,45f,85f,70f,75f,85f),
 												fuenteMinimalNegrita,  Alignment.CENTER,
@@ -1237,7 +1235,7 @@ public class FormularioSolicitudCreditoVivienda {
 								EasyComponentsFactory.getSimpleTable(0, 0,
 										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
 												Arrays.asList(
-														String.format("%s",solicitud.getAniosServicioGarante2()),
+														solicitud.getAniosServicioGarante2(),
 														solicitud.getTelefonoCelularGarante2(),
 														solicitud.getDestinoActualGarante2(),
 														solicitud.getDepartamentoGarante2()
@@ -1307,11 +1305,9 @@ public class FormularioSolicitudCreditoVivienda {
 																						EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStylesAndRelativePosition(
 																								Arrays.asList(
 																										"LUGAR Y FECHA:",
-																										String.format("%s, %s / %s / %s",
+																										String.format("%s, %s",
 																												solicitud.getLugarGarante1(),
-																												fechaGarante1.getDiaLiteral(),
-																												fechaGarante1.getMesLiteral(),
-																												fechaGarante1.getAnioLiteral())
+																												fechaGarante1)
 																								),
 																								Arrays.asList(80f,170f),
 																								Arrays.asList(
@@ -1356,11 +1352,9 @@ public class FormularioSolicitudCreditoVivienda {
 																						EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStylesAndRelativePosition(
 																								Arrays.asList(
 																										"LUGAR Y FECHA:",
-																										String.format("%s, %s / %s / %s",
+																										String.format("%s, %s",
 																												solicitud.getLugarGarante1(),
-																												fechaGarante1.getDiaLiteral(),
-																												fechaGarante1.getMesLiteral(),
-																												fechaGarante1.getAnioLiteral())
+																												fechaGarante1)
 																								),
 																								Arrays.asList(80f,170f),
 																								Arrays.asList(

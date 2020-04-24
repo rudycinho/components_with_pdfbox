@@ -1,4 +1,4 @@
-package form;
+package subsistema.pdf.form;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -24,6 +24,9 @@ public class ArchivoPDFConDatosHTML {
                         "   <!--\n" +
                         "      @page { size:8.5in 11in; margin-top: 1.8cm; margin-bottom: 2cm; margin-left: 2.5cm; margin-right: 1.5cm; }\n" +
                         "   -->\n" +
+                        "body {\n" +
+                        "  font: 16px;\n" +
+                        "}\n" +
                         "</style>"+
                 "</head>\n" +
                 "\n" +

@@ -1,16 +1,17 @@
-package dto;
+package subsistema.pdf.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import subsistema.pdf.utils.Fecha;
 
-import java.util.Date;
+import java.util.Calendar;
 
 @Getter
 @Setter
 public class SucursalDTO{
     private Long Id;
 
-    private Date   fechaRegistro;
+    private String fechaRegistro;
 
     private String nombre;
     private String departamento;
@@ -31,7 +32,9 @@ public class SucursalDTO{
 
         sucursalDTO.Id           = 450L;
 
-        sucursalDTO.fechaRegistro= new Date(2018,5,8);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2015, Calendar.MAY,28);
+        sucursalDTO.fechaRegistro= new Fecha(calendar.getTime()).getFormatoFecha();
 
         sucursalDTO.nombre       = "GRAN CENTRAL";
         sucursalDTO.departamento = "COCHABAMBA";

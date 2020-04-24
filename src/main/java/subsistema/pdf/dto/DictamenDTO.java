@@ -1,4 +1,4 @@
-package dto;
+package subsistema.pdf.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +13,7 @@ public class DictamenDTO{
 	private String montoSolicitadoBS;
 	private String cambioUFV;
 	private String cambioUS;
-	private String cantidadDiasDeAmortización;
+	private String cantidadDiasDeAmortizacion;
 	private String plazoCuotas;
 	private String tasaInteresFija;
 	private String maximoComprometido;
@@ -39,7 +39,7 @@ public class DictamenDTO{
 		dictamenDTO.cambioUS ="6.96";
 
 		dictamenDTO.montoSolicitadoBS ="100000.00";
-		dictamenDTO.cantidadDiasDeAmortización="30";//
+		dictamenDTO.cantidadDiasDeAmortizacion="30";//
 		dictamenDTO.plazoCuotas= "180";//
 		dictamenDTO.tasaInteresFija="4.5";//
 		dictamenDTO.maximoComprometido="50";

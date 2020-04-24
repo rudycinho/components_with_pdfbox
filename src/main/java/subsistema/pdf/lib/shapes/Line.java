@@ -1,4 +1,4 @@
-package lib.shapes;
+package subsistema.pdf.lib.shapes;
 
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 

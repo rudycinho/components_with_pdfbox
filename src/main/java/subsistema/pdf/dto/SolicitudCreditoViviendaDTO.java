@@ -1,10 +1,10 @@
-package dto;
+package subsistema.pdf.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import utils.enums.TipoCreditoEnum;
-import utils.enums.TipoGarantiaEnum;
-import utils.enums.TipoViviendaEnum;
+import subsistema.pdf.utils.enums.TipoCreditoEnum;
+import subsistema.pdf.utils.enums.TipoGarantiaEnum;
+import subsistema.pdf.utils.enums.TipoViviendaEnum;
 
 import java.util.Date;
 

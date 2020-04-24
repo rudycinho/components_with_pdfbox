@@ -1,4 +1,4 @@
-package utils.enums;
+package subsistema.pdf.utils.enums;
 
 public enum TipoCreditoEnum {
     CONSTRUCCION,

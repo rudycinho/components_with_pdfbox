@@ -1,4 +1,4 @@
-package dto;
+package subsistema.pdf.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +12,7 @@ public class PerfilDTO {
     private Long Id;
 
     private String nombre;
+    private String rol;
     private String descripcion;
     private String estado;
     private List<PermisoDTO> permisos;
@@ -30,6 +31,7 @@ public class PerfilDTO {
                 "Nam vitae blandit justo. Donec lacus leo, congue nec ultrices in, luctus in felis.\n"+
                 "Ut congue erat vel ullamcorper tempor.\n"+
                 "Fusce malesuada interdum ligula, vitae eleifend leo tempor non.\n";
+        perfilDTO.rol         = "SISTEMAS";
         perfilDTO.estado      = "HABILITADO";
         perfilDTO.permisos    = new LinkedList<>();
         perfilDTO.permisos.add(PermisoDTO.getFake());

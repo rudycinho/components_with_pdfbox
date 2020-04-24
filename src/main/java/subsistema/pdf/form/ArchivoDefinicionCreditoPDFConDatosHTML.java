@@ -1,17 +1,16 @@
 package subsistema.pdf.form;
 
+import com.lowagie.text.DocumentException;
+import org.apache.commons.io.FileUtils;
+import org.xhtmlrenderer.pdf.ITextRenderer;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.commons.io.FileUtils;
-import org.xhtmlrenderer.pdf.ITextRenderer;
+public class ArchivoDefinicionCreditoPDFConDatosHTML {
 
-import com.lowagie.text.DocumentException;
-
-public class ArchivoRequisitosPDFConDatosHTML {
-
-	public ArchivoRequisitosPDFConDatosHTML(
+	public ArchivoDefinicionCreditoPDFConDatosHTML(
 	        String ruta,
             String porcionHTML) throws IOException, DocumentException {
 
@@ -31,7 +30,7 @@ public class ArchivoRequisitosPDFConDatosHTML {
                 "</head>\n" +
                 "\n" +
                 "<body>\n" +
-                "<div style=\"width:100%;height:185px;\"></div>" +
+                "<div style=\"width:100%;height:400px;\"></div>" +
                 porcionHTML+
                 "</body></html>\n";
         FileUtils.writeByteArrayToFile(new File(ruta), convertirPDF(htmlLiteral));

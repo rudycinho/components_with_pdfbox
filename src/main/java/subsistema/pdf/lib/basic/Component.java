@@ -1,4 +1,4 @@
-package lib.basic;
+package subsistema.pdf.lib.basic;
 
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 

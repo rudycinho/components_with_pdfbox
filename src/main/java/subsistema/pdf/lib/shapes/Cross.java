@@ -1,9 +1,9 @@
-package lib.shapes;
+package subsistema.pdf.lib.shapes;
 
 import java.awt.Color;
 import java.io.IOException;
 
-import lib.basic.Component;
+import subsistema.pdf.lib.basic.Component;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
 public class Cross implements Component {

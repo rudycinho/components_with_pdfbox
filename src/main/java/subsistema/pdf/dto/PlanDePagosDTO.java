@@ -1,4 +1,4 @@
-package dto;
+package subsistema.pdf.dto;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -32,7 +32,7 @@ public class PlanDePagosDTO {
 	public List<String> getContenidoCabecera() {
 		List<String> lista = new LinkedList<>();
 		lista.add("Numero Fila");
-		lista.add("fecha Pago");
+		lista.add("Fecha Pago");
 		lista.add("Saldo Amortizable");
 		lista.add("Amortizacion");
 		lista.add("Interes");
@@ -43,6 +43,9 @@ public class PlanDePagosDTO {
 		lista.add("Cuota Total");
 		return lista;
 	}
-	
+
+	public List<String> getSumatoria(){
+		return FilaPagoMensualDTO.getFake2().getContenido();
+	}
 	
 }

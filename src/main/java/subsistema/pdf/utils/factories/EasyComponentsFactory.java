@@ -1,19 +1,20 @@
-package utils.factories;
+package subsistema.pdf.utils.factories;
 
-import lib.basic.Alignment;
-import lib.basic.Component;
-import lib.basic.Style;
-import lib.shapes.Rectangle;
-import lib.tables.Cell;
-import lib.tables.Column;
-import lib.tables.RecursiveTable;
-import lib.tables.SimpleTable;
-import lib.text.MultipleParagraph;
+import subsistema.pdf.lib.basic.Alignment;
+import subsistema.pdf.lib.basic.Component;
+import subsistema.pdf.lib.basic.Style;
+import subsistema.pdf.lib.shapes.Rectangle;
+import subsistema.pdf.lib.tables.Cell;
+import subsistema.pdf.lib.tables.Column;
+import subsistema.pdf.lib.tables.RecursiveTable;
+import subsistema.pdf.lib.tables.SimpleTable;
+import subsistema.pdf.lib.text.MultipleParagraph;
 
-import java.awt.*;
+import java.awt.Color;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+
 
     public class EasyComponentsFactory {
         public static MultipleParagraph getSimpleMultipleParagraph(String text,
@@ -173,12 +174,12 @@ import java.util.List;
 
 
         public static Column getSimpleColumnFromTextAndWithsAndStyle(
-                java.util.List<String> texts,
-                java.util.List<Float> widths,
+                List<String> texts,
+                List<Float> widths,
                 Style style,
                 Alignment alignment) throws IOException {
 
-            java.util.List<Cell> cells = new LinkedList<>();
+            List<Cell> cells = new LinkedList<>();
             int size = widths.size();
             for(int i=0; i < size; i++)
                 cells.add(getSimpleCellFromText(texts.get(i),style,widths.get(i), 5,5,alignment,true));
@@ -194,7 +195,7 @@ import java.util.List;
                 float relativePositionY,
                 Alignment alignment, boolean hasMargin) throws IOException {
 
-            java.util.List<Cell> cells = new LinkedList<>();
+            List<Cell> cells = new LinkedList<>();
             int size = widths.size();
             for(int i=0; i < size; i++)
                 cells.add(getSimpleCellFromText(texts.get(i),style,widths.get(i), relativePositionX,relativePositionY,alignment,hasMargin));
@@ -210,7 +211,7 @@ import java.util.List;
                 float relativePositionY,
                 Alignment alignment, boolean hasMargin) throws IOException {
 
-            java.util.List<Cell> cells = new LinkedList<>();
+            List<Cell> cells = new LinkedList<>();
             int size = widths.size();
             for(int i=0; i < size; i++)
                 cells.add(getSimpleCellFromText(texts.get(i),styles.get(i),widths.get(i), relativePositionX,relativePositionY,alignment,hasMargin));
@@ -220,15 +221,15 @@ import java.util.List;
 
 
 
-        public static java.util.List<RecursiveTable> getHeaderTable(
+        public static List<RecursiveTable> getHeaderTable(
                 float startX,
                 float startY,
                 float anotherStartY,
                 Column headerColumn,
                 Column anotherHeaderColumn,
-                java.util.List<Column> bodyColumns,
+                List<Column> bodyColumns,
                 int limitY) {
-            java.util.List<RecursiveTable> recursiveTables = new LinkedList<>();
+            List<RecursiveTable> recursiveTables = new LinkedList<>();
 
             RecursiveTable table = createRecursiveTable(startX,startY,headerColumn,bodyColumns,limitY);
             recursiveTables.add(table);
@@ -261,7 +262,7 @@ import java.util.List;
                 float relativePositionY,
                 boolean margin) {
 
-            lib.shapes.Rectangle rectangle = Rectangle.builder()
+            subsistema.pdf.lib.shapes.Rectangle rectangle = Rectangle.builder()
                     .addColor(new Color(110,110,110))
                     .addStartX(relativePositionX)
                     .addStartY(relativePositionY)
@@ -291,5 +292,105 @@ import java.util.List;
                     .addAlignment(Alignment.LEFT)
                     .addStyle(style)
                     .build();
+        }
+
+
+        public static Column getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+                List<String> texts,
+                List<Float> widths,
+                Style style,
+                Alignment alignment,
+                float relativePositionX,
+                float relativePositionY,
+                boolean hasMargin,
+                boolean hasFilling,
+                Color colorMargin,
+                Color colorFilling) throws IOException {
+
+            List<Cell> cells = new LinkedList<>();
+            int size = widths.size();
+            for(int i=0; i < size; i++)
+                cells.add(getSimpleCellFromText(
+                        texts.get(i),
+                        style,
+                        widths.get(i),
+                        relativePositionX,relativePositionY,
+                        alignment,
+                        hasMargin,hasFilling,
+                        colorMargin,colorFilling));
+
+            return Column.builder().addCells(cells).build();
+        }
+
+        public static Column getSimpleColumnFromTextAndWithsAndStylesAndRelativePosition(
+                List<String> texts,
+                List<Float> widths,
+                List<Style> styles,
+                Alignment alignment,
+                float relativePositionX,
+                float relativePositionY,
+                boolean hasMargin,
+                boolean hasFilling,
+                Color colorMargin,
+                Color colorFilling) throws IOException {
+
+            List<Cell> cells = new LinkedList<>();
+            int size = widths.size();
+            for(int i=0; i < size; i++)
+                cells.add(getSimpleCellFromText(
+                        texts.get(i),
+                        styles.get(i),
+                        widths.get(i),
+                        relativePositionX,relativePositionY,
+                        alignment,
+                        hasMargin,hasFilling,
+                        colorMargin,colorFilling));
+
+            return Column.builder().addCells(cells).build();
+        }
+
+        public static Cell getSimpleCellFromText(String text,
+                                                 Style style,
+                                                 float width,
+                                                 float relativeDistanceX,
+                                                 float relativeDistanceY,
+                                                 Alignment alignment,
+                                                 boolean hasMargin,
+                                                 boolean hasFilling,
+                                                 Color colorMargin,
+                                                 Color colorFilling) throws IOException {
+            return getSimpleCell(
+                    relativeDistanceX,
+                    relativeDistanceY,
+                    hasMargin,
+                    hasFilling,
+                    colorMargin,
+                    colorFilling,
+                    getSimpleMultipleParagraph(text,style,width - ( 2*relativeDistanceX),alignment ) );
+        }
+
+        public static Cell getSimpleCell(float relativeDistanceX,
+                                         float relativeDistanceY,
+                                         boolean hasMargin,
+                                         boolean hasFilling,
+                                         Color colorMargin,
+                                         Color colorFilling,
+                                         Component component){
+            return Cell.builder()
+                    .addRelativeDistanceX(relativeDistanceX)
+                    .addRelativeDistanceY(relativeDistanceY)
+                    .addHasMargin(hasMargin)
+                    .addHasFilling(hasFilling)
+                    .addColorMargin(colorMargin)
+                    .addColorFilling(colorFilling)
+                    .addComponent(component)
+                    .build();
+        }
+
+        public static void cambiarColor(Color color, Cell... cells) {
+            for (Cell cell : cells) {
+                cell.setHasFilling(true);
+                cell.setColorFilling(color);
+            }
         }
     }

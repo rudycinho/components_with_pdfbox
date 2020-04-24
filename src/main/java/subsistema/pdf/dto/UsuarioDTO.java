@@ -1,16 +1,17 @@
-package dto;
+package subsistema.pdf.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import subsistema.pdf.utils.Fecha;
 
-import java.util.Date;
+import java.util.Calendar;
 
 @Getter
 @Setter
 public class UsuarioDTO {
 	private Long Id;
 
-	private Date   fechaRegistro;
+	private String fechaRegistro;
 
 	private String nombreCompleto;
 
@@ -33,7 +34,10 @@ public class UsuarioDTO {
 		UsuarioDTO usuarioDTO        = new UsuarioDTO();
 
 		usuarioDTO.Id                = 345L;
-		usuarioDTO.fechaRegistro     = new Date(2018,5,8);
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(2015, Calendar.MAY,28);
+		usuarioDTO.fechaRegistro     = new Fecha(calendar.getTime()).getFormatoFecha();
 
 		usuarioDTO.nombreCompleto    = "JUAN JOSE PEREZ CAMACHO DE LA SANTISIMA TRINIDAD";
 

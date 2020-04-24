@@ -1,4 +1,4 @@
-package lib.basic;
+package subsistema.pdf.lib.basic;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;

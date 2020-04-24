@@ -1,11 +1,11 @@
-package lib.text;
+package subsistema.pdf.lib.text;
 
-import lib.basic.Alignment;
-import lib.basic.Component;
-import lib.basic.Style;
+import subsistema.pdf.lib.basic.Alignment;
+import subsistema.pdf.lib.basic.Component;
+import subsistema.pdf.lib.basic.Style;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
-import java.awt.*;
+import java.awt.Color;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -90,8 +90,8 @@ public class MultipleParagraph implements Component {
     public void draw(PDPageContentStream contentStream) throws IOException {
         for(Paragraph paragraph : paragraphs)
             paragraph.draw(contentStream);
-        //contentStream.setStrokingColor(Color.ORANGE);
-        //contentStream.addRect(startX,startY,width,height);
+        contentStream.setStrokingColor(Color.ORANGE);
+        contentStream.addRect(startX,startY,width,height);
         contentStream.stroke();
     }
 

@@ -1,6 +1,6 @@
-package lib.tables;
+package subsistema.pdf.lib.tables;
 
-import lib.basic.Component;
+import subsistema.pdf.lib.basic.Component;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
 import java.io.IOException;

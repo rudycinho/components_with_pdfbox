@@ -1,4 +1,4 @@
-package dto;
+package subsistema.pdf.dto;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -40,9 +40,26 @@ public class FilaPagoMensualDTO {
 		return fila;
 	}
 
+	public static FilaPagoMensualDTO getFake2(){
+		FilaPagoMensualDTO fila = new FilaPagoMensualDTO();
+
+		fila.numeroFila       = "";
+		fila.fechaPago        = "TOTAL";
+		fila.saldoAmortizable = "TOTAL";
+		fila.amortizacion     = "TOTAL";
+		fila.interes          = "TOTAL";
+		fila.cuotaParcial     = "TOTAL";
+		fila.seguroDesgravamen= "TOTAL";
+		fila.subTotal         = "TOTAL";
+		fila.cipMensual       = "TOTAL";
+		fila.cuotaTotal       = "TOTAL";
+
+		return fila;
+	}
+
 	public List<String> getContenido(){
 		List<String> lista;
-		lista = new LinkedList<String>();
+		lista = new LinkedList<>();
 		lista.add(numeroFila);
 		lista.add(fechaPago);
 		lista.add(saldoAmortizable);

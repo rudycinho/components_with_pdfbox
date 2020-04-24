@@ -1,13 +1,13 @@
-package form;
+package subsistema.pdf.form;
 
-import dto.DictamenDTO;
-import dto.SucursalDTO;
-import dto.UsuarioDTO;
+import subsistema.pdf.dto.DictamenDTO;
+import subsistema.pdf.dto.SucursalDTO;
+import subsistema.pdf.dto.UsuarioDTO;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import utils.factories.GeneradorFormularioFactory;
+import subsistema.pdf.utils.factories.GeneradorFormularioFactory;
 
 import java.io.File;
 import java.io.IOException;

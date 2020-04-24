@@ -1,19 +1,117 @@
-package form;
+package subsistema.pdf.form;
 
-import dto.SucursalDTO;
-import dto.UsuarioDTO;
-import dto.SolicitudCreditoViviendaDTO;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import subsistema.pdf.dto.SucursalDTO;
+import subsistema.pdf.dto.UsuarioDTO;
+import subsistema.pdf.dto.SolicitudCreditoViviendaDTO;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import utils.factories.GeneradorFormularioFactory;
+import subsistema.pdf.lib.basic.Alignment;
+import subsistema.pdf.lib.basic.Style;
+import subsistema.pdf.lib.shapes.Cross;
+import subsistema.pdf.lib.shapes.Rectangle;
+import subsistema.pdf.lib.tables.Cell;
+import subsistema.pdf.lib.tables.Column;
+import subsistema.pdf.lib.tables.SimpleTable;
+import subsistema.pdf.utils.Data;
+import subsistema.pdf.utils.Fecha;
+import subsistema.pdf.utils.enums.TipoCreditoEnum;
+import subsistema.pdf.utils.enums.TipoGarantiaEnum;
+import subsistema.pdf.utils.factories.EasyComponentsFactory;
+import subsistema.pdf.utils.factories.GeneradorFormularioFactory;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
 
 public class FormularioSolicitudCreditoVivienda {
+
+	private final float maxY         = Data.MAX_OFFICE_Y;
+	private final float maxX         = Data.MAX_OFFICE_X;
+	private final float thickness    = Data.THICKNESS_MODEL_1;
+	private final float marginStartX = Data.MARGIN_START_X_MODEL_1;
+	private final float marginEndX   = Data.MARGIN_END_X_MODEL_1;
+	private final float relativePositionX = 5f;
+	private final float relativePositionY = 5f;
+
+	private final PDFont fuenteBasica        = Data.BASIC_FONT;
+	private final PDFont fuenteBasicaOblicua = Data.BASIC_OBLIQUE_FONT;
+	private final PDFont fuenteBasicaNegrita = Data.BASIC_BOLD_FONT;
+
+	/*private final Style fuenteSubtitulo = Style.builder()
+			.addTextFont(fuenteBasicaNegrita)
+			.addFontSize(14f)
+			.addTextColor(Color.BLACK)
+			.addLeading(0.8f)
+			.build();
+
+	private final Style fuenteNormal = Style.builder()
+			.addTextFont(fuenteBasica)
+			.addFontSize(10.5f)
+			.addTextColor(Color.BLACK)
+			.addLeading(0.8f)
+			.build();
+
+	private final Style fuenteNormalNegrita = Style.builder()
+			.addTextFont(fuenteBasicaNegrita)
+			.addFontSize(10.5f)
+			.addTextColor(Color.BLACK)
+			.addLeading(0.8f)
+			.build();
+
+	private final Style fuenteDiminuta = Style.builder()
+			.addFontSize(8)
+			.addTextFont(fuenteBasica)
+			.build();
+*/
+
+	Style fuenteNegrita = Style.builder()
+			.addTextFont(fuenteBasicaNegrita)
+			.addFontSize(10.5f)
+			.addTextColor(Color.BLACK)
+			.addLeading(0.9f)
+			.build();
+
+	Style fuenteEstrechaNegrita = Style.builder()
+			.addTextFont(fuenteBasicaNegrita)
+			.addFontSize(9f)
+			.addTextColor(Color.BLACK)
+			.addLeading(0.8f)
+			.build();
+
+	Style fuenteMinimal = Style.builder()
+			.addTextFont(fuenteBasica)
+			.addFontSize(7f)
+			.addTextColor(Color.BLACK)
+			.addLeading(0.8f)
+			.build();
+
+	Style fuenteMinimalNegrita = Style.builder()
+			.addTextFont(fuenteBasicaNegrita)
+			.addFontSize(9f)
+			.addTextColor(new Color(60,60,60))
+			.addLeading(0.8f)
+			.build();
+
+	Style fuenteEstrecha = Style.builder()
+			.addTextFont(fuenteBasica)
+			.addFontSize(9f)
+			.addTextColor(Color.BLACK)
+			.addLeading(0.8f)
+			.build();
+
+	Style fuenteEstrechaInclinada = Style.builder()
+			.addTextFont(fuenteBasicaOblicua)
+			.addFontSize(9f)
+			.addTextColor(Color.BLACK)
+			.addLeading(0.8f)
+			.build();
+
+
 	public FormularioSolicitudCreditoVivienda(
 			String ruta,
 			SolicitudCreditoViviendaDTO solicitud,
@@ -22,15 +120,10 @@ public class FormularioSolicitudCreditoVivienda {
 			Date fechaExportacion) throws IOException {
 
 
-		float heigthAux= PDRectangle.LEGAL.getHeight();
-
-		float width = PDRectangle.LEGAL.getWidth();
-		float height= heigthAux - heigthAux/14;
-
 		PDDocument doc = new PDDocument();
 
-		PDPage page1 = new PDPage(new PDRectangle(width,height));
-		PDPage page2 = new PDPage(new PDRectangle(width,height));
+		PDPage page1 = new PDPage(new PDRectangle(maxX,maxY));
+		PDPage page2 = new PDPage(new PDRectangle(maxX,maxY));
 
 		doc.addPage(page1);
 		doc.addPage(page2);
@@ -38,7 +131,7 @@ public class FormularioSolicitudCreditoVivienda {
 		PDPageContentStream contentStream1 = new PDPageContentStream(doc, page1);
 		PDPageContentStream contentStream2 = new PDPageContentStream(doc, page2);
 
-		GeneradorFormularioFactory.setDimensiones(width,height);
+		GeneradorFormularioFactory.setDimensiones(maxX,maxY);
 		GeneradorFormularioFactory.setMarginStartX(50f);
 
 		GeneradorFormularioFactory.crearMargen(contentStream1);
@@ -51,25 +144,1374 @@ public class FormularioSolicitudCreditoVivienda {
 		GeneradorFormularioFactory.crearMargen(contentStream2);
 		GeneradorFormularioFactory.crearInfo(contentStream2, sucursal);
 
-
-
-
+		crearCuadroCarpeta(solicitud,contentStream1);
 		
-		//GeneradorFormularioFactory.crearCuadroCarpeta(solicitud,contentStream1);
-		
-		GeneradorFormularioFactory.crearTipoCredito(solicitud, contentStream1);
-		GeneradorFormularioFactory.crearTipoGarantia(solicitud, contentStream1);
-		GeneradorFormularioFactory.crearMontoPrestamoSolicitado(solicitud, contentStream1);
-		GeneradorFormularioFactory.crearDatosSolicitado(solicitud, contentStream1);
-	/*
+		crearTipoCredito(solicitud, contentStream1);
+		crearTipoGarantia(solicitud, contentStream1);
+		crearMontoPrestamoSolicitado(solicitud, contentStream1);
+		crearDatosSolicitado(solicitud, contentStream1);
+
 		GeneradorFormularioFactory.crearMargen(contentStream2);
-		GeneradorFormularioFactory.crearDatosGarantesPersonales(solicitudDTO, contentStream2);
-		GeneradorFormularioFactory.crearCroquis(contentStream2,doc);
-		GeneradorFormularioFactory.crearInfo(contentStream2,sucursalDTO);
-		*/
+		crearDatosGarantesPersonales(solicitud, contentStream2);
+		crearCroquis(contentStream2,doc);
+        crearNotas(contentStream2);
+        crearNotaValidez(contentStream2);
+
 		contentStream1.close();
 		contentStream2.close();
 
-        doc.save(new File("/home/rudy/file.pdf"));
+        doc.save(new File(ruta));
+	}
+
+	private void crearTipoCredito(
+			SolicitudCreditoViviendaDTO solicitudDTO,
+			PDPageContentStream contentStream) throws IOException {
+
+		float witdh = 500f;
+		float initX = marginStartX + thickness;
+
+		TipoCreditoEnum tipo = solicitudDTO.getTipoCreditoODestinoPrestamoSolicitado();
+
+		Column columnTitulo = EasyComponentsFactory.getSimpleColumnFromTextAndWidthsAndStyleAndRelativePosition(
+				Arrays.asList("A. TIPO DE CREDITO O DESTINO DE PRESTAMO SOLICITADO: "),
+				Arrays.asList(witdh), fuenteNegrita, 5f, 2.5f, Alignment.LEFT, true);
+
+		Column column1 = EasyComponentsFactory.getSimpleColumnFromTextAndWidthsAndStyleAndRelativePosition(
+				Arrays.asList("CONSTRUCCION", "AMPLIACION", "ANTICRETICO"),
+				Arrays.asList(witdh / 3, witdh / 3, witdh / 3), fuenteEstrechaNegrita, 35, 5f, Alignment.LEFT, false);
+
+		Column column2 = EasyComponentsFactory.getSimpleColumnFromTextAndWidthsAndStyleAndRelativePosition(
+				Arrays.asList("COMPRA DE TERRENO VIVIENTA O DEPARTAMENTO", "REFACCION"),
+				Arrays.asList(2 * witdh / 3, witdh / 3), fuenteEstrechaNegrita, 35, 5f, Alignment.LEFT, false);
+
+		Cell celdaCuerpo = EasyComponentsFactory.getSimpleCell(0, 5, true,
+				EasyComponentsFactory.getSimpleTable(0, 0, column1, column2)
+		);
+
+		Column cuerpo = EasyComponentsFactory.getSimpleColumn(celdaCuerpo);
+
+		SimpleTable tabla = EasyComponentsFactory.getSimpleTable(initX, maxY - 220, columnTitulo, cuerpo);
+		tabla.draw(contentStream);
+
+		Rectangle rectangle1 = new Rectangle(column1.getStartX()+10          , column1.getStartY()-2.5f, 15, -10);
+		Rectangle rectangle2 = new Rectangle(column1.getStartX()+witdh/3+10  , column1.getStartY()-2.5f, 15, -10);
+		Rectangle rectangle3 = new Rectangle(column1.getStartX()+2*witdh/3+10, column1.getStartY()-2.5f, 15, -10);
+
+		Rectangle rectangle4 = new Rectangle(column2.getStartX()+10          , column2.getStartY()-2.5f, 15, -10);
+		Rectangle rectangle5 = new Rectangle(column2.getStartX()+2*witdh/3+10, column2.getStartY()-2.5f, 15, -10);
+
+		rectangle1.draw(contentStream);
+		rectangle2.draw(contentStream);
+		rectangle3.draw(contentStream);
+		rectangle4.draw(contentStream);
+		rectangle5.draw(contentStream);
+
+		Cross cross1 = Cross.builder().addRectangle(rectangle1).addColor(Color.GRAY).addThickness(2).build();
+		Cross cross2 = Cross.builder().addRectangle(rectangle2).addColor(Color.GRAY).addThickness(2).build();
+		Cross cross3 = Cross.builder().addRectangle(rectangle3).addColor(Color.GRAY).addThickness(2).build();
+		Cross cross4 = Cross.builder().addRectangle(rectangle4).addColor(Color.GRAY).addThickness(2).build();
+		Cross cross5 = Cross.builder().addRectangle(rectangle5).addColor(Color.GRAY).addThickness(2).build();
+
+		if(tipo == TipoCreditoEnum.CONSTRUCCION)
+			cross1.draw(contentStream);
+		if(tipo == TipoCreditoEnum.AMPLIACION)
+			cross2.draw(contentStream);
+		if(tipo == TipoCreditoEnum.ANTICRETICO)
+			cross3.draw(contentStream);
+		if(tipo == TipoCreditoEnum.COMPRA_TERRENO_VIVIENDA_DEPARTAMENTO)
+			cross4.draw(contentStream);
+		if(tipo == TipoCreditoEnum.REFACCION)
+			cross5.draw(contentStream);
+
+		Rectangle borde = new Rectangle(tabla.getStartX(), tabla.getStartY(), tabla.getWidth(), tabla.getHeight());
+		borde.draw(contentStream);
+	}
+
+	private void crearTipoGarantia(
+			SolicitudCreditoViviendaDTO solicitudDTO,
+			PDPageContentStream contentStream) throws IOException {
+
+		float witdh = 500f;
+		float initX = marginStartX + thickness;
+
+		TipoGarantiaEnum tipo = solicitudDTO.getTipoGarantia();
+
+		Column columnTitulo = EasyComponentsFactory.getSimpleColumnFromTextAndWidthsAndStyleAndRelativePosition(
+				Arrays.asList("B. TIPO DE GARANTIA: "),
+				Arrays.asList(witdh), fuenteNegrita, 5f, 2.5f, Alignment.LEFT, true);
+
+		Column column1 = EasyComponentsFactory.getSimpleColumnFromTextAndWidthsAndStyleAndRelativePosition(
+				Arrays.asList("REAL (GRAVAMEN HIPOTECARIO)",
+						"PERSONAL (GARANTIA DE HABERES Y\nPRESENTACION DE DOS GARANTES)"),
+				Arrays.asList(witdh / 2, witdh / 2), fuenteEstrechaNegrita, 35, 5f, Alignment.LEFT, false);
+
+		Cell celdaCuerpo = EasyComponentsFactory.getSimpleCell(0, 5, true,
+				EasyComponentsFactory.getSimpleTable(0, 0, column1)
+		);
+
+		Column cuerpo = EasyComponentsFactory.getSimpleColumn(celdaCuerpo);
+
+		SimpleTable tabla = EasyComponentsFactory.getSimpleTable(initX, maxY - 290, columnTitulo, cuerpo);
+		tabla.draw(contentStream);
+
+		Rectangle rectangle1 = new Rectangle(column1.getStartX()+10          , column1.getStartY()-2.5f, 15, -10);
+		Rectangle rectangle2 = new Rectangle(column1.getStartX()+witdh/2+10  , column1.getStartY()-2.5f, 15, -10);
+
+		rectangle1.draw(contentStream);
+		rectangle2.draw(contentStream);
+
+		Cross cross1 = Cross.builder().addRectangle(rectangle1).addColor(Color.GRAY).addThickness(2).build();
+		Cross cross2 = Cross.builder().addRectangle(rectangle2).addColor(Color.GRAY).addThickness(2).build();
+
+		if(tipo == TipoGarantiaEnum.REAL)
+			cross1.draw(contentStream);
+		if(tipo == TipoGarantiaEnum.PERSONAL)
+			cross2.draw(contentStream);
+
+		Rectangle borde = new Rectangle(tabla.getStartX(), tabla.getStartY(), tabla.getWidth(), tabla.getHeight());
+		borde.draw(contentStream);
+	}
+
+	private void crearMontoPrestamoSolicitado(
+			SolicitudCreditoViviendaDTO solicitudDTO,
+			PDPageContentStream contentStream) throws IOException {
+
+		float witdh = 500f;
+		float initX = marginStartX + thickness;
+
+		Column columnTitulo = EasyComponentsFactory.getSimpleColumnFromTextAndWidthsAndStyleAndRelativePosition(
+				Arrays.asList("C. MONTO DE PRESTAMO SOLICITADO: "),
+				Arrays.asList(witdh), fuenteNegrita, 5f, 2.5f, Alignment.LEFT, true);
+
+		Column column1 = EasyComponentsFactory.getSimpleColumnFromTextAndWidthsAndStylesAndRelativePosition(
+				Arrays.asList(
+						"",
+						"BS.-",
+						String.format("%.2f",solicitudDTO.getMontoPrestamoSolicitadoBs()),
+						"En UFV.-",
+						String.format("%.4f",solicitudDTO.getMontoPrestamoSolicitadoUFV()),
+						"Tipo de cambio oficial: UFV.-",
+						String.format("%f",solicitudDTO.getTipoCambioOficialUFV())
+				),
+				Arrays.asList(25f,30f,80f,50f,70f,170f,65f),
+				Arrays.asList(
+						fuenteEstrecha,
+						fuenteEstrecha,
+						fuenteMinimalNegrita,
+						fuenteEstrecha,
+						fuenteMinimalNegrita,
+						fuenteEstrechaInclinada,
+						fuenteMinimalNegrita
+				),
+				2.5f, 5f, Alignment.LEFT, false);
+
+		Cell celdaCuerpo = EasyComponentsFactory.getSimpleCell(5f, 2.5f, true,
+				EasyComponentsFactory.getSimpleTable(0, 0, column1)
+		);
+
+		Column cuerpo = EasyComponentsFactory.getSimpleColumn(celdaCuerpo);
+
+		SimpleTable tabla = EasyComponentsFactory.getSimpleTable(initX, maxY - 350, columnTitulo, cuerpo);
+		tabla.draw(contentStream);
+
+		Rectangle borde = new Rectangle(tabla.getStartX(), tabla.getStartY(), tabla.getWidth(), tabla.getHeight());
+		borde.draw(contentStream);
+	}
+
+	private void crearDatosSolicitado(
+			SolicitudCreditoViviendaDTO solicitud,
+			PDPageContentStream contentStream) throws IOException {
+
+		float initX  = marginStartX+thickness;
+		float witdh = 500f;
+
+		Color colorGris      = new Color(60,60,60);
+		Color colorGrisClaro = new Color(160,160,160);
+
+
+		float anchoRectangulo = 20f;
+
+		Rectangle rectangulo0101 = Rectangle.builder()
+				.addStartX(0)
+				.addStartY(0)
+				.addHeight(-10f)
+				.addWidth(anchoRectangulo)
+				.addColor(Color.BLACK)
+				.build();
+
+		Rectangle rectangulo0102 = Rectangle.builder()
+				.addStartX(0)
+				.addStartY(0)
+				.addHeight(-10f)
+				.addWidth(anchoRectangulo)
+				.addColor(Color.BLACK)
+				.build();
+
+		Rectangle rectangulo0201 = Rectangle.builder()
+				.addStartX(0)
+				.addStartY(0)
+				.addHeight(-10f)
+				.addWidth(anchoRectangulo)
+				.addColor(Color.BLACK)
+				.build();
+
+		Rectangle rectangulo0202 = Rectangle.builder()
+				.addStartX(0)
+				.addStartY(0)
+				.addHeight(-10f)
+				.addWidth(anchoRectangulo)
+				.addColor(Color.BLACK)
+				.build();
+
+		Rectangle rectangulo0301 = Rectangle.builder()
+				.addStartX(0)
+				.addStartY(0)
+				.addHeight(-10f)
+				.addWidth(anchoRectangulo)
+				.addColor(Color.BLACK)
+				.build();
+
+		Rectangle rectangulo0302 = Rectangle.builder()
+				.addStartX(0)
+				.addStartY(0)
+				.addHeight(-10f)
+				.addWidth(anchoRectangulo)
+				.addColor(Color.BLACK)
+				.build();
+
+		Rectangle rectangulo0303 = Rectangle.builder()
+				.addStartX(0)
+				.addStartY(0)
+				.addHeight(-10f)
+				.addWidth(anchoRectangulo)
+				.addColor(Color.BLACK)
+				.build();
+
+		Rectangle rectangulo0304 = Rectangle.builder()
+				.addStartX(0)
+				.addStartY(0)
+				.addHeight(-10f)
+				.addWidth(anchoRectangulo)
+				.addColor(Color.BLACK)
+				.build();
+
+
+		Rectangle rectangulo0401 = Rectangle.builder()
+				.addStartX(0)
+				.addStartY(0)
+				.addHeight(-10f)
+				.addWidth(anchoRectangulo)
+				.addColor(Color.BLACK)
+				.build();
+
+		Rectangle rectangulo0402 = Rectangle.builder()
+				.addStartX(0)
+				.addStartY(0)
+				.addHeight(-10f)
+				.addWidth(anchoRectangulo)
+				.addColor(Color.BLACK)
+				.build();
+
+		Rectangle rectangulo0501 = Rectangle.builder()
+				.addStartX(0)
+				.addStartY(0)
+				.addHeight(-10f)
+				.addWidth(anchoRectangulo)
+				.addColor(Color.BLACK)
+				.build();
+
+		Rectangle rectangulo0502 = Rectangle.builder()
+				.addStartX(0)
+				.addStartY(0)
+				.addHeight(-10f)
+				.addWidth(anchoRectangulo)
+				.addColor(Color.BLACK)
+				.build();
+
+		Rectangle rectangulo0601 = Rectangle.builder()
+				.addStartX(0)
+				.addStartY(0)
+				.addHeight(-10f)
+				.addWidth(anchoRectangulo)
+				.addColor(Color.BLACK)
+				.build();
+
+		Rectangle rectangulo0602 = Rectangle.builder()
+				.addStartX(0)
+				.addStartY(0)
+				.addHeight(-10f)
+				.addWidth(anchoRectangulo)
+				.addColor(Color.BLACK)
+				.build();
+
+
+		Column columnTitulo = EasyComponentsFactory.getSimpleColumnFromTextAndWidthsAndStyleAndRelativePosition(
+				Arrays.asList("D. DATOS DEL SOLICITANTE: "),
+				Arrays.asList(witdh), fuenteNegrita, 5f, 2.5f, Alignment.LEFT, true);
+
+		SimpleTable tabla = EasyComponentsFactory.getSimpleTable(initX, maxY - 395,
+				columnTitulo,
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
+								EasyComponentsFactory.getSimpleTable(0, 0,
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														solicitud.getApellidoPaternoSolicitante(),
+														solicitud.getApellidoMaternoSolicitante(),
+														solicitud.getNombreSolicitante(),
+														solicitud.getGradoSolicitante()
+												),
+												Arrays.asList(120f,120f,180f,80f),
+												fuenteMinimalNegrita,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro),
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														"APELLIDO PATERNO",
+														"APELLIDO MATERNO",
+														"NOMBRES","GRADO"
+												),
+												Arrays.asList(120f,120f,180f,80f),
+												fuenteMinimal,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro)
+								)
+						)
+				),
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
+								EasyComponentsFactory.getSimpleTable(0, 0,
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														solicitud.getCedulaIdentidadSolicitante(),
+														solicitud.getCategoriaPorcentajeSolicitante(),
+														solicitud.getUnidadSolicitante(),
+														String.format("%s",solicitud.getLiquidoPagableBsSueldoSolicitante()),
+														String.format("%s",solicitud.getAntiguedadBsSolicitante()),
+														String.format("%s",solicitud.getPostGradoBsSolicitante()),
+														String.format("%s",solicitud.getBonoBsSegSolicitante()),
+														String.format("%s",solicitud.getAniosServicioSolicitante())
+												),
+												Arrays.asList(70f,60f,40f,80f,60f,65f,75f,50f),
+												fuenteMinimalNegrita,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro),
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														"N* DE CELULA\nIDENTIDAD",
+														"CATEGORIA\nEN %",
+														"N* de\nUNIDAD",
+														"Liquido Pagable\nSUELDO (Bs.)",
+														"ANTIGUEDAD\n(Bs.)",
+														"POST GRADO\nEN (Bs.)",
+														"BONO SEG.\nCIUDADANA (Bs.)",
+														"AÑOS DE SERVICIO"
+												),
+												Arrays.asList(70f,60f,40f,80f,60f,65f,75f,50f),
+												fuenteMinimal,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro)
+								)
+						)
+				),
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
+								EasyComponentsFactory.getSimpleTable(0, 0,
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList("Llena de acuerdo a los datos de la boleta de pago"),
+												Arrays.asList(witdh),
+												fuenteMinimal,  Alignment.CENTER,
+												5f, 1.5f,
+												true,true,Color.BLACK,colorGrisClaro)
+								)
+						)
+				),
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
+								EasyComponentsFactory.getSimpleTable(0, 0,
+										EasyComponentsFactory.getSimpleColumn(
+												EasyComponentsFactory.getSimpleCell(
+														0f, 0f,
+														true,false,colorGrisClaro,colorGrisClaro,
+														EasyComponentsFactory.getSimpleTable(0, 0,
+																EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+																		Arrays.asList(
+																				new Fecha(solicitud.getFechaNacimientoSolicitante()).getDiaLiteral(),
+																				new Fecha(solicitud.getFechaNacimientoSolicitante()).getMesLiteral(),
+																				new Fecha(solicitud.getFechaNacimientoSolicitante()).getAnioLiteral()
+																		),
+																		Arrays.asList(40f,40f,40f),
+																		fuenteMinimalNegrita,  Alignment.CENTER,
+																		5f, 1.5f,
+																		true,false,colorGrisClaro,colorGrisClaro),
+																EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+																		Arrays.asList("Dia","Mes","Año"),
+																		Arrays.asList(40f,40f,40f),
+																		fuenteMinimal,  Alignment.CENTER,
+																		5f, 1.5f,
+																		true,false,colorGrisClaro,colorGrisClaro)
+														)
+												),
+												EasyComponentsFactory.getSimpleCellFromText(
+														solicitud.getCiudadLocalidadSolicitanteDomilicioActual(),
+														fuenteMinimalNegrita,
+														160f,
+														5f, 5f,
+														Alignment.CENTER,true,false,colorGrisClaro,colorGrisClaro
+												),
+												EasyComponentsFactory.getSimpleCellFromText(
+														solicitud.getProvinciaSolicitante(),
+														fuenteMinimalNegrita,
+														110f,
+														5f, 5f,
+														Alignment.CENTER,true,false,colorGrisClaro,colorGrisClaro
+												),
+												EasyComponentsFactory.getSimpleCellFromText(
+														solicitud.getDepartamentoSolicitante(),
+														fuenteMinimalNegrita,
+														110f,
+														5f, 5f,
+														Alignment.CENTER,true,false,colorGrisClaro,colorGrisClaro
+												)
+										),
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														"FECHA DE NACIMIENTO",
+														"CIUDAD / LOCALIDAD",
+														"PROVINCIA",
+														"DEPARTAMENTO"
+												),
+												Arrays.asList(120f,160f,110f,110f),
+												fuenteMinimal,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro)
+								)
+						)
+				),
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
+								EasyComponentsFactory.getSimpleTable(0, 0,
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														String.format("%s",solicitud.getEdadSolicitante()),
+														solicitud.getEstadoCivilSolicitante(),
+														String.format("%s",solicitud.getDependientesSolicitante()),
+														String.format("%s",solicitud.getTotalGrupoFamiliarSolicitante())
+												),
+												Arrays.asList(100f,120f,140f,140f),
+												fuenteMinimalNegrita,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro),
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														"EDAD",
+														"ESTADO CIVIL",
+														"DEPENDIENTES",
+														"TOTAL GRUPO FAMILIAR"
+												),
+												Arrays.asList(100f,120f,140f,140f),
+												fuenteMinimal,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro)
+								)
+						)
+				),
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
+								EasyComponentsFactory.getSimpleTable(0, 0,
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														solicitud.getCalleAvenidaSolicitante(),
+														String.format("%s",solicitud.getNumeroCasaSolicitante()),
+														solicitud.getZonaBarrioSolicitante(),
+														solicitud.getCiudadLocalidadSolicitante(),
+														solicitud.getDepartamentoSolicitante()
+												),
+												Arrays.asList(110f,30f,120f,120f,120f),
+												fuenteMinimalNegrita,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro),
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														"CALLE / AVENIDA",
+														"Nro",
+														"ZONA / BARRIO",
+														"CIUDAD / LOCALIDAD",
+														"DEPARTAMENTO"
+												),
+												Arrays.asList(110f,30f,120f,120f,120f),
+												fuenteMinimal,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro)
+								)
+						)
+				),
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
+								EasyComponentsFactory.getSimpleTable(0, 0,
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList("DATOS DEL DOMICILIO ACTUAL"),
+												Arrays.asList(witdh),
+												fuenteMinimal,  Alignment.CENTER,
+												5f, 1.5f,
+												true,true,Color.BLACK,colorGrisClaro)
+								)
+						)
+				),
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
+								EasyComponentsFactory.getSimpleTable(0, 0,
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														String.format("%s",solicitud.getLugarInmuebleNumeroDomicilioDestinoActual()),
+														solicitud.getNumeroCelularSolicitanteDomilicioActual(),
+														solicitud.getNumeroTelefonoDomicilioSolicitanteDomilicioActual(),
+														solicitud.getNumeroTelefonoReferenciaSolicitanteDomilicioActual()
+												),
+												Arrays.asList(120f,130f,120f,130f),
+												fuenteMinimalNegrita,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro),
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														"Nro TELEFONO DOM.",
+														"Nro CELULAR",
+														"TELEFONO LABORAL",
+														"TELEFONO REFERENCIA"
+												),
+												Arrays.asList(120f,130f,120f,130f),
+												fuenteMinimal,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro)
+								)
+						)
+				),
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
+								EasyComponentsFactory.getSimpleTable(0, 0,
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														solicitud.getUnidadPolicialSolicitanteDomilicioActual(),
+														solicitud.getCiudadLocalidadSolicitanteDomilicioActual(),
+														solicitud.getDepartamentoSolicitanteDomilicioActual()
+												),
+												Arrays.asList(260f,120f,120f),
+												fuenteMinimalNegrita,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro),
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														"REPARTICION POLICIAL UNIDAD",
+														"CIUDAD / LOCALIDAD",
+														"DEPARTAMENTO"
+												),
+												Arrays.asList(260f,120f,120f),
+												fuenteMinimal,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro)
+								)
+						)
+				),
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
+								EasyComponentsFactory.getSimpleTable(0, 0,
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList("DESTINO ACTUAL DEL SOLICITANTE"),
+												Arrays.asList(witdh),
+												fuenteMinimal,  Alignment.CENTER,
+												5f, 1.5f,
+												true,true,Color.BLACK,colorGrisClaro)
+								)
+						)
+				),
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
+								EasyComponentsFactory.getSimpleTable(0, 0,
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														"SITUACION HABITACIONAL DEL SOLICITANTE: (Marque con una x)"
+												),
+												Arrays.asList(500f),
+												fuenteMinimal,  Alignment.LEFT,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro),
+										EasyComponentsFactory.getSimpleColumn(
+												EasyComponentsFactory.getSimpleCell(
+														0f,0f,true,false,colorGrisClaro,Color.WHITE,
+														EasyComponentsFactory.getSimpleTable(0,0,
+																EasyComponentsFactory.getSimpleColumn(
+																		EasyComponentsFactory.getSimpleCellFromText("SI",fuenteMinimalNegrita,45f-anchoRectangulo,5f,2.5f,Alignment.CENTER,false,false,colorGrisClaro,Color.WHITE),
+																		EasyComponentsFactory.getSimpleCell(2.5f,2.5f,false,false,colorGrisClaro,Color.WHITE,rectangulo0101)
+																)
+														)
+												),
+												EasyComponentsFactory.getSimpleCell(
+														0f,0f,true,false,colorGrisClaro,Color.WHITE,
+														EasyComponentsFactory.getSimpleTable(0,0,
+																EasyComponentsFactory.getSimpleColumn(
+																		EasyComponentsFactory.getSimpleCellFromText("NO",fuenteMinimalNegrita,45f-anchoRectangulo,5f,2.5f,Alignment.CENTER,false,false,colorGrisClaro,Color.WHITE),
+																		EasyComponentsFactory.getSimpleCell(2.5f,2.5f,false,false,colorGrisClaro,Color.WHITE,rectangulo0102)
+																)
+														)
+												),
+												EasyComponentsFactory.getSimpleCell(
+														0f,0f,true,false,colorGrisClaro,Color.WHITE,
+														EasyComponentsFactory.getSimpleTable(0,0,
+																EasyComponentsFactory.getSimpleColumn(
+																		EasyComponentsFactory.getSimpleCellFromText("SI",fuenteMinimalNegrita,45f-anchoRectangulo,5f,2.5f,Alignment.CENTER,false,false,colorGrisClaro,Color.WHITE),
+																		EasyComponentsFactory.getSimpleCell(2.5f,2.5f,false,false,colorGrisClaro,Color.WHITE,rectangulo0201)
+																)
+														)
+												),
+												EasyComponentsFactory.getSimpleCell(
+														0f,0f,true,false,colorGrisClaro,Color.WHITE,
+														EasyComponentsFactory.getSimpleTable(0,0,
+																EasyComponentsFactory.getSimpleColumn(
+																		EasyComponentsFactory.getSimpleCellFromText("NO",fuenteMinimalNegrita,45f-anchoRectangulo,5f,2.5f,Alignment.CENTER,false,false,colorGrisClaro,Color.WHITE),
+																		EasyComponentsFactory.getSimpleCell(2.5f,2.5f,false,false,colorGrisClaro,Color.WHITE,rectangulo0202)
+																)
+														)
+												),
+												EasyComponentsFactory.getSimpleCell(
+														0f,0f,true,false,colorGrisClaro,Color.WHITE,
+														EasyComponentsFactory.getSimpleTable(0,0,
+																EasyComponentsFactory.getSimpleColumn(
+																		EasyComponentsFactory.getSimpleCellFromText("PROPIA",fuenteMinimalNegrita,60f-anchoRectangulo,5f,2.5f,Alignment.CENTER,false,false,colorGrisClaro,Color.WHITE),
+																		EasyComponentsFactory.getSimpleCell(2.5f,2.5f,false,false,colorGrisClaro,Color.WHITE,rectangulo0301)
+																)
+														)
+												),
+												EasyComponentsFactory.getSimpleCell(
+														0f,0f,true,false,colorGrisClaro,Color.WHITE,
+														EasyComponentsFactory.getSimpleTable(0,0,
+																EasyComponentsFactory.getSimpleColumn(
+																		EasyComponentsFactory.getSimpleCellFromText("ALQUILADA",fuenteMinimalNegrita,75f-anchoRectangulo,5f,2.5f,Alignment.CENTER,false,false,colorGrisClaro,Color.WHITE),
+																		EasyComponentsFactory.getSimpleCell(2.5f,2.5f,false,false,colorGrisClaro,Color.WHITE,rectangulo0302)
+																)
+														)
+												),
+												EasyComponentsFactory.getSimpleCell(
+														0f,0f,true,false,colorGrisClaro,Color.WHITE,
+														EasyComponentsFactory.getSimpleTable(0,0,
+																EasyComponentsFactory.getSimpleColumn(
+																		EasyComponentsFactory.getSimpleCellFromText("ANTICRETICO",fuenteMinimalNegrita,85f-anchoRectangulo,5f,2.5f,Alignment.CENTER,false,false,colorGrisClaro,Color.WHITE),
+																		EasyComponentsFactory.getSimpleCell(2.5f,2.5f,false,false,colorGrisClaro,Color.WHITE,rectangulo0303)
+																)
+														)
+												),
+												EasyComponentsFactory.getSimpleCell(
+														0f,0f,true,false,colorGrisClaro,Color.WHITE,
+														EasyComponentsFactory.getSimpleTable(0,0,
+																EasyComponentsFactory.getSimpleColumn(
+																		EasyComponentsFactory.getSimpleCellFromText("CEDIDA",fuenteMinimalNegrita,60f-anchoRectangulo,5f,2.5f,Alignment.CENTER,false,false,colorGrisClaro,Color.WHITE),
+																		EasyComponentsFactory.getSimpleCell(2.5f,2.5f,false,false,colorGrisClaro,Color.WHITE,rectangulo0304)
+																)
+														)
+												)
+										),
+
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														"TIENE TERRENO PROPIO",
+														"TIENE VIVIENDA PROPIA",
+														"HABITA EN VIVIENDA"
+												),
+												Arrays.asList(100f,100f,300f),
+												fuenteMinimal,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro)
+								)
+						)
+				),
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
+								EasyComponentsFactory.getSimpleTable(0, 0,
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList("PRESTAMOS ANTERIORES: (Marque con una x)"),
+												Arrays.asList(witdh),
+												fuenteMinimal,  Alignment.LEFT,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro),
+										EasyComponentsFactory.getSimpleColumn(
+												EasyComponentsFactory.getSimpleCell(
+														0f,0f,true,false,colorGrisClaro,Color.WHITE,
+														EasyComponentsFactory.getSimpleTable(0,0,
+																EasyComponentsFactory.getSimpleColumn(
+																		EasyComponentsFactory.getSimpleCellFromText("SI",fuenteMinimalNegrita,50f-anchoRectangulo,5f,2.5f,Alignment.CENTER,false,false,colorGrisClaro,Color.WHITE),
+																		EasyComponentsFactory.getSimpleCell(2.5f,2.5f,false,false,colorGrisClaro,Color.WHITE,rectangulo0401)
+																)
+														)
+												),
+												EasyComponentsFactory.getSimpleCell(
+														0f,0f,true,false,colorGrisClaro,Color.WHITE,
+														EasyComponentsFactory.getSimpleTable(0,0,
+																EasyComponentsFactory.getSimpleColumn(
+																		EasyComponentsFactory.getSimpleCellFromText("NO",fuenteMinimalNegrita,50f-anchoRectangulo,5f,2.5f,Alignment.CENTER,false,false,colorGrisClaro,Color.WHITE),
+																		EasyComponentsFactory.getSimpleCell(2.5f,2.5f,false,false,colorGrisClaro,Color.WHITE,rectangulo0402)
+																)
+														)
+												),
+												EasyComponentsFactory.getSimpleCell(
+														0f,0f,true,false,colorGrisClaro,Color.WHITE,
+														EasyComponentsFactory.getSimpleTable(0,0,
+																EasyComponentsFactory.getSimpleColumn(
+																		EasyComponentsFactory.getSimpleCellFromText("SI",fuenteMinimalNegrita,50f-anchoRectangulo,5f,2.5f,Alignment.CENTER,false,false,colorGrisClaro,Color.WHITE),
+																		EasyComponentsFactory.getSimpleCell(2.5f,2.5f,false,false,colorGrisClaro,Color.WHITE,rectangulo0501)
+																)
+														)
+												),
+												EasyComponentsFactory.getSimpleCell(
+														0f,0f,true,false,colorGrisClaro,Color.WHITE,
+														EasyComponentsFactory.getSimpleTable(0,0,
+																EasyComponentsFactory.getSimpleColumn(
+																		EasyComponentsFactory.getSimpleCellFromText("NO",fuenteMinimalNegrita,50f-anchoRectangulo,5f,2.5f,Alignment.CENTER,false,false,colorGrisClaro,Color.WHITE),
+																		EasyComponentsFactory.getSimpleCell(2.5f,2.5f,false,false,colorGrisClaro,Color.WHITE,rectangulo0502)
+																)
+														)
+												),
+												EasyComponentsFactory.getSimpleCell(
+														0f,0f,true,false,colorGrisClaro,Color.WHITE,
+														EasyComponentsFactory.getSimpleTable(0,0,
+																EasyComponentsFactory.getSimpleColumn(
+																		EasyComponentsFactory.getSimpleCellFromText("SI",fuenteMinimalNegrita,65f-anchoRectangulo,5f,2.5f,Alignment.CENTER,false,false,colorGrisClaro,Color.WHITE),
+																		EasyComponentsFactory.getSimpleCell(2.5f,2.5f,false,false,colorGrisClaro,Color.WHITE,rectangulo0601)
+																)
+														)
+												),
+												EasyComponentsFactory.getSimpleCell(
+														0f,0f,true,false,colorGrisClaro,Color.WHITE,
+														EasyComponentsFactory.getSimpleTable(0,0,
+																EasyComponentsFactory.getSimpleColumn(
+																		EasyComponentsFactory.getSimpleCellFromText("NO",fuenteMinimalNegrita,65f-anchoRectangulo,5f,2.5f,Alignment.CENTER,false,false,colorGrisClaro,Color.WHITE),
+																		EasyComponentsFactory.getSimpleCell(2.5f,2.5f,false,false,colorGrisClaro,Color.WHITE,rectangulo0602)
+																)
+														)
+												),
+												EasyComponentsFactory.getSimpleCellFromText(
+														String.format("%s",solicitud.getNumeroCreditosAnteriores()),
+														fuenteMinimalNegrita,140f,5f,2.5f,Alignment.CENTER,false,false,colorGrisClaro,Color.WHITE
+												)
+										)
+										,
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														"TERRENO",
+														"VIVIENDA PROPIA",
+														"ANTICRETICO",
+														"Nros CREDITOS ANTERIORES"
+												),
+												Arrays.asList(110f,110f,140f,140f),
+												fuenteMinimal,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro)
+								)
+						)
+				),
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
+								EasyComponentsFactory.getSimpleTable(0, 0,
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList("LUGAR DE UBICACION DEL BIEN INMUEBLE SUJETO DE COMPRA, ANTICRETICO O REFACCION: "),
+												Arrays.asList(witdh),
+												fuenteMinimal,  Alignment.LEFT,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro)
+								)
+						)
+				),
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
+								EasyComponentsFactory.getSimpleTable(0, 0,
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														solicitud.getCalleAvenidaSolicitante(),
+														String.format("%s",solicitud.getLugarInmuebleNumeroDomicilioDestinoActual()),
+														solicitud.getZonaBarrioSolicitante(),
+														solicitud.getCiudadLocalidadSolicitante(),
+														solicitud.getDepartamentoSolicitante()
+												),
+												Arrays.asList(170f,30f,100f,100f,100f),
+												fuenteMinimalNegrita,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro),
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														"CALLE / AVENIDA",
+														"Nro",
+														"ZONA / BARRIO",
+														"CIUDAD / LOCALIDAD",
+														"DEPARTAMENTO"
+												),
+												Arrays.asList(170f,30f,100f,100f,100f),
+												fuenteMinimal,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro)
+								)
+						)
+				),
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
+								EasyComponentsFactory.getSimpleTable(0, 0,
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStylesAndRelativePosition(
+												Arrays.asList(
+														"LUGAR Y FECHA DE LA SUBSCRIPCION DEL FORMULARIO: ",
+														String.format(
+																"%s - %s",
+																solicitud.getCiudadLocalidadSolicitante(),
+																new Fecha(solicitud.getFechaSuscripcionFormularioDestinoActual())
+																		.getFormatoFecha())
+												),
+												Arrays.asList(230f,270f),
+												Arrays.asList(fuenteMinimal,fuenteMinimalNegrita),  Alignment.LEFT,
+												5f, 2.5f,
+												false,false,colorGrisClaro,colorGrisClaro)
+								)
+						)
+				),
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
+								EasyComponentsFactory.getSimpleTable(0, 0,
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(""),
+												Arrays.asList(witdh),
+												fuenteMinimalNegrita,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro)
+								)
+						)
+				),
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
+								EasyComponentsFactory.getSimpleTable(0, 0,
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(" "),
+												Arrays.asList(200f),
+												fuenteMinimalNegrita,  Alignment.CENTER,
+												5f, 25f,
+												false,false,colorGrisClaro,colorGrisClaro),EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList("...................."),
+												Arrays.asList(200f),
+												fuenteMinimalNegrita,  Alignment.CENTER,
+												5f, 2.5f,
+												false,false,colorGrisClaro,colorGrisClaro),
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList("FIRMA SOLICITANTE"),
+												Arrays.asList(200f),
+												fuenteMinimal,  Alignment.CENTER,
+												5f, 5f,
+												false,false,colorGrisClaro,colorGrisClaro)
+								)
+						),
+						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
+								EasyComponentsFactory.getSimpleTable(0, 0,
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList("OBSERVACIONES"),
+												Arrays.asList(300f),
+												fuenteMinimal,  Alignment.LEFT,
+												5f, 2.5f,
+												false,false,colorGrisClaro,colorGrisClaro),
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(solicitud.getObservaciones()),
+												Arrays.asList(300f),
+												fuenteMinimalNegrita,  Alignment.LEFT,
+												5f, 2.5f,
+												false,false,colorGrisClaro,colorGrisClaro)
+								)
+						)
+				)
+
+		);
+		tabla.draw(contentStream);
+
+		Rectangle borde = new Rectangle(tabla.getStartX(), tabla.getStartY(), tabla.getWidth(), tabla.getHeight());
+		borde.draw(contentStream);
+	}
+
+
+
+	private void crearDatosGarantesPersonales(
+			SolicitudCreditoViviendaDTO solicitud,
+			PDPageContentStream contentStream) throws IOException {
+
+		float initX  = marginStartX+thickness;
+		float witdh = 500f;
+
+		Fecha fechaGarante1 = new Fecha(solicitud.getFechaGarante1());
+		Fecha fechaGarante2 = new Fecha(solicitud.getFechaGarante1());
+
+		Color colorGris      = new Color(60,60,60);
+		Color colorGrisClaro = new Color(160,160,160);
+
+		Column columnTitulo = EasyComponentsFactory.getSimpleColumnFromTextAndWidthsAndStyleAndRelativePosition(
+				Arrays.asList("E. DATOS DE LOS GARANTES PERSONALES "),
+				Arrays.asList(witdh), fuenteNegrita, 5f, 2.5f, Alignment.LEFT, true);
+
+		SimpleTable tabla = EasyComponentsFactory.getSimpleTable(initX, maxY - 40,
+				columnTitulo,
+				EasyComponentsFactory.getSimpleColumnFromTextAndWidthsAndStyleAndRelativePosition(
+						Arrays.asList("1) PRIMER GARANTE"),
+						Arrays.asList(witdh), fuenteMinimalNegrita, 5f, 2.5f, Alignment.LEFT, true
+				),
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
+								EasyComponentsFactory.getSimpleTable(0, 0,
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														solicitud.getApellidoPaternoGarante1(),
+														solicitud.getApellidoMaternoGarante1(),
+														solicitud.getNombreGarante1(),
+														solicitud.getGradoGarante1()
+												),
+												Arrays.asList(120f,120f,180f,80f),
+												fuenteMinimalNegrita,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro),
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														"APELLIDO PATERNO",
+														"APELLIDO MATERNO",
+														"NOMBRES",
+														"GRADO"
+												),
+												Arrays.asList(120f,120f,180f,80f),
+												fuenteMinimal,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro)
+								)
+						)
+				),
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
+								EasyComponentsFactory.getSimpleTable(0, 0,
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														solicitud.getCedulaIdentidadGarante1(),
+														solicitud.getCategoriaPorcentajeGarante1(),
+														solicitud.getUnidadGarante1(),
+														String.format("%s",solicitud.getSueldoGarante1()),
+														String.format("%s",solicitud.getAntiguedadGarante1()),
+														String.format("%s",solicitud.getPostGradoEnBsGarante1()),
+														String.format("%s",solicitud.getBonoBSCBsGarante1())
+												),
+												Arrays.asList(75f,65f,45f,85f,70f,75f,85f),
+												fuenteMinimalNegrita,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro),
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														"N* DE CELULA\nIDENTIDAD",
+														"CATEGORIA\nEN %",
+														"N* de\nUNIDAD",
+														"SUELDO (Bs.)",
+														"ANTIGUEDAD\n(Bs.)",
+														"POST GRADO\nEN (Bs.)",
+														"BONO B.S.C.EN\n (Bs.)"
+												),
+												Arrays.asList(75f,65f,45f,85f,70f,75f,85f),
+												fuenteMinimal,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro)
+								)
+						)
+				),
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
+								EasyComponentsFactory.getSimpleTable(0, 0,
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList("Llena de acuerdo a los datos de la boleta de pago"),
+												Arrays.asList(witdh),
+												fuenteMinimal,  Alignment.LEFT,
+												5f, 1.5f,
+												true,true,Color.BLACK,colorGrisClaro)
+								)
+						)
+				),
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
+								EasyComponentsFactory.getSimpleTable(0, 0,
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														String.format("%s",solicitud.getAniosServicioGarante1()),
+														solicitud.getTelefonoCelularGarante1(),
+														solicitud.getDestinoActualGarante1(),
+														solicitud.getDepartamentoGarante1()
+												),
+												Arrays.asList(66f,132f,200f,102f),
+												fuenteMinimalNegrita,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro),
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														"AÑOS DE SERVICIO",
+														"TELEFONO / CELULAR",
+														"DESTINO ACTUAL (UNIDAD)",
+														"DEPARTAMENTO"
+												),
+												Arrays.asList(66f,132f,200f,102f),
+												fuenteMinimal,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro)
+								)
+						)
+				),
+				EasyComponentsFactory.getSimpleColumnFromTextAndWidthsAndStyleAndRelativePosition(
+						Arrays.asList("2) PRIMER GARANTE"),
+						Arrays.asList(witdh), fuenteMinimalNegrita, 5f, 2.5f, Alignment.LEFT, true
+				),
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
+								EasyComponentsFactory.getSimpleTable(0, 0,
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														solicitud.getApellidoPaternoGarante2(),
+														solicitud.getApellidoMaternoGarante2(),
+														solicitud.getNombreGarante2(),
+														solicitud.getGradoGarante2()
+												),
+												Arrays.asList(120f,120f,180f,80f),
+												fuenteMinimalNegrita,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro),
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														"APELLIDO PATERNO",
+														"APELLIDO MATERNO",
+														"NOMBRES",
+														"GRADO"
+												),
+												Arrays.asList(120f,120f,180f,80f),
+												fuenteMinimal,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro)
+								)
+						)
+				),
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
+								EasyComponentsFactory.getSimpleTable(0, 0,
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														solicitud.getCedulaIdentidadGarante2(),
+														solicitud.getCategoriaPorcentajeGarante2(),
+														solicitud.getUnidadGarante2(),
+														String.format("%s",solicitud.getSueldoGarante2()),
+														String.format("%s",solicitud.getAntiguedadGarante2()),
+														String.format("%s",solicitud.getPostGradoEnBsGarante2()),
+														String.format("%s",solicitud.getBonoBSCBsGarante2())
+												),
+												Arrays.asList(75f,65f,45f,85f,70f,75f,85f),
+												fuenteMinimalNegrita,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro),
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														"N* DE CELULA\nIDENTIDAD",
+														"CATEGORIA\nEN %",
+														"N* de\nUNIDAD",
+														"SUELDO (Bs.)",
+														"ANTIGUEDAD\n(Bs.)",
+														"POST GRADO\nEN (Bs.)",
+														"BONO B.S.C.EN\n (Bs.)"
+												),
+												Arrays.asList(75f,65f,45f,85f,70f,75f,85f),
+												fuenteMinimal,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro)
+								)
+						)
+				),
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
+								EasyComponentsFactory.getSimpleTable(0, 0,
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList("Llena de acuerdo a los datos de la boleta de pago"),
+												Arrays.asList(witdh),
+												fuenteMinimal,  Alignment.LEFT,
+												5f, 1.5f,
+												true,true,Color.BLACK,colorGrisClaro)
+								)
+						)
+				),
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
+								EasyComponentsFactory.getSimpleTable(0, 0,
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														String.format("%s",solicitud.getAniosServicioGarante2()),
+														solicitud.getTelefonoCelularGarante2(),
+														solicitud.getDestinoActualGarante2(),
+														solicitud.getDepartamentoGarante2()
+												),
+												Arrays.asList(66f,132f,200f,102f),
+												fuenteMinimalNegrita,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro),
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														"AÑOS DE SERVICIO",
+														"TELEFONO / CELULAR",
+														"DESTINO ACTUAL (UNIDAD)",
+														"DEPARTAMENTO"
+												),
+												Arrays.asList(66f,132f,200f,102f),
+												fuenteMinimal,  Alignment.CENTER,
+												5f, 2.5f,
+												true,false,colorGrisClaro,colorGrisClaro)
+								)
+						)
+				),
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCell(0f, 0f, true,
+								EasyComponentsFactory.getSimpleTable(0, 0,
+										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+												Arrays.asList(
+														"LOS GARANTES SOLIDARIA Y MANCOMUNADAMENTE ANTE EL INCUMPLIMIENTO DE LA OBLIGACION DEL DEUDOR(AFILIADO)"
+												),
+												Arrays.asList(witdh),
+												fuenteMinimal,  Alignment.LEFT,
+												5f, 5f,
+												true,false,colorGrisClaro,colorGrisClaro)
+								)
+						)
+				),
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCell(0f, 0f, true,false,colorGris,colorGris,
+								EasyComponentsFactory.getSimpleTable(0, 0,
+										EasyComponentsFactory.getSimpleColumn(
+												EasyComponentsFactory.getSimpleCell(
+														0f, 0f,
+														true,false,colorGrisClaro,colorGrisClaro,
+														EasyComponentsFactory.getSimpleTable(0, 0,
+																EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+																		Arrays.asList(" "),
+																		Arrays.asList(250f),
+																		fuenteMinimalNegrita,  Alignment.CENTER,
+																		5f, 25f,
+																		false,false,colorGrisClaro,colorGrisClaro),EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+																		Arrays.asList("...................."),
+																		Arrays.asList(250f),
+																		fuenteMinimal,  Alignment.CENTER,
+																		5f, 2.5f,
+																		false,false,colorGrisClaro,colorGrisClaro
+																),
+																EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+																		Arrays.asList("FIRMA SOLICITANTE"),
+																		Arrays.asList(250f),
+																		fuenteMinimal,  Alignment.CENTER,
+																		5f, 5f,
+																		false,false,colorGrisClaro,colorGrisClaro
+																),
+																EasyComponentsFactory.getSimpleColumn(
+																		EasyComponentsFactory.getSimpleCell(0f, 0f, true,false,colorGrisClaro,colorGrisClaro,
+																				EasyComponentsFactory.getSimpleTable(0, 5f,
+																						EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStylesAndRelativePosition(
+																								Arrays.asList(
+																										"LUGAR Y FECHA:",
+																										String.format("%s, %s / %s / %s",
+																												solicitud.getLugarGarante1(),
+																												fechaGarante1.getDiaLiteral(),
+																												fechaGarante1.getMesLiteral(),
+																												fechaGarante1.getAnioLiteral())
+																								),
+																								Arrays.asList(80f,170f),
+																								Arrays.asList(
+																										fuenteMinimal,
+																										fuenteMinimalNegrita
+																								)
+																								,  Alignment.LEFT,
+																								5f, 5f,
+																								false,false,colorGrisClaro,colorGrisClaro
+																						)
+																				)
+																		)
+																)
+														)
+												),
+												EasyComponentsFactory.getSimpleCell(
+														0f, 0f,
+														true,false,colorGrisClaro,colorGrisClaro,
+														EasyComponentsFactory.getSimpleTable(0, 0,
+																EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+																		Arrays.asList(" "),
+																		Arrays.asList(250f),
+																		fuenteMinimalNegrita,  Alignment.CENTER,
+																		5f, 25f,
+																		false,false,colorGrisClaro,colorGrisClaro),EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+																		Arrays.asList("...................."),
+																		Arrays.asList(250f),
+																		fuenteMinimal,  Alignment.CENTER,
+																		5f, 2.5f,
+																		false,false,colorGrisClaro,colorGrisClaro
+																),
+																EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
+																		Arrays.asList("FIRMA SOLICITANTE"),
+																		Arrays.asList(250f),
+																		fuenteMinimal,  Alignment.CENTER,
+																		5f, 5f,
+																		false,false,colorGrisClaro,colorGrisClaro
+																),
+																EasyComponentsFactory.getSimpleColumn(
+																		EasyComponentsFactory.getSimpleCell(0f, 0f, true,false,colorGrisClaro,colorGrisClaro,
+																				EasyComponentsFactory.getSimpleTable(0, 5f,
+																						EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStylesAndRelativePosition(
+																								Arrays.asList(
+																										"LUGAR Y FECHA:",
+																										String.format("%s, %s / %s / %s",
+																												solicitud.getLugarGarante1(),
+																												fechaGarante1.getDiaLiteral(),
+																												fechaGarante1.getMesLiteral(),
+																												fechaGarante1.getAnioLiteral())
+																								),
+																								Arrays.asList(80f,170f),
+																								Arrays.asList(
+																										fuenteMinimal,
+																										fuenteMinimalNegrita
+																								)
+																								,  Alignment.LEFT,
+																								5f, 5f,
+																								false,false,colorGrisClaro,colorGrisClaro
+																						)
+																				)
+																		)
+																)
+														)
+												)
+										)
+								)
+						)
+				)
+		);
+		tabla.draw(contentStream);
+
+		Rectangle borde = new Rectangle(tabla.getStartX(), tabla.getStartY(), tabla.getWidth(), tabla.getHeight());
+		borde.draw(contentStream);
+	}
+
+
+	private void crearCroquis(
+			PDPageContentStream contentStream,
+			PDDocument doc) throws IOException {
+
+		float initX = marginStartX + thickness;
+		float witdh = 500f;
+
+		Column columnTitulo = EasyComponentsFactory.getSimpleColumnFromTextAndWidthsAndStyleAndRelativePosition(
+				Arrays.asList("F. CROQUIS DE UBICACION DEL INMUEBLE SUJETO DE ANTICRESIS, COMPRA, REFACCION O " +
+						"CONSTRUCCION"),
+				Arrays.asList(witdh), fuenteNegrita, 5f, 2.5f, Alignment.LEFT, true);
+
+		SimpleTable tabla = EasyComponentsFactory.getSimpleTable(initX, maxY - 410,
+				columnTitulo,
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCell(0,0,false,
+								Rectangle.builder().addStartX(0f).addStartY(0f).addWidth(500f).addHeight(-275).build()
+						)
+				)
+		);
+
+		tabla.draw(contentStream);
+	}
+
+	private void crearNotas(
+			PDPageContentStream contentStream) throws IOException {
+		float initX = marginStartX + thickness;
+
+		SimpleTable tabla = EasyComponentsFactory.getSimpleTable(initX, maxY - 720,
+				EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStylesAndRelativePosition(
+						Arrays.asList("NOTA 1:","Elaborar el croquis con referencias a un punto especifico (Avenida calle principal, plazas, parques, iglesias, parada de buses y otros)"),
+						Arrays.asList(80f,420f) ,
+						Arrays.asList(fuenteMinimal,fuenteMinimal),
+						Alignment.LEFT,10f,5f,false,false,Color.WHITE,Color.WHITE
+				),
+				EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStylesAndRelativePosition(
+						Arrays.asList("NOTA 2:","Cualquier tachadura, raspadura o borron, INVALIDA el presente formulario"),
+						Arrays.asList(80f,420f) ,
+						Arrays.asList(fuenteMinimal,fuenteMinimal),
+						Alignment.LEFT,10f,5f,false,false,Color.WHITE,Color.WHITE
+				),
+				EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStylesAndRelativePosition(
+						Arrays.asList("NOTA 3:","Los datos consignados en la presenta solicitud son veraces y tienen el rango de declaracion jurada, asimismo se compromete" +
+								"hacer el buen uso del objeto de credito"),
+						Arrays.asList(80f,420f) ,
+						Arrays.asList(fuenteMinimal,fuenteMinimal),
+						Alignment.LEFT,10f,5f,false,false,Color.WHITE,Color.WHITE
+				),
+				EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStylesAndRelativePosition(
+						Arrays.asList("NOTA 4:","El solicitante debe cumplir con los requisitos exigidos de acuerdo a la modalidad del credito"),
+						Arrays.asList(80f,420f) ,
+						Arrays.asList(fuenteMinimal,fuenteMinimal),
+						Alignment.LEFT,10f,0f,false,false,Color.WHITE,Color.WHITE
+				)
+		);
+
+		tabla.draw(contentStream);
+	}
+
+	private void crearNotaValidez(PDPageContentStream contentStream) throws IOException {
+		float initX = marginStartX + thickness;
+		float witdh = 500f;
+
+		Style fuenteNegrita = Style.builder()
+				.addTextFont(fuenteBasicaNegrita)
+				.addFontSize(9.5f)
+				.addTextColor(Color.BLACK)
+				.addLeading(0.9f)
+				.build();
+
+		SimpleTable tabla = EasyComponentsFactory.getSimpleTable(initX, maxY - 800,
+				EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStylesAndRelativePosition(
+						Arrays.asList("EL PRESENTE FORMULARIO TIENE VALIDEZ DE TRES(3) MESES A PARTIR DE SU ADQUISICION"),
+						Arrays.asList(witdh) ,
+						Arrays.asList(fuenteNegrita),
+						Alignment.CENTER,10f,5f,false,false,Color.WHITE,Color.WHITE
+				)
+		);
+
+		tabla.draw(contentStream);
+	}
+
+	private void crearCuadroCarpeta(
+			SolicitudCreditoViviendaDTO solicitud,
+			PDPageContentStream contentStream) throws IOException {
+
+		float initX  = marginStartX+thickness;
+
+		Color colorGris      = new Color(60,60,60);
+
+		Style fuenteNegrita = Style.builder()
+				.addTextFont(fuenteBasicaNegrita)
+				.addFontSize(9.5f)
+				.addTextColor(Color.BLACK)
+				.addLeading(0.9f)
+				.build();
+
+		Style fuenteMinimal = Style.builder()
+				.addTextFont(fuenteBasica)
+				.addFontSize(7f)
+				.addTextColor(Color.BLACK)
+				.addLeading(0.8f)
+				.build();
+
+		Style fuenteMinimalNegrita = Style.builder()
+				.addTextFont(fuenteBasicaNegrita)
+				.addFontSize(9f)
+				.addTextColor(colorGris)
+				.addLeading(0.8f)
+				.build();
+
+		SimpleTable tabla = EasyComponentsFactory.getSimpleTable(initX, maxY - 200,
+				EasyComponentsFactory.getSimpleColumn(
+						EasyComponentsFactory.getSimpleCellFromText("Carpeta Nro",fuenteNegrita,80f,5f,2.5f,Alignment.LEFT,false,false,Color.BLACK,Color.WHITE),
+						EasyComponentsFactory.getSimpleCellFromText(
+								solicitud.getNumeroCarpeta(),
+								fuenteMinimalNegrita,75f,5f,2.5f,Alignment.LEFT,true,false,Color.BLACK,Color.WHITE),
+						EasyComponentsFactory.getSimpleCellFromText("",fuenteMinimalNegrita,200f,5f,2.5f,Alignment.LEFT,false,false,Color.BLACK,Color.WHITE),
+						EasyComponentsFactory.getSimpleCellFromText("Registro Nro",fuenteNegrita,80f,5f,2.5f,Alignment.LEFT,false,false,Color.BLACK,Color.WHITE),
+						EasyComponentsFactory.getSimpleCellFromText(
+								solicitud.getNumeroRegistro(),
+								fuenteMinimalNegrita,60f,5f,2.5f,Alignment.LEFT,true,false,Color.BLACK,Color.WHITE)
+				)
+		);
+		tabla.draw(contentStream);
 	}
 }

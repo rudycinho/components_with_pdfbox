@@ -1,13 +1,13 @@
-package form;
+package subsistema.pdf.form;
 
 import com.lowagie.text.DocumentException;
-import dto.SucursalDTO;
-import dto.UsuarioDTO;
+import subsistema.pdf.dto.SucursalDTO;
+import subsistema.pdf.dto.UsuarioDTO;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import utils.factories.GeneradorFormularioFactory;
+import subsistema.pdf.utils.factories.GeneradorFormularioFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +21,7 @@ public class FormularioRequisitosSolicitudCredito {
             SucursalDTO sucursal,
             Date fechaExportacion) throws IOException, DocumentException {
 
-        new ArchivoPDFConDatosHTML(ruta,porcion);
+        new ArchivoRequisitosPDFConDatosHTML(ruta,porcion);
 
         GeneradorFormularioFactory.setDimensiones(PDRectangle.LETTER.getWidth(),PDRectangle.LETTER.getHeight());
         GeneradorFormularioFactory.setMarginStartX(50f);

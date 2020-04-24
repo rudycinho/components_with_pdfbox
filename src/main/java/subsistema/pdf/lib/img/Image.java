@@ -1,6 +1,6 @@
-package lib.img;
+package subsistema.pdf.lib.img;
 
-import lib.basic.Component;
+import subsistema.pdf.lib.basic.Component;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 

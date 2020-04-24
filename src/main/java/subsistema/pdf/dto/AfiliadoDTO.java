@@ -1,7 +1,8 @@
-package dto;
+package subsistema.pdf.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import subsistema.pdf.utils.Fecha;
 
 import java.util.Date;
 
@@ -9,12 +10,12 @@ import java.util.Date;
 @Setter
 public class AfiliadoDTO{
 	private Long Id;
-	private Date   fechaSolicitud;
+	private String fechaSolicitud;
 
 	private String grado;
 	private String nombreCompleto;
 	private String carnetIdentidad;
-	private Date   fechaNacimiento;
+	private String fechaNacimiento;
 	private String telefono;
 	private String celular;
 	private String correoElectronico;
@@ -30,12 +31,12 @@ public class AfiliadoDTO{
 
 		afiliadoDTO.Id                = 204L;
 
-		afiliadoDTO.fechaSolicitud    = new Date(2018,5,8);
+		afiliadoDTO.fechaSolicitud    = new Fecha(new Date(2018,5,8)).getFormatoFecha();
 
 		afiliadoDTO.grado             = "CORONEL";
 		afiliadoDTO.nombreCompleto    = "JUAN JOSE PEREZ CAMACHO DE LA SANTISIMA TRINIDAD";
 		afiliadoDTO.carnetIdentidad   = "9977761 CB";
-		afiliadoDTO.fechaNacimiento   = new Date(1984,12,18);
+		afiliadoDTO.fechaNacimiento   = new Fecha(new Date(1984,12,18)).getFormatoFecha();
 		afiliadoDTO.telefono          = "44546474";
 		afiliadoDTO.celular           = "77476787";
 		afiliadoDTO.correoElectronico = "juan.perez@gmail.com";

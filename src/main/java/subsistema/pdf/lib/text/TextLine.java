@@ -1,8 +1,8 @@
-package lib.text;
+package subsistema.pdf.lib.text;
 
-import lib.basic.Alignment;
-import lib.basic.Component;
-import lib.basic.Style;
+import subsistema.pdf.lib.basic.Alignment;
+import subsistema.pdf.lib.basic.Component;
+import subsistema.pdf.lib.basic.Style;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
 import java.io.IOException;

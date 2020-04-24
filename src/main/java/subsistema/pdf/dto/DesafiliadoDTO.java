@@ -1,7 +1,8 @@
-package dto;
+package subsistema.pdf.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import subsistema.pdf.utils.Fecha;
 
 import java.util.Date;
 
@@ -10,7 +11,7 @@ import java.util.Date;
 public class DesafiliadoDTO {
 	private Long Id;
 
-	private Date fechaSolicitud;
+	private String fechaSolicitud;
 
 	private String grado;
 	private String nombreCompleto;
@@ -29,7 +30,7 @@ public class DesafiliadoDTO {
 
 		desafiliadoDTO.Id                = 204L;
 
-		desafiliadoDTO.fechaSolicitud    = new Date(2020,8,6);
+		desafiliadoDTO.fechaSolicitud    = new Fecha(new Date(2018,5,8)).getFormatoFecha();
 
 		desafiliadoDTO.grado             = "CORONEL";
 		desafiliadoDTO.nombreCompleto    = "JUAN JOSE PEREZ CAMACHO DE LA SANTISIMA TRINIDAD";

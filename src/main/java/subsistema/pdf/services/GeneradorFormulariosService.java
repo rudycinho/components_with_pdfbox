@@ -262,7 +262,7 @@ public class GeneradorFormulariosService {
 	public String FormularioCarpetaDatosAfiliadio(
 			DatosCarpetaAfiliadioDTOPDF datos,
 			UsuarioDTOPDF usuarioEditor,
-			SucursalDTOPDF sucursal) {
+			SucursalDTOPDF sucursal) throws IOException {
 		Date fechaCreacion = new Date();
 
 		String nombreArchivo = String.format("Formulario_Carpeta_Datos_%s_%s_%s.pdf",

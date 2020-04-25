@@ -52,8 +52,10 @@ public class Main {
                         "<p>&nbsp;&nbsp;&nbsp;&nbsp;</p>\n" +
                         "\n";
 
+        ComentariosDTOPDF comentarios = ComentariosDTOPDF.getFake();
+        DatosCarpetaAfiliadioDTOPDF datos = DatosCarpetaAfiliadioDTOPDF.getFake();
 
-        service.FormularioInformacionUsuario(usuarioEditado,usuarioEditor,sucursal);
+/*        service.FormularioInformacionUsuario(usuarioEditado,usuarioEditor,sucursal);
         service.FormularioInformacionSucursal(usuarioEditor,sucursal);
         service.FormularioAjustesSistema(ajustesSistemaDTO,usuarioEditor,sucursal);
         service.FormularioAfiliacion(afiliado,usuarioEditor,sucursal,estados);
@@ -64,6 +66,9 @@ public class Main {
         service.FormularioRequisitosSolicitudCredito(porcionHTML,usuarioEditor,sucursal);
         service.FormularioDefinicionCredito(definicionCredito,usuarioEditor,sucursal);
         service.FormularioSolicitudCreditoVivienda(solicitud,usuarioEditor,sucursal);
+*/
+        service.FormularioCarpetaComentarios(comentarios,usuarioEditor,sucursal);
+        service.FormularioCarpetaDatosAfiliadio(datos,usuarioEditor,sucursal);
 
     }
 

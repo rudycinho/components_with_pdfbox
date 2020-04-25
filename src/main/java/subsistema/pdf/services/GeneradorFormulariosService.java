@@ -240,4 +240,41 @@ public class GeneradorFormulariosService {
         return ruta;
 	}
 
+    public String FormularioCarpetaComentarios(
+    		ComentariosDTOPDF comentarios,
+			UsuarioDTOPDF usuarioEditor,
+			SucursalDTOPDF sucursal) {
+		Date fechaCreacion = new Date();
+
+		String nombreArchivo = String.format("Formulario_Carpeta_Comentarios_%s_%s_%s.pdf",
+				comentarios.getCarnetAfiliado().trim().replaceAll(" ", "_"),
+				usuarioEditor.getNombreCompleto().trim().replaceAll(" ", "_"),
+				new Fecha(fechaCreacion).getFormatoTitulo());
+
+//		String ruta = String.format("%s%s%s",DEST,"/",nombreArchivo);
+		String ruta = String.format("%s%s%s",DEST,"/","form11.pdf");
+
+		new FormularioCarpetaComentarios(ruta,comentarios,usuarioEditor,sucursal,fechaCreacion);
+
+		return ruta;
+    }
+
+	public String FormularioCarpetaDatosAfiliadio(
+			DatosCarpetaAfiliadioDTOPDF datos,
+			UsuarioDTOPDF usuarioEditor,
+			SucursalDTOPDF sucursal) {
+		Date fechaCreacion = new Date();
+
+		String nombreArchivo = String.format("Formulario_Solicitud_Credito_%s_%s_%s.pdf",
+				datos.getCarnetIdentidad().trim().replaceAll(" ", "_"),
+				usuarioEditor.getNombreCompleto().trim().replaceAll(" ", "_"),
+				new Fecha(fechaCreacion).getFormatoTitulo());
+
+//		String ruta = String.format("%s%s%s",DEST,"/",nombreArchivo);
+		String ruta = String.format("%s%s%s",DEST,"/","form11.pdf");
+
+		new FormularioCarpetaDatosAfiliadio(ruta,datos,usuarioEditor,sucursal,fechaCreacion);
+
+		return ruta;
+	}
 }

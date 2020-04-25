@@ -243,7 +243,7 @@ public class GeneradorFormulariosService {
     public String FormularioCarpetaComentarios(
     		ComentariosDTOPDF comentarios,
 			UsuarioDTOPDF usuarioEditor,
-			SucursalDTOPDF sucursal) {
+			SucursalDTOPDF sucursal) throws IOException {
 		Date fechaCreacion = new Date();
 
 		String nombreArchivo = String.format("Formulario_Carpeta_Comentarios_%s_%s_%s.pdf",
@@ -252,7 +252,7 @@ public class GeneradorFormulariosService {
 				new Fecha(fechaCreacion).getFormatoTitulo());
 
 //		String ruta = String.format("%s%s%s",DEST,"/",nombreArchivo);
-		String ruta = String.format("%s%s%s",DEST,"/","form11.pdf");
+		String ruta = String.format("%s%s%s",DEST,"/","form12.pdf");
 
 		new FormularioCarpetaComentarios(ruta,comentarios,usuarioEditor,sucursal,fechaCreacion);
 
@@ -265,13 +265,13 @@ public class GeneradorFormulariosService {
 			SucursalDTOPDF sucursal) {
 		Date fechaCreacion = new Date();
 
-		String nombreArchivo = String.format("Formulario_Solicitud_Credito_%s_%s_%s.pdf",
+		String nombreArchivo = String.format("Formulario_Carpeta_Datos_%s_%s_%s.pdf",
 				datos.getCarnetIdentidad().trim().replaceAll(" ", "_"),
 				usuarioEditor.getNombreCompleto().trim().replaceAll(" ", "_"),
 				new Fecha(fechaCreacion).getFormatoTitulo());
 
 //		String ruta = String.format("%s%s%s",DEST,"/",nombreArchivo);
-		String ruta = String.format("%s%s%s",DEST,"/","form11.pdf");
+		String ruta = String.format("%s%s%s",DEST,"/","form13.pdf");
 
 		new FormularioCarpetaDatosAfiliadio(ruta,datos,usuarioEditor,sucursal,fechaCreacion);
 

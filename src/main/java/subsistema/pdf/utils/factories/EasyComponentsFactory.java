@@ -243,6 +243,24 @@ import java.util.List;
             return recursiveTables;
         }
 
+        public static List<RecursiveTable> getLargeTable(
+                float startX,
+                float startY,
+                float anotherStartY,
+                List<Column> bodyColumns,
+                int limitY) {
+            List<RecursiveTable> recursiveTables = new LinkedList<>();
+
+            RecursiveTable table = createRecursiveTable(startX,startY,bodyColumns,limitY);
+            recursiveTables.add(table);
+            while (table.hasExcessColumns()){
+                table = createRecursiveTable(startX,anotherStartY,table.getExcessColumns(),limitY);
+                recursiveTables.add(table);
+            }
+
+            return recursiveTables;
+        }
+
         private static RecursiveTable createRecursiveTable(
                 float startX,
                 float startY,
@@ -253,6 +271,20 @@ import java.util.List;
                     .addStartX(startX)
                     .addStartY(startY)
                     .addColumn(headerColum)
+                    .addColumns(bodyColumns)
+                    .addLimit(limitY)
+                    .build();
+        }
+
+
+        private static RecursiveTable createRecursiveTable(
+                float startX,
+                float startY,
+                List<Column> bodyColumns,
+                int limitY) {
+            return RecursiveTable.builder()
+                    .addStartX(startX)
+                    .addStartY(startY)
                     .addColumns(bodyColumns)
                     .addLimit(limitY)
                     .build();

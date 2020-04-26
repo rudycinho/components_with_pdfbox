@@ -19,7 +19,7 @@ public class ComentarioDTOPDF {
     public static ComentarioDTOPDF getFake(){
         ComentarioDTOPDF comentario = new ComentarioDTOPDF();
 
-        comentario.nombreUsuario = "Linus Tolbar";
+        comentario.nombreUsuario = "Linus Tolbar" + " Linux " +" Linus Tolbar";
         comentario.nombreCargo   = "SISTEMAS";
         comentario.nombreArea    = "ADMINISTRADOR";
 

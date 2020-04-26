@@ -8,11 +8,11 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import subsistema.pdf.dto.*;
 import subsistema.pdf.lib.basic.Alignment;
 import subsistema.pdf.lib.basic.Style;
-import subsistema.pdf.lib.tables.Cell;
+import subsistema.pdf.lib.shapes.Line;
 import subsistema.pdf.lib.tables.Column;
 import subsistema.pdf.lib.tables.RecursiveTable;
-import subsistema.pdf.lib.tables.SimpleTable;
-import subsistema.pdf.lib.text.MultipleParagraph;
+import subsistema.pdf.lib.text.complex.ParagraphMultipleStyle;
+import subsistema.pdf.lib.text.complex.Text;
 import subsistema.pdf.utils.factories.EasyComponentsFactory;
 import subsistema.pdf.utils.factories.GeneradorFormularioFactory;
 import subsistema.pdf.utils.settings.Model;
@@ -90,6 +90,7 @@ public class FormularioCarpetaComentarios {
         GeneradorFormularioFactory.crearTitulo(contentStream,"COMENTARIOS\nDE CARPETA DE CREDITO", Model.MODEL_1);
 
         crearInfoAfiliado(contentStream,comentarios);
+        crearLineaSeparacionDesafiliado(contentStream);
 
         crearTablaObservaciones(
                 contentStream,
@@ -114,29 +115,52 @@ public class FormularioCarpetaComentarios {
     private void crearInfoAfiliado(
             PDPageContentStream contentStream,
             ComentariosDTOPDF comentarios) throws IOException {
-        /*
-        float width1 = 150f;
-        float width2 = 350f - 10f;
-        float initY = 235;
-        boolean margin = false;
 
-        Cell c11 = EasyComponentsFactory.getSimpleCellFromText("NOMBRE: ", fuenteNormalNegrita, width1, 0f, 5f, margin);
-        Cell c12 = EasyComponentsFactory.getSimpleCellFromText("ROL: ", fuenteNormalNegrita, width1, 0f, 5f, margin);
-        Cell c13 = EasyComponentsFactory.getSimpleCellFromText("ESTADO: ", fuenteNormalNegrita, width1, 0f, 5f, margin);
+        Style fuenteNormal = Style.builder()
+                .addTextFont(fuenteBasica)
+                .addFontSize(9.5f)
+                .addTextColor(Color.BLACK)
+                .addLeading(1.1f)
+                .build();
 
-        Cell c21 = EasyComponentsFactory.getSimpleCellFromText(perfil.getNombre(), fuenteNormalEspaciada, width2, 0f, 5f, margin);
-        Cell c22 = EasyComponentsFactory.getSimpleCellFromText(perfil.getRol(), fuenteNormalEspaciada, width2, 0f, 5f, margin);
-        Cell c23 = EasyComponentsFactory.getSimpleCellFromText(perfil.getEstado(), fuenteNormalEspaciada, width2, 0f, 5f, margin);
+        Style fuenteNormalNegrita = Style.builder()
+                .addTextFont(fuenteBasicaNegrita)
+                .addFontSize(9.5f)
+                .addTextColor(Color.BLACK)
+                .addLeading(1.1f)
+                .build();
 
-        float auxY = maxY - initY;
+        String prestamo        = comentarios.getPrestamoCodigo();
+        String modalidad       = comentarios.getPrestamoModalidad();
+        String garantia        = comentarios.getPrestamoTipoGarantia();
+        String fechaInicio     = comentarios.getFechaInicioPrestamo();
+        String grado           = comentarios.getGradoAfiliado();
+        String nombreAfiliado  = comentarios.getNombreAfiliado();
+        String carnetIdentidad = comentarios.getCarnetAfiliado();
 
-        SimpleTable table = EasyComponentsFactory.getSimpleTableFromCell(
-                marginStartX + thickness, auxY,
-                new Cell[]{c11, c21},
-                new Cell[]{c12, c22},
-                new Cell[]{c13, c23}
-        );
-        EasyComponentsFactory.getBoxStroke(10f, 5f, Color.BLACK, table).draw(contentStream);*/
+        float width = 500f;
+        float initY = maxY-200;
+
+        ParagraphMultipleStyle paragraph = ParagraphMultipleStyle.builder()
+                .addStartX(marginStartX + thickness)
+                .addStartY(initY)
+                .addWidth(width)
+                .addText(new Text("Prestamo",fuenteNormal))
+                .addText(new Text(prestamo + ",",fuenteNormalNegrita))
+                .addText(new Text("modalidad",fuenteNormal))
+                .addText(new Text(modalidad + ",",fuenteNormalNegrita))
+                .addText(new Text("con tipo de garantia",fuenteNormal))
+                .addText(new Text(garantia + ",",fuenteNormalNegrita))
+                .addText(new Text("fecha de inicio",fuenteNormal))
+                .addText(new Text(fechaInicio + ",",fuenteNormalNegrita))
+                .addText(new Text("en favor de",fuenteNormal))
+                .addText(new Text(grado,fuenteNormalNegrita))
+                .addText(new Text(nombreAfiliado + ",",fuenteNormalNegrita))
+                .addText(new Text("con numero de carnet de identidad",fuenteNormal))
+                .addText(new Text(carnetIdentidad + ".",fuenteNormalNegrita))
+                .build();
+
+        paragraph.draw(contentStream);
     }
 
     private void crearTablaObservaciones(
@@ -166,23 +190,23 @@ public class FormularioCarpetaComentarios {
             column = EasyComponentsFactory.getSimpleColumn(
                     EasyComponentsFactory.getSimpleCell(0f, 7.5f, false,
                             EasyComponentsFactory.getSimpleTable(0, 0,
-                                    EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStylesAndRelativePosition(
-                                            Arrays.asList(
-                                                    "Comentario realizado por: ",
-                                                    comentario.getNombreUsuario(),
-                                                    String.format("( %s - %s )",
-                                                            comentario.getNombreArea(),
-                                                            comentario.getNombreCargo()
-                                                            )
-                                            ),
-                                            Arrays.asList(160f,140f,200f),
-                                            Arrays.asList(
-                                                    fuenteNormalNegrita,
-                                                    fuenteNormal,
-                                                    fuenteNormalNegrita),
-                                            Alignment.LEFT,
-                                            5f, 2.5f,
-                                            false,false,Color.BLACK,Color.WHITE),
+                                    EasyComponentsFactory.getSimpleColumn(
+                                            EasyComponentsFactory.getSimpleCellFromText("Comentario realizado por: ",fuenteNormalNegrita,160f,5f,2.5f,Alignment.CENTER,false),
+                                            EasyComponentsFactory.getSimpleCell(5f,2.5f,false,false,Color.BLACK,Color.WHITE,
+                                                    ParagraphMultipleStyle.builder()
+                                                            .addStartX(marginStartX + thickness)
+                                                            .addStartY(0f)
+                                                            .addWidth(340f-20f)
+                                                            .addText(new Text(comentario.getNombreUsuario(),fuenteNormal))
+                                                            .addText(new Text(
+                                                                    String.format("( %s - %s )",
+                                                                        comentario.getNombreArea(),
+                                                                        comentario.getNombreCargo()
+                                                                    )
+                                                                    ,fuenteNormalNegrita))
+                                                            .build()
+                                                    )
+                                    ),
                                     EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStylesAndRelativePosition(
                                             Arrays.asList(
                                                     "Fecha :",
@@ -214,7 +238,7 @@ public class FormularioCarpetaComentarios {
         }
 
         List<RecursiveTable> tables = EasyComponentsFactory.getLargeTable(
-                marginStartX + thickness, maxY - 245, maxY - 40,  bodyColumns, 45);
+                marginStartX + thickness, maxY - 255, maxY - 40,  bodyColumns, 45);
 
         Iterator<RecursiveTable> it = tables.iterator();
         it.next().draw(contentStream);
@@ -227,8 +251,15 @@ public class FormularioCarpetaComentarios {
             it.next().draw(content);
             contentStreams.add(content);
         }
-
         contentStreams.add(0, contentStream);
+    }
 
+    private void crearLineaSeparacionDesafiliado(
+            PDPageContentStream contentStream) throws IOException {
+
+        float initY = 245f;
+        float auxY = maxY - initY;
+
+        new Line(marginStartX, auxY, maxX - marginEndX, auxY).setColor(Color.GRAY).setThickness(1).draw(contentStream);
     }
 }

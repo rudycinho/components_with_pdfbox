@@ -1,4 +1,4 @@
-package subsistema.pdf.lib.text;
+package subsistema.pdf.lib.text.simple;
 
 import subsistema.pdf.lib.basic.Alignment;
 import subsistema.pdf.lib.basic.Component;

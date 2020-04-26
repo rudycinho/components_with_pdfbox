@@ -1,7 +1,19 @@
 import com.lowagie.text.DocumentException;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import subsistema.pdf.dto.*;
+import subsistema.pdf.lib.basic.Style;
+import subsistema.pdf.lib.text.complex.ParagraphMultipleStyle;
+import subsistema.pdf.lib.text.complex.Text;
+import subsistema.pdf.lib.text.complex.Word;
+import subsistema.pdf.lib.text.complex.WordLine;
 import subsistema.pdf.services.GeneradorFormulariosService;
 
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -55,7 +67,7 @@ public class Main {
         ComentariosDTOPDF comentarios = ComentariosDTOPDF.getFake();
         DatosCarpetaAfiliadioDTOPDF datos = DatosCarpetaAfiliadioDTOPDF.getFake();
 
-/*        service.FormularioInformacionUsuario(usuarioEditado,usuarioEditor,sucursal);
+        service.FormularioInformacionUsuario(usuarioEditado,usuarioEditor,sucursal);
         service.FormularioInformacionSucursal(usuarioEditor,sucursal);
         service.FormularioAjustesSistema(ajustesSistemaDTO,usuarioEditor,sucursal);
         service.FormularioAfiliacion(afiliado,usuarioEditor,sucursal,estados);
@@ -66,13 +78,12 @@ public class Main {
         service.FormularioRequisitosSolicitudCredito(porcionHTML,usuarioEditor,sucursal);
         service.FormularioDefinicionCredito(definicionCredito,usuarioEditor,sucursal);
         service.FormularioSolicitudCreditoVivienda(solicitud,usuarioEditor,sucursal);
-*/
         service.FormularioCarpetaComentarios(comentarios,usuarioEditor,sucursal);
         service.FormularioCarpetaDatosAfiliadio(datos,usuarioEditor,sucursal);
-
+        //prueba();
     }
 
-    /*
+
     public static void prueba() throws IOException {
 
         int maxY = (int) PDRectangle.LETTER.getHeight();
@@ -120,20 +131,159 @@ public class Main {
         //String st = "Lorem ipsum dolor sit amet";
 
         Style style1 = Style.builder()
-                .addFontSize(13f)
-                .addTextColor(Color.BLUE)
+                .addFontSize(10f)
+                .addTextColor(Color.GRAY)
                 .addTextFont(PDType1Font.COURIER_BOLD)
                 .addLeading(1.4f)
                 .build();
 
         Style style2 = Style.builder()
-                .addFontSize(13f)
-                .addTextColor(Color.BLUE)
-                .addTextFont(PDType1Font.HELVETICA)
-                .addLeading(1.1f)
+                .addFontSize(15f)
+                .addTextColor(Color.BLACK)
+                .addTextFont(PDType1Font.HELVETICA_BOLD)
+                .addLeading(1.3f)
                 .build();
 
-        /*TextLine textLine = TextLine.builder()
+
+        Style style3 = Style.builder()
+                .addFontSize(10f)
+                .addTextColor(Color.YELLOW)
+                .addTextFont(PDType1Font.HELVETICA)
+                .addLeading(.9f)
+                .build();
+
+
+        Style style4 = Style.builder()
+                .addFontSize(10f)
+                .addTextColor(Color.BLUE)
+                .addTextFont(PDType1Font.HELVETICA)
+                .addLeading(.9f)
+                .build();
+/*
+        Word word1 = Word.builder()
+                .addStartX(150)
+                .addStartY(400)
+                .addStyle(style1)
+                .addTextContent("PERRO")
+                .build();
+
+        Word word2 = Word.builder()
+                .addStartX(50)
+                .addStartY(200)
+                .addStyle(style2)
+                .addTextContent("GATO")
+                .build();
+
+        Word word3 = Word.builder()
+                .addStartX(450)
+                .addStartY(100)
+                .addStyle(style3)
+                .addTextContent("GALLO")
+                .build();
+
+        Word word4 = Word.builder()
+                .addStartX(50)
+                .addStartY(210)
+                .addStyle(style2)
+                .addTextContent("BURRO")
+                .build();
+
+        WordLine wordLine = WordLine.builder()
+                .addStartX(50)
+                .addStartY(610)
+                .addWord(word1)
+                .addWord(word2)
+                .addWord(word3)
+                .addWord(word4)
+                .build();
+
+        wordLine.draw(contentStream);
+
+        contentStream.setStrokingColor(Color.GRAY);
+        contentStream.addRect(wordLine.getStartX(),wordLine.getStartY(),wordLine.getWidth(),wordLine.getHeight());
+        contentStream.stroke();
+
+                */
+/*
+        ParagraphMultipleStyle paragraph = ParagraphMultipleStyle.builder()
+                .addStartX(50f)
+                .addStartY(610f)
+                .addWidth(300f)
+                .addWord(getWord("Linux_11",style4))
+                .addWord(getWord("perro_12",style2))
+                .addWord(getWord("can_13",style1))
+                .addWord(getWord("bestia_14",style3))
+                .addWord(getWord("diogenes_15",style3))
+                .addWord(getWord("libelula_16",style1))
+                .addWord(getWord("vikingo_17",style2))
+                .addWord(getWord("Lampara_18",style3))
+                .addWord(getWord("Linux_21",style1))
+                .addWord(getWord("perro_22",style2))
+                .addWord(getWord("can_23",style1))
+                .addWord(getWord("bestia_24",style3))
+                .addWord(getWord("diogenes_25",style3))
+                .addWord(getWord("libelula_26",style1))
+                .addWord(getWord("vikingo_27",style2))
+                .addWord(getWord("Lampara_28",style3))
+                .build();
+*/
+        Style fuenteNormal = Style.builder()
+                .addFontSize(10.5f)
+                .addTextColor(Color.BLACK)
+                .addTextFont(PDType1Font.COURIER)
+                .addLeading(.9f)
+                .build();
+
+        Style fuenteNormalNegrita = Style.builder()
+                .addFontSize(10.5f)
+                .addTextColor(Color.BLACK)
+                .addTextFont(PDType1Font.COURIER_BOLD)
+                .addLeading(.9f)
+                .build();
+
+
+        String prestamo        = "CP000000001";
+        String modalidad       = "COMPRA DE TERRENO, VIVIENDA, O DEPARTAMENTO";
+        String garantia        = "REAL (GRAVAMEN HIPOTECARIO)";
+        String fechaInicio     = "23-03-2020";
+        String grado           = "POLICIA";
+        String nombreAfiliado  = "ROBERTO JUAN ZENTENO APAZA";
+        String carnetIdentidad = "7311543";
+
+
+
+
+        ParagraphMultipleStyle paragraph = ParagraphMultipleStyle.builder()
+                .addStartX(50f)
+                .addStartY(610f)
+                .addWidth(400f)
+                .addText(new Text("Prestamo",fuenteNormal))
+                .addText(new Text(prestamo,fuenteNormalNegrita))
+                .addText(new Text("modalidad",fuenteNormal))
+                .addText(new Text(modalidad,fuenteNormalNegrita))
+                .addText(new Text("con tipo de garantia",fuenteNormal))
+                .addText(new Text(garantia,fuenteNormalNegrita))
+                .addText(new Text("fecha de inicio",fuenteNormal))
+                .addText(new Text(fechaInicio,fuenteNormalNegrita))
+                .addText(new Text("en favor de",fuenteNormal))
+                .addText(new Text(grado,fuenteNormalNegrita))
+                .addText(new Text(nombreAfiliado,fuenteNormalNegrita))
+                .addText(new Text("con numero de carnet de identidad",fuenteNormal))
+                .addText(new Text(carnetIdentidad,fuenteNormalNegrita))
+                .build();
+
+        paragraph.draw(contentStream);
+/*
+        contentStream.setStrokingColor(Color.BLUE);
+        contentStream.addRect(
+                paragraph.getStartX(),
+                paragraph.getStartY(),
+                paragraph.getWidth(),
+                paragraph.getHeight());
+        contentStream.stroke();
+
+
+        TextLine textLine = TextLine.builder()
                 .addTextContent(st)
                 .addAlignment(Alignment.LEFT)
                 .addStartX(20)
@@ -148,7 +298,7 @@ public class Main {
         float yf = textLine.getHeight();
 
 
-        /*Paragraph paragraph = Paragraph.builder()
+        Paragraph paragraph = Paragraph.builder()
                 .addTextContent(st)
                 .addAlignment(Alignment.LEFT)
                 .addStartX(20)
@@ -286,7 +436,7 @@ public class Main {
         image.draw(contentStream);
 
 
-        /*contentStream.setStrokingColor(Color.ORANGE);
+        contentStream.setStrokingColor(Color.ORANGE);
         contentStream.setNonStrokingColor(Color.ORANGE);
         contentStream.addRect(
                 column.getStartX(),
@@ -347,9 +497,18 @@ public class Main {
 
         //image.draw(contentStream);
 
-        column.draw(contentStream);
+        column.draw(contentStream);*/
 
         contentStream.close();
         doc.save(new File("/home/rudy/example.pdf"));
-    }*/
+    }
+
+    public static Word getWord(String text, Style style) throws IOException {
+        return Word.builder()
+                .addStartX(0)
+                .addStartY(0)
+                .addStyle(style)
+                .addTextContent(text)
+                .build();
+    }
 }

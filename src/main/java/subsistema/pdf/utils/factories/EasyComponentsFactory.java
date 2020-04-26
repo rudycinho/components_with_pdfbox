@@ -11,7 +11,7 @@ import subsistema.pdf.lib.tables.Cell;
 import subsistema.pdf.lib.tables.Column;
 import subsistema.pdf.lib.tables.RecursiveTable;
 import subsistema.pdf.lib.tables.SimpleTable;
-import subsistema.pdf.lib.text.MultipleParagraph;
+import subsistema.pdf.lib.text.simple.MultipleParagraph;
 
 import java.awt.Color;
 import java.io.IOException;

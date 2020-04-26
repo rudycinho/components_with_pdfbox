@@ -1,6 +1,7 @@
 package subsistema.pdf.form;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import subsistema.pdf.dto.ComentariosDTOPDF;
 import subsistema.pdf.dto.DatosCarpetaAfiliadioDTOPDF;
 import subsistema.pdf.dto.SucursalDTOPDF;
 import subsistema.pdf.dto.UsuarioDTOPDF;
@@ -13,7 +14,9 @@ import subsistema.pdf.lib.basic.Style;
 import subsistema.pdf.lib.shapes.Line;
 import subsistema.pdf.lib.tables.Cell;
 import subsistema.pdf.lib.tables.SimpleTable;
-import subsistema.pdf.lib.text.MultipleParagraph;
+import subsistema.pdf.lib.text.complex.ParagraphMultipleStyle;
+import subsistema.pdf.lib.text.complex.Text;
+import subsistema.pdf.lib.text.simple.MultipleParagraph;
 import subsistema.pdf.utils.factories.EasyComponentsFactory;
 import subsistema.pdf.utils.factories.GeneradorFormularioFactory;
 import subsistema.pdf.utils.settings.Model;
@@ -82,11 +85,13 @@ public class FormularioCarpetaDatosAfiliadio {
         GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Model.MODEL_1);
         GeneradorFormularioFactory.crearTitulo(contentStream,"DATOS\nDE CARPETA DE PRESTAMO", Model.MODEL_1);
 
-        crearSubTitulosDesafiliado(contentStream);
-        crearDatosDesafiliado(contentStream, datos);
-        crearObservacionesDesafiliado(contentStream, datos);
+        crearSubTitulosAfiliado(contentStream);
+        crearInfoAfiliado(contentStream,datos);
 
-        crearLineaSeparacionDesafiliado(contentStream);
+        crearLineaSeparacionAfiliado(contentStream);
+
+        crearDatosAfiliado(contentStream, datos);
+        crearObservacionesAfiliado(contentStream, datos);
 
         contentStream.close();
 
@@ -94,12 +99,12 @@ public class FormularioCarpetaDatosAfiliadio {
         doc.close();
     }
 
-    private void crearSubTitulosDesafiliado(
+    private void crearSubTitulosAfiliado(
             PDPageContentStream contentStream) throws IOException {
 
         MultipleParagraph.builder()
                 .addStartX(marginStartX + thickness + relativePositionX)
-                .addStartY(maxY - 245 - relativePositionY)
+                .addStartY(maxY - 265 - relativePositionY)
                 .addWidth(180f)
                 .addTextContent("DATOS DEL AFILIADO")
                 .addAlignment(Alignment.LEFT)
@@ -108,7 +113,7 @@ public class FormularioCarpetaDatosAfiliadio {
                 .draw(contentStream);
     }
 
-    private void crearDatosDesafiliado(
+    private void crearDatosAfiliado(
             PDPageContentStream contentStream,
             DatosCarpetaAfiliadioDTOPDF datos) throws IOException {
 
@@ -121,7 +126,7 @@ public class FormularioCarpetaDatosAfiliadio {
 
         float width1 = 200f;
         float width2 = 280f;
-        float initY = 265;
+        float initY = 285;
         boolean margin = false;
 
         Cell c101 = EasyComponentsFactory.getSimpleCellFromText("GRADO: "                , fuenteNormalNegrita, width1, 0f, 2.5f, margin);
@@ -182,7 +187,7 @@ public class FormularioCarpetaDatosAfiliadio {
         EasyComponentsFactory.getBoxStroke(10f, 5f, Color.BLACK, table).draw(contentStream);
     }
 
-    private void crearObservacionesDesafiliado(
+    private void crearObservacionesAfiliado(
             PDPageContentStream contentStream,
             DatosCarpetaAfiliadioDTOPDF datos) throws IOException {
 
@@ -195,7 +200,7 @@ public class FormularioCarpetaDatosAfiliadio {
 
         MultipleParagraph.builder()
                 .addStartX(marginStartX + thickness + 2 * relativePositionX)
-                .addStartY(maxY - 525 - 2 * relativePositionY)
+                .addStartY(maxY - 545 - 2 * relativePositionY)
                 .addWidth(135f)
                 .addTextContent("OBSERVACIONES")
                 .addAlignment(Alignment.LEFT)
@@ -205,7 +210,7 @@ public class FormularioCarpetaDatosAfiliadio {
 
         MultipleParagraph.builder()
                 .addStartX(marginStartX + thickness + (2 * relativePositionX))
-                .addStartY(maxY - 540 - (2 * relativePositionY))
+                .addStartY(maxY - 560 - (2 * relativePositionY))
                 .addWidth(500f)
                 .addTextContent(datos.getObservacion())
                 .addAlignment(Alignment.LEFT)
@@ -214,7 +219,7 @@ public class FormularioCarpetaDatosAfiliadio {
                 .draw(contentStream);
     }
 
-    private void crearLineaSeparacionDesafiliado(
+    private void crearLineaSeparacionAfiliado(
             PDPageContentStream contentStream) throws IOException {
 
         float initY = 245f;
@@ -222,5 +227,57 @@ public class FormularioCarpetaDatosAfiliadio {
 
         new Line(marginStartX, auxY, maxX - marginEndX, auxY).setColor(Color.GRAY).setThickness(1).draw(contentStream);
     }
+
+    private void crearInfoAfiliado(
+            PDPageContentStream contentStream,
+            DatosCarpetaAfiliadioDTOPDF datos) throws IOException {
+
+        Style fuenteNormal = Style.builder()
+                .addTextFont(fuenteBasica)
+                .addFontSize(9.5f)
+                .addTextColor(Color.BLACK)
+                .addLeading(1.1f)
+                .build();
+
+        Style fuenteNormalNegrita = Style.builder()
+                .addTextFont(fuenteBasicaNegrita)
+                .addFontSize(9.5f)
+                .addTextColor(Color.BLACK)
+                .addLeading(1.1f)
+                .build();
+
+        String prestamo        = datos.getPrestamoCodigo();
+        String modalidad       = datos.getPrestamoModalidad();
+        String garantia        = datos.getPrestamoTipoGarantia();
+        String fechaInicio     = datos.getFechaInicio();
+        String grado           = datos.getGrado();
+        String nombreAfiliado  = datos.getNombres();
+        String carnetIdentidad = datos.getCarnetIdentidad();
+
+        float width = 500f;
+        float initY = maxY-200;
+
+        ParagraphMultipleStyle paragraph = ParagraphMultipleStyle.builder()
+                .addStartX(marginStartX + thickness)
+                .addStartY(initY)
+                .addWidth(width)
+                .addText(new Text("Prestamo",fuenteNormal))
+                .addText(new Text(prestamo + ",",fuenteNormalNegrita))
+                .addText(new Text("modalidad",fuenteNormal))
+                .addText(new Text(modalidad + ",",fuenteNormalNegrita))
+                .addText(new Text("con tipo de garantia",fuenteNormal))
+                .addText(new Text(garantia + ",",fuenteNormalNegrita))
+                .addText(new Text("fecha de inicio",fuenteNormal))
+                .addText(new Text(fechaInicio + ",",fuenteNormalNegrita))
+                .addText(new Text("en favor de",fuenteNormal))
+                .addText(new Text(grado,fuenteNormalNegrita))
+                .addText(new Text(nombreAfiliado + ",",fuenteNormalNegrita))
+                .addText(new Text("con numero de carnet de identidad",fuenteNormal))
+                .addText(new Text(carnetIdentidad + ".",fuenteNormalNegrita))
+                .build();
+
+        paragraph.draw(contentStream);
+    }
+
 
 }

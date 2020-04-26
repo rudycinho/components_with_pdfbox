@@ -6,7 +6,7 @@ import subsistema.pdf.lib.basic.Style;
 import subsistema.pdf.lib.shapes.Line;
 import subsistema.pdf.lib.tables.Cell;
 import subsistema.pdf.lib.tables.Column;
-import subsistema.pdf.lib.text.MultipleParagraph;
+import subsistema.pdf.lib.text.simple.MultipleParagraph;
 import subsistema.pdf.lib.shapes.Rectangle;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -19,32 +19,14 @@ import java.io.IOException;
 import java.util.*;
 
 public class GeneradorFormularioFactory {
-    /*private static float maxY = 0;
-    private static float maxX = 0;
-
-    private static float thickness = 15f;
-
-    private static float marginStartX = 50f;
-    private static float marginEndX = 25f;
-
-    private static float relativePositionX = 5f;
-    private static float relativePositionY = 5f;
-
-
-    private static PDFont fuenteBasica = Data.BASIC_FONT;
-    private static PDFont fuenteBasicaNegrita = Data.BASIC_BOLD_FONT;
-*/
     private static final String imagenPolicia =
             "/home/rudy/polbol.png";
     private static final String imagenCovipol =
             "/home/rudy/covipol.png";
 
-    // private static final String flechaNorte =
-    //        "./src/main/resources/north_arrow.png";
-
-    // METODOS GENERICOS
-
-    public static void crearMargen(PDPageContentStream contentStream, Settings model) throws IOException {
+    public static void crearMargen(
+            PDPageContentStream contentStream,
+            Settings model) throws IOException {
         float marginStartX = model.getMarginStartX();
         float marginEndX   = model.getMarginEndX();
         float maxX         = model.getMaxX();
@@ -137,7 +119,7 @@ public class GeneradorFormularioFactory {
                 "CORREO ELECTRONICO", "covipol.afiliaciones@covipol.gob.bo"
         );
 
-        float distance = 35f;
+        float distance = 15f;
 
         MultipleParagraph.builder()
                 .addStartX(marginStartX + distance)
@@ -152,7 +134,8 @@ public class GeneradorFormularioFactory {
 
     public static void crearFechaExportacion(
             PDPageContentStream contentStream,
-            Date fechaExportacion, Settings model) throws IOException {
+            Date fechaExportacion,
+            Settings model) throws IOException {
 
         PDFont fuenteBasica = model.getFuenteBasica();
         float marginEndX   = model.getMarginEndX();
@@ -182,7 +165,8 @@ public class GeneradorFormularioFactory {
 
     public static void crearUsuarioExportador(
             PDPageContentStream contentStream,
-            UsuarioDTOPDF usuarioEditor, Settings model) throws IOException {
+            UsuarioDTOPDF usuarioEditor,
+            Settings model) throws IOException {
 
         PDFont fuenteBasica = model.getFuenteBasica();
         PDFont fuenteBasicaNegrita = model.getFuenteBasicaNegrita();
@@ -228,7 +212,8 @@ public class GeneradorFormularioFactory {
 
     public static void crearTitulo(
             PDPageContentStream contentStream,
-            String titulo, Settings model) throws IOException {
+            String titulo,
+            Settings model) throws IOException {
 
         PDFont fuenteBasicaNegrita = model.getFuenteBasicaNegrita();
         float maxX         = model.getMaxX();
@@ -254,7 +239,8 @@ public class GeneradorFormularioFactory {
 
     public static void enumerarPaginas(
             PDPageContentStream contentStream,
-            int numeroPagina, int totalPaginas,
+            int numeroPagina,
+            int totalPaginas,
             Settings model
     ) throws IOException {
 

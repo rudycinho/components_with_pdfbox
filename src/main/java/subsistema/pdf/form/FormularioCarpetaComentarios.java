@@ -139,7 +139,7 @@ public class FormularioCarpetaComentarios {
                     EasyComponentsFactory.getSimpleCell(0f, 10f, false,
                             EasyComponentsFactory.getSimpleTable(0, 0,
                                     EasyComponentsFactory.getSimpleColumn(
-                                            EasyComponentsFactory.getSimpleCellFromText("Comentario realizado por: ",fuenteComentarioNegrita,160f,5f,2.5f,Alignment.CENTER,false),
+                                            EasyComponentsFactory.getSimpleCellFromText("Comentario realizado por: ",fuenteComentarioNegrita,160f,5f,2.5f,Alignment.LEFT,false),
                                             EasyComponentsFactory.getSimpleCell(5f,2.5f,false,false,Color.BLACK,Color.WHITE,
                                                     ParagraphMultipleStyle.builder()
                                                             .addStartX(marginStartX + thickness)

@@ -30,7 +30,7 @@ public class ArchivoDefinicionCreditoPDFConDatosHTML {
                 "</head>\n" +
                 "\n" +
                 "<body>\n" +
-                "<div style=\"width:100%;height:400px;\"></div>" +
+                "<div style=\"width:100%;height:410px;\"></div>" +
                 porcionHTML+
                 "</body></html>\n";
         FileUtils.writeByteArrayToFile(new File(ruta), convertirPDF(htmlLiteral));

@@ -1,7 +1,6 @@
 package subsistema.pdf.form;
 
 import com.lowagie.text.DocumentException;
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import subsistema.pdf.dto.SucursalDTOPDF;
 import subsistema.pdf.dto.UsuarioDTOPDF;
 import subsistema.pdf.dto.DefinicionCreditoDTOPDF;
@@ -14,51 +13,24 @@ import subsistema.pdf.lib.tables.Cell;
 import subsistema.pdf.lib.text.simple.MultipleParagraph;
 import subsistema.pdf.utils.factories.EasyComponentsFactory;
 import subsistema.pdf.utils.factories.GeneradorFormularioFactory;
-import subsistema.pdf.utils.settings.Model;
+import subsistema.pdf.utils.settings.*;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
 public class FormularioDefinicionCredito {
 
-    private final float maxY         = Model.MODEL_1.getMaxY();
-    private final float maxX         = Model.MODEL_1.getMaxX();
-    private final float thickness    = Model.MODEL_1.getThickness();
-    private final float marginStartX = Model.MODEL_1.getMarginStartX();
-    private final float marginEndX   = Model.MODEL_1.getMarginEndX();
-    private final float relativePositionX = 5f;
-    private final float relativePositionY = 5f;
+    private final float maxY         = Models.MODEL_1.getMaxY();
+    private final float maxX         = Models.MODEL_1.getMaxX();
+    private final float thickness    = Models.MODEL_1.getThickness();
+    private final float marginStartX = Models.MODEL_1.getMarginStartX();
+    private final float marginEndX   = Models.MODEL_1.getMarginEndX();
+    private final FontEnum fontEnum  = Models.MODEL_1.getFont();
 
-    private final PDFont fuenteBasica        = Model.MODEL_1.getFuenteBasica();
-    private final PDFont fuenteBasicaNegrita = Model.MODEL_1.getFuenteBasicaNegrita();
-
-    private final Style fuenteSubtitulo = Style.builder()
-            .addTextFont(fuenteBasicaNegrita)
-            .addFontSize(14f)
-            .addTextColor(Color.BLACK)
-            .addLeading(0.8f)
-            .build();
-
-    private final Style fuenteNormal = Style.builder()
-            .addTextFont(fuenteBasica)
-            .addFontSize(10.5f)
-            .addTextColor(Color.BLACK)
-            .addLeading(0.8f)
-            .build();
-
-    private final Style fuenteNormalNegrita = Style.builder()
-            .addTextFont(fuenteBasicaNegrita)
-            .addFontSize(10.5f)
-            .addTextColor(Color.BLACK)
-            .addLeading(0.8f)
-            .build();
-
-    private final Style fuenteDiminuta = Style.builder()
-            .addFontSize(8)
-            .addTextFont(fuenteBasica)
-            .build();
+    private Style fuenteSubtitulo;
+    private Style fuenteInfoEspaciado;
+    private Style fuenteInfoNegritaEspaciado;
 
     public FormularioDefinicionCredito(
             String ruta,
@@ -71,6 +43,12 @@ public class FormularioDefinicionCredito {
 
         File file      = new File(ruta);
         PDDocument doc = PDDocument.load(file);
+
+        FontGroup fontGroup = FontGroup.getFontGroup(fontEnum,doc);
+        fuenteSubtitulo                = Style.getStyle(fontGroup, StyleEnum.SUBTITLE_BOLD);
+        fuenteInfoEspaciado        = Style.getStyle(fontGroup, StyleEnum.MINIMAL_NORMAL_SPACED);
+        fuenteInfoNegritaEspaciado = Style.getStyle(fontGroup, StyleEnum.MINIMAL_BOLD_SPACED);
+
         int totalPages = doc.getNumberOfPages();
         PDPage page;
         PDPageContentStream contentStream;
@@ -78,13 +56,13 @@ public class FormularioDefinicionCredito {
         for(int i=0;i<totalPages;i++) {
             page = doc.getPage(i);
             contentStream = new PDPageContentStream(doc, page, true, true);
-            GeneradorFormularioFactory.crearInfo(contentStream, sucursal, Model.MODEL_1);
-            GeneradorFormularioFactory.crearMargen(contentStream, Model.MODEL_1);
+            GeneradorFormularioFactory.crearInfo(contentStream, sucursal, Model1.MODEL_1);
+            GeneradorFormularioFactory.crearMargen(contentStream, Model1.MODEL_1);
             if(i==0) {
-                GeneradorFormularioFactory.crearCabecera(contentStream, doc, Model.MODEL_1);
-                GeneradorFormularioFactory.crearFechaExportacion(contentStream, fechaExportacion, Model.MODEL_1);
-                GeneradorFormularioFactory.crearUsuarioExportador(contentStream, usuarioEditor, Model.MODEL_1);
-                GeneradorFormularioFactory.crearTitulo(contentStream, "DOCUMENTOS INICIALES\nRECEPCIONADOS", Model.MODEL_1);
+                GeneradorFormularioFactory.crearCabecera(contentStream, doc, Model1.MODEL_1);
+                GeneradorFormularioFactory.crearFechaExportacion(contentStream, fechaExportacion, Model1.MODEL_1);
+                GeneradorFormularioFactory.crearUsuarioExportador(contentStream, usuarioEditor, Model1.MODEL_1);
+                GeneradorFormularioFactory.crearTitulo(contentStream, "DOCUMENTOS INICIALES\nRECEPCIONADOS", Model1.MODEL_1);
 
                 crearSubTitulosDatos(contentStream);
                 crearDatosAfiliadoDefinicion(contentStream, definicion);
@@ -101,8 +79,8 @@ public class FormularioDefinicionCredito {
             PDPageContentStream contentStream) throws IOException {
 
         MultipleParagraph.builder()
-                .addStartX(marginStartX + thickness + relativePositionX)
-                .addStartY(maxY - 190 - relativePositionY)
+                .addStartX(marginStartX + thickness + 5f)
+                .addStartY(maxY - 190 - 5f)
                 .addWidth(180f)
                 .addTextContent("DATOS")
                 .addAlignment(Alignment.LEFT)
@@ -115,8 +93,8 @@ public class FormularioDefinicionCredito {
             PDPageContentStream contentStream) throws IOException {
 
         MultipleParagraph.builder()
-                .addStartX(marginStartX + thickness + relativePositionX)
-                .addStartY(maxY - 345 - relativePositionY)
+                .addStartX(marginStartX + thickness + 5f)
+                .addStartY(maxY - 355 - 5f)
                 .addWidth(180f)
                 .addTextContent("DETALLES")
                 .addAlignment(Alignment.LEFT)
@@ -138,41 +116,27 @@ public class FormularioDefinicionCredito {
         String tipoDeGarantia      = definicion.getTipoDeGarantia();
         String origenTramite       = definicion.getOrigenTramite();
 
-        Style fuenteNormal = Style.builder()
-                .addTextFont(fuenteBasica)
-                .addFontSize(9f)
-                .addTextColor(Color.BLACK)
-                .addLeading(1.2f)
-                .build();
-
-        Style fuenteNormalNegrita = Style.builder()
-                .addTextFont(fuenteBasicaNegrita)
-                .addFontSize(9f)
-                .addTextColor(Color.BLACK)
-                .addLeading(0.8f)
-                .build();
-
         float width1 = 280f;
         float width2 = 220f;
 
         float initY = 215f;
         boolean margin = false;
 
-        Cell c11 = EasyComponentsFactory.getSimpleCellFromText("Afiliado", fuenteNormalNegrita, width1, 1f, 2f, margin);
-        Cell c12 = EasyComponentsFactory.getSimpleCellFromText(gradoNombreAfiliado, fuenteNormal, width1, 1f, 2f, margin);
-        Cell c13 = EasyComponentsFactory.getSimpleCellFromText("Numero de carpeta", fuenteNormalNegrita, width1, 1f, 2f, margin);
-        Cell c14 = EasyComponentsFactory.getSimpleCellFromText(numeroCarpeta, fuenteNormal, width1, 1f, 2f, margin);
-        Cell c15 = EasyComponentsFactory.getSimpleCellFromText("Modalidad de credito", fuenteNormalNegrita, width1, 1f, 2f, margin);
-        Cell c16 = EasyComponentsFactory.getSimpleCellFromText(modalidadCredito, fuenteNormal, width1, 1f, 2f, margin);
-        Cell c17 = EasyComponentsFactory.getSimpleCellFromText("Origen Tramite", fuenteNormalNegrita, width1, 1f, 2f, margin);
-        Cell c18 = EasyComponentsFactory.getSimpleCellFromText(origenTramite, fuenteNormal, width1, 1f, 2f, margin);
+        Cell c11 = EasyComponentsFactory.getSimpleCellFromText("Afiliado", fuenteInfoNegritaEspaciado, width1, 1f, 2f, margin);
+        Cell c12 = EasyComponentsFactory.getSimpleCellFromText(gradoNombreAfiliado, fuenteInfoEspaciado, width1, 1f, 2f, margin);
+        Cell c13 = EasyComponentsFactory.getSimpleCellFromText("Numero de carpeta", fuenteInfoNegritaEspaciado, width1, 1f, 2f, margin);
+        Cell c14 = EasyComponentsFactory.getSimpleCellFromText(numeroCarpeta, fuenteInfoEspaciado, width1, 1f, 2f, margin);
+        Cell c15 = EasyComponentsFactory.getSimpleCellFromText("Modalidad de credito", fuenteInfoNegritaEspaciado, width1, 1f, 2f, margin);
+        Cell c16 = EasyComponentsFactory.getSimpleCellFromText(modalidadCredito, fuenteInfoEspaciado, width1, 1f, 2f, margin);
+        Cell c17 = EasyComponentsFactory.getSimpleCellFromText("Origen Tramite", fuenteInfoNegritaEspaciado, width1, 1f, 2f, margin);
+        Cell c18 = EasyComponentsFactory.getSimpleCellFromText(origenTramite, fuenteInfoEspaciado, width1, 1f, 2f, margin);
 
-        Cell c21 = EasyComponentsFactory.getSimpleCellFromText("Carnet de Identidad", fuenteNormalNegrita, width2, 1f, 2f, margin);
-        Cell c22 = EasyComponentsFactory.getSimpleCellFromText(carnetIdentidad, fuenteNormal, width2, 1f, 2f, margin);
-        Cell c23 = EasyComponentsFactory.getSimpleCellFromText("Fecha de Creacion", fuenteNormalNegrita, width2, 1f, 2f, margin);
-        Cell c24 = EasyComponentsFactory.getSimpleCellFromText(fechaCreacion, fuenteNormal, width2, 1f, 2f, margin);
-        Cell c25 = EasyComponentsFactory.getSimpleCellFromText("Tipo de garantia", fuenteNormalNegrita, width2, 1f, 2f, margin);
-        Cell c26 = EasyComponentsFactory.getSimpleCellFromText(tipoDeGarantia, fuenteNormal, width2, 1f, 2f, margin);
+        Cell c21 = EasyComponentsFactory.getSimpleCellFromText("Carnet de Identidad", fuenteInfoNegritaEspaciado, width2, 1f, 2f, margin);
+        Cell c22 = EasyComponentsFactory.getSimpleCellFromText(carnetIdentidad, fuenteInfoEspaciado, width2, 1f, 2f, margin);
+        Cell c23 = EasyComponentsFactory.getSimpleCellFromText("Fecha de Creacion", fuenteInfoNegritaEspaciado, width2, 1f, 2f, margin);
+        Cell c24 = EasyComponentsFactory.getSimpleCellFromText(fechaCreacion, fuenteInfoEspaciado, width2, 1f, 2f, margin);
+        Cell c25 = EasyComponentsFactory.getSimpleCellFromText("Tipo de garantia", fuenteInfoNegritaEspaciado, width2, 1f, 2f, margin);
+        Cell c26 = EasyComponentsFactory.getSimpleCellFromText(tipoDeGarantia, fuenteInfoEspaciado, width2, 1f, 2f, margin);
 
         float auxY = maxY - initY;
 

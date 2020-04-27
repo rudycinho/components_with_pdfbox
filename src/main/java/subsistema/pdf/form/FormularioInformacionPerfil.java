@@ -1,6 +1,5 @@
 package subsistema.pdf.form;
 
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import subsistema.pdf.dto.PerfilDTOPDF;
 import subsistema.pdf.dto.PermisoDTOPDF;
 import subsistema.pdf.dto.SucursalDTOPDF;
@@ -18,7 +17,7 @@ import subsistema.pdf.lib.tables.SimpleTable;
 import subsistema.pdf.lib.text.simple.MultipleParagraph;
 import subsistema.pdf.utils.factories.EasyComponentsFactory;
 import subsistema.pdf.utils.factories.GeneradorFormularioFactory;
-import subsistema.pdf.utils.settings.Model;
+import subsistema.pdf.utils.settings.*;
 
 import java.awt.*;
 import java.io.File;
@@ -28,49 +27,17 @@ import java.util.List;
 
 public class FormularioInformacionPerfil {
 
-    private final float maxY         = Model.MODEL_1.getMaxY();
-    private final float maxX         = Model.MODEL_1.getMaxX();
-    private final float thickness    = Model.MODEL_1.getThickness();
-    private final float marginStartX = Model.MODEL_1.getMarginStartX();
-    private final float marginEndX   = Model.MODEL_1.getMarginEndX();
-    private final float relativePositionX = 5f;
-    private final float relativePositionY = 5f;
+    private final float maxY         = Models.MODEL_1.getMaxY();
+    private final float maxX         = Models.MODEL_1.getMaxX();
+    private final float thickness    = Models.MODEL_1.getThickness();
+    private final float marginStartX = Models.MODEL_1.getMarginStartX();
+    private final float marginEndX   = Models.MODEL_1.getMarginEndX();
+    private final FontEnum fontEnum  = Models.MODEL_1.getFont();
 
-    private final PDFont fuenteBasica        = Model.MODEL_1.getFuenteBasica();
-    private final PDFont fuenteBasicaNegrita = Model.MODEL_1.getFuenteBasicaNegrita();
-
-    private final Style fuenteSubtitulo = Style.builder()
-            .addTextFont(fuenteBasicaNegrita)
-            .addFontSize(14f)
-            .addTextColor(Color.BLACK)
-            .addLeading(0.8f)
-            .build();
-
-    private final Style fuenteNormal = Style.builder()
-            .addTextFont(fuenteBasica)
-            .addFontSize(10.5f)
-            .addTextColor(Color.BLACK)
-            .addLeading(0.8f)
-            .build();
-
-    private final Style fuenteNormalEspaciada = Style.builder()
-            .addTextFont(fuenteBasica)
-            .addFontSize(10.5f)
-            .addTextColor(Color.BLACK)
-            .addLeading(1f)
-            .build();
-
-    private final Style fuenteNormalNegrita = Style.builder()
-            .addTextFont(fuenteBasicaNegrita)
-            .addFontSize(10.5f)
-            .addTextColor(Color.BLACK)
-            .addLeading(0.8f)
-            .build();
-
-    private final Style fuenteDiminuta = Style.builder()
-            .addFontSize(8)
-            .addTextFont(fuenteBasica)
-            .build();
+    private Style fuenteSubtitulo;
+    private Style fuenteNormal;
+    private Style fuenteNormalNegrita;
+    private Style fuenteNormalEspaciada;
 
     public FormularioInformacionPerfil(String ruta,
                                        PerfilDTOPDF perfil,
@@ -79,16 +46,24 @@ public class FormularioInformacionPerfil {
                                        Date fechaExportacion) throws IOException {
 
         PDDocument doc = new PDDocument();
+
+        FontGroup fontGroup = FontGroup.getFontGroup(fontEnum,doc);
+
+        fuenteSubtitulo       = Style.getStyle(fontGroup, StyleEnum.SUBTITLE_BOLD);
+        fuenteNormal          = Style.getStyle(fontGroup, StyleEnum.DATA_NORMAL);
+        fuenteNormalNegrita   = Style.getStyle(fontGroup, StyleEnum.DATA_BOLD);
+        fuenteNormalEspaciada = Style.getStyle(fontGroup, StyleEnum.DATA_NORMAL_SPACED);
+
         PDPage page = new PDPage(new PDRectangle(maxX,maxY));
 
         doc.addPage(page);
         PDPageContentStream contentStream = new PDPageContentStream(doc, page);
         List<PDPageContentStream> contentStreams = new LinkedList<>();
 
-        GeneradorFormularioFactory.crearCabecera(contentStream,doc, Model.MODEL_1);
-        GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Model.MODEL_1);
-        GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Model.MODEL_1);
-        GeneradorFormularioFactory.crearTitulo(contentStream,"INFORMACION DE PERMISOS\nPOR PERFIL", Model.MODEL_1);
+        GeneradorFormularioFactory.crearCabecera(contentStream,doc, Model1.MODEL_1);
+        GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Model1.MODEL_1);
+        GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Model1.MODEL_1);
+        GeneradorFormularioFactory.crearTitulo(contentStream,"INFORMACION DE PERMISOS\nPOR PERFIL", Model1.MODEL_1);
 
         crearSubTitulosPerfil(contentStream);
         crearDatosPerfil(contentStream,perfil);
@@ -101,8 +76,8 @@ public class FormularioInformacionPerfil {
                 perfil);
 
         for(PDPageContentStream contentStream1 : contentStreams){
-            GeneradorFormularioFactory.crearMargen(contentStream1, Model.MODEL_1);
-            GeneradorFormularioFactory.crearInfo(contentStream1,sucursal, Model.MODEL_1);
+            GeneradorFormularioFactory.crearMargen(contentStream1, Model1.MODEL_1);
+            GeneradorFormularioFactory.crearInfo(contentStream1,sucursal, Model1.MODEL_1);
         }
 
         for(PDPageContentStream e : contentStreams)
@@ -118,8 +93,8 @@ public class FormularioInformacionPerfil {
             PDPageContentStream contentStream) throws IOException {
 
         MultipleParagraph.builder()
-                .addStartX(marginStartX + thickness + relativePositionX)
-                .addStartY(maxY - 180 - 30 - relativePositionY)
+                .addStartX(marginStartX + thickness + 5f)
+                .addStartY(maxY - 180 - 30 - 5f)
                 .addWidth(180f)
                 .addTextContent("DATOS DEL PERFIL")
                 .addAlignment(Alignment.LEFT)
@@ -138,11 +113,11 @@ public class FormularioInformacionPerfil {
         boolean margin = false;
 
         Cell c11 = EasyComponentsFactory.getSimpleCellFromText("NOMBRE: ", fuenteNormalNegrita, width1, 0f, 5f, margin);
-        Cell c12 = EasyComponentsFactory.getSimpleCellFromText("ROL: ", fuenteNormalNegrita, width1, 0f, 5f, margin);
+        Cell c12 = EasyComponentsFactory.getSimpleCellFromText("ROL: "   , fuenteNormalNegrita, width1, 0f, 5f, margin);
         Cell c13 = EasyComponentsFactory.getSimpleCellFromText("ESTADO: ", fuenteNormalNegrita, width1, 0f, 5f, margin);
 
         Cell c21 = EasyComponentsFactory.getSimpleCellFromText(perfil.getNombre(), fuenteNormalEspaciada, width2, 0f, 5f, margin);
-        Cell c22 = EasyComponentsFactory.getSimpleCellFromText(perfil.getRol(), fuenteNormalEspaciada, width2, 0f, 5f, margin);
+        Cell c22 = EasyComponentsFactory.getSimpleCellFromText(perfil.getRol()   , fuenteNormalEspaciada, width2, 0f, 5f, margin);
         Cell c23 = EasyComponentsFactory.getSimpleCellFromText(perfil.getEstado(), fuenteNormalEspaciada, width2, 0f, 5f, margin);
 
         float auxY = maxY - initY;
@@ -160,8 +135,8 @@ public class FormularioInformacionPerfil {
             PDPageContentStream contentStream) throws IOException {
 
         MultipleParagraph.builder()
-                .addStartX(marginStartX + thickness + relativePositionX)
-                .addStartY(maxY - 320 - relativePositionY)
+                .addStartX(marginStartX + thickness + 5f)
+                .addStartY(maxY - 320 - 5f)
                 .addWidth(180f)
                 .addTextContent("PERMISOS ASOCIADOS")
                 .addAlignment(Alignment.LEFT)
@@ -189,13 +164,6 @@ public class FormularioInformacionPerfil {
 
         List<Float> widths  = Arrays.asList(30f, 170f, 300f);
         List<String> header = Arrays.asList("N*", "Nombre Permiso", "Descripcion Permiso");
-
-        Style fuenteNormal = Style.builder()
-                .addTextFont(fuenteBasica)
-                .addFontSize(10.5f)
-                .addTextColor(Color.BLACK)
-                .addLeading(1f)
-                .build();
 
         Column headerColumn = EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyle(
                 header, widths, fuenteNormalNegrita, Alignment.LEFT);

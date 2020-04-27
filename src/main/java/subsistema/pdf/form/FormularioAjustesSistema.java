@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import subsistema.pdf.dto.AjustesSistemaDTOPDF;
 import subsistema.pdf.dto.SucursalDTOPDF;
 import subsistema.pdf.dto.UsuarioDTOPDF;
@@ -20,40 +19,20 @@ import subsistema.pdf.lib.tables.SimpleTable;
 import subsistema.pdf.lib.text.simple.MultipleParagraph;
 import subsistema.pdf.utils.factories.EasyComponentsFactory;
 import subsistema.pdf.utils.factories.GeneradorFormularioFactory;
-import subsistema.pdf.utils.settings.Model;
+import subsistema.pdf.utils.settings.*;
 
 public class FormularioAjustesSistema {
-	private final float maxY         = Model.MODEL_1.getMaxY();
-	private final float maxX         = Model.MODEL_1.getMaxX();
-	private final float thickness    = Model.MODEL_1.getThickness();
-	private final float marginStartX = Model.MODEL_1.getMarginStartX();
-	private final float marginEndX   = Model.MODEL_1.getMarginEndX();
-	private final float relativePositionX = 5f;
-	private final float relativePositionY = 5f;
 
-	private final PDFont fuenteBasica        = Model.MODEL_1.getFuenteBasica();
-	private final PDFont fuenteBasicaNegrita = Model.MODEL_1.getFuenteBasicaNegrita();
+	private final float maxY         = Models.MODEL_1.getMaxY();
+	private final float maxX         = Models.MODEL_1.getMaxX();
+	private final float thickness    = Models.MODEL_1.getThickness();
+	private final float marginStartX = Models.MODEL_1.getMarginStartX();
+	private final float marginEndX   = Models.MODEL_1.getMarginEndX();
+	private final FontEnum fontEnum  = Models.MODEL_1.getFont();
 
-	private final Style fuenteSubtitulo = Style.builder()
-			.addTextFont(fuenteBasicaNegrita)
-			.addFontSize(14f)
-			.addTextColor(Color.BLACK)
-			.addLeading(0.8f)
-			.build();
-
-	private final Style fuenteNormal = Style.builder()
-			.addTextFont(fuenteBasica)
-			.addFontSize(10.5f)
-			.addTextColor(Color.BLACK)
-			.addLeading(1f)
-			.build();
-
-	private final Style fuenteNormalNegrita = Style.builder()
-			.addTextFont(fuenteBasicaNegrita)
-			.addFontSize(10.5f)
-			.addTextColor(Color.BLACK)
-			.addLeading(0.8f)
-			.build();
+	private Style fuenteSubtitulo;
+	private Style fuenteNormalNegrita;
+	private Style fuenteNormalEspaciada;
 
 	public FormularioAjustesSistema(String ruta,
 									AjustesSistemaDTOPDF ajustes,
@@ -61,17 +40,24 @@ public class FormularioAjustesSistema {
 									SucursalDTOPDF sucursal,
 									Date fechaExportacion) throws IOException {
 		PDDocument doc = new PDDocument();
+
+		FontGroup fontGroup = FontGroup.getFontGroup(fontEnum,doc);
+
+		fuenteSubtitulo       = Style.getStyle(fontGroup, StyleEnum.SUBTITLE_BOLD);
+		fuenteNormalNegrita   = Style.getStyle(fontGroup, StyleEnum.DATA_BOLD);
+		fuenteNormalEspaciada = Style.getStyle(fontGroup, StyleEnum.DATA_NORMAL_SPACED);
+
 		PDPage page = new PDPage(new PDRectangle(maxX,maxY));
 
 		doc.addPage(page);
 		PDPageContentStream contentStream = new PDPageContentStream(doc, page);
 
-		GeneradorFormularioFactory.crearMargen(contentStream, Model.MODEL_1);
-		GeneradorFormularioFactory.crearCabecera(contentStream,doc, Model.MODEL_1);
-		GeneradorFormularioFactory.crearInfo(contentStream,sucursal, Model.MODEL_1);
-		GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Model.MODEL_1);
-		GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Model.MODEL_1);
-		GeneradorFormularioFactory.crearTitulo(contentStream,"AJUSTES DEL SISTEMA", Model.MODEL_1);
+		GeneradorFormularioFactory.crearMargen(contentStream, Model1.MODEL_1);
+		GeneradorFormularioFactory.crearCabecera(contentStream,doc, Model1.MODEL_1);
+		GeneradorFormularioFactory.crearInfo(contentStream,sucursal, Model1.MODEL_1);
+		GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Model1.MODEL_1);
+		GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Model1.MODEL_1);
+		GeneradorFormularioFactory.crearTitulo(contentStream,"AJUSTES DEL SISTEMA", Model1.MODEL_1);
 
 		crearSubTituloAjustesSistema(contentStream);
 		crearDatosAjustesSistema(contentStream,ajustes);
@@ -87,8 +73,8 @@ public class FormularioAjustesSistema {
 
 
 		MultipleParagraph.builder()
-				.addStartX(marginStartX + thickness + relativePositionX)
-				.addStartY(maxY - 180 - 30 - relativePositionY)
+				.addStartX(marginStartX + thickness + 5f)
+				.addStartY(maxY - 180 - 30 - 5f)
 				.addWidth(180f)
 				.addTextContent("DATOS DEL SISTEMA")
 				.addAlignment(Alignment.LEFT)
@@ -106,25 +92,25 @@ public class FormularioAjustesSistema {
 		float initY = 235;
 		boolean margin = false;
 
-		Cell c11 = EasyComponentsFactory.getSimpleCellFromText("CAMBIO USD: ", fuenteNormalNegrita, width1, 0f, 5f, margin);
-		Cell c12 = EasyComponentsFactory.getSimpleCellFromText("CAMBIO UFV: ", fuenteNormalNegrita, width1, 0f, 5f, margin);
-		Cell c13 = EasyComponentsFactory.getSimpleCellFromText("AMORTIZACION DIAS: ", fuenteNormalNegrita, width1, 0f, 5f, margin);
-		Cell c14 = EasyComponentsFactory.getSimpleCellFromText("SEGURO DESGRAVAMEN: ", fuenteNormalNegrita, width1, 0f, 5f, margin);
-		Cell c15 = EasyComponentsFactory.getSimpleCellFromText("DIAS PARA ARCHIVAR: ", fuenteNormalNegrita, width1, 0f, 5f, margin);
-		Cell c16 = EasyComponentsFactory.getSimpleCellFromText("C.I.P.: ", fuenteNormalNegrita, width1, 0f, 5f, margin);
-		Cell c17 = EasyComponentsFactory.getSimpleCellFromText("INTERES ANUAL: ", fuenteNormalNegrita, width1, 0f, 5f, margin);
-		Cell c18 = EasyComponentsFactory.getSimpleCellFromText("CORREO DE NOTIFICACIONES: ", fuenteNormalNegrita, width1, 0f, 5f, margin);
+		Cell c11 = EasyComponentsFactory.getSimpleCellFromText("CAMBIO USD: "                 , fuenteNormalNegrita, width1, 0f, 5f, margin);
+		Cell c12 = EasyComponentsFactory.getSimpleCellFromText("CAMBIO UFV: "                 , fuenteNormalNegrita, width1, 0f, 5f, margin);
+		Cell c13 = EasyComponentsFactory.getSimpleCellFromText("AMORTIZACION DIAS: "          , fuenteNormalNegrita, width1, 0f, 5f, margin);
+		Cell c14 = EasyComponentsFactory.getSimpleCellFromText("SEGURO DESGRAVAMEN: "         , fuenteNormalNegrita, width1, 0f, 5f, margin);
+		Cell c15 = EasyComponentsFactory.getSimpleCellFromText("DIAS PARA ARCHIVAR: "         , fuenteNormalNegrita, width1, 0f, 5f, margin);
+		Cell c16 = EasyComponentsFactory.getSimpleCellFromText("C.I.P.: "                     , fuenteNormalNegrita, width1, 0f, 5f, margin);
+		Cell c17 = EasyComponentsFactory.getSimpleCellFromText("INTERES ANUAL: "              , fuenteNormalNegrita, width1, 0f, 5f, margin);
+		Cell c18 = EasyComponentsFactory.getSimpleCellFromText("CORREO DE NOTIFICACIONES: "   , fuenteNormalNegrita, width1, 0f, 5f, margin);
 		Cell c19 = EasyComponentsFactory.getSimpleCellFromText("DIAS MAXIMO PARA DESCUENTOS: ", fuenteNormalNegrita, width1, 0f, 5f, margin);
 
-		Cell c21 = EasyComponentsFactory.getSimpleCellFromText(ajustes.getCambioUSD().toString(), fuenteNormal, width2, 0f, 5f, margin);
-		Cell c22 = EasyComponentsFactory.getSimpleCellFromText(ajustes.getCambioUFV().toString(), fuenteNormal, width2, 0f, 5f, margin);
-		Cell c23 = EasyComponentsFactory.getSimpleCellFromText(ajustes.getAmortizacionDias().toString(), fuenteNormal, width2, 0f, 5f, margin);
-		Cell c24 = EasyComponentsFactory.getSimpleCellFromText(ajustes.getSeguroDesgravamen().toString(), fuenteNormal, width2, 0f, 5f, margin);
-		Cell c25 = EasyComponentsFactory.getSimpleCellFromText(ajustes.getDiasParaArchivar().toString(), fuenteNormal, width2, 0f, 5f, margin);
-		Cell c26 = EasyComponentsFactory.getSimpleCellFromText(ajustes.getCIP().toString(), fuenteNormal, width2, 0f, 5f, margin);
-		Cell c27 = EasyComponentsFactory.getSimpleCellFromText(ajustes.getInteresAnual().toString(), fuenteNormal, width2, 0f, 5f, margin);
-		Cell c28 = EasyComponentsFactory.getSimpleCellFromText(ajustes.getCorreoNotificaciones(), fuenteNormal, width2, 0f, 5f, margin);
-		Cell c29 = EasyComponentsFactory.getSimpleCellFromText(ajustes.getDiasMaximoParaDescuentos().toString(), fuenteNormal, width2, 0f, 5f, margin);
+		Cell c21 = EasyComponentsFactory.getSimpleCellFromText(ajustes.getCambioUSD()               , fuenteNormalEspaciada, width2, 0f, 5f, margin);
+		Cell c22 = EasyComponentsFactory.getSimpleCellFromText(ajustes.getCambioUFV()               , fuenteNormalEspaciada, width2, 0f, 5f, margin);
+		Cell c23 = EasyComponentsFactory.getSimpleCellFromText(ajustes.getAmortizacionDias()        , fuenteNormalEspaciada, width2, 0f, 5f, margin);
+		Cell c24 = EasyComponentsFactory.getSimpleCellFromText(ajustes.getSeguroDesgravamen()       , fuenteNormalEspaciada, width2, 0f, 5f, margin);
+		Cell c25 = EasyComponentsFactory.getSimpleCellFromText(ajustes.getDiasParaArchivar()        , fuenteNormalEspaciada, width2, 0f, 5f, margin);
+		Cell c26 = EasyComponentsFactory.getSimpleCellFromText(ajustes.getCIP()                     , fuenteNormalEspaciada, width2, 0f, 5f, margin);
+		Cell c27 = EasyComponentsFactory.getSimpleCellFromText(ajustes.getInteresAnual()            , fuenteNormalEspaciada, width2, 0f, 5f, margin);
+		Cell c28 = EasyComponentsFactory.getSimpleCellFromText(ajustes.getCorreoNotificaciones()    , fuenteNormalEspaciada, width2, 0f, 5f, margin);
+		Cell c29 = EasyComponentsFactory.getSimpleCellFromText(ajustes.getDiasMaximoParaDescuentos(), fuenteNormalEspaciada, width2, 0f, 5f, margin);
 
 		float auxY = maxY - initY;
 

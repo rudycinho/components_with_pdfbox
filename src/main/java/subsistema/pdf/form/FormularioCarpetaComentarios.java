@@ -4,7 +4,6 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import subsistema.pdf.dto.*;
 import subsistema.pdf.lib.basic.Alignment;
 import subsistema.pdf.lib.basic.Style;
@@ -15,7 +14,7 @@ import subsistema.pdf.lib.text.complex.ParagraphMultipleStyle;
 import subsistema.pdf.lib.text.complex.Text;
 import subsistema.pdf.utils.factories.EasyComponentsFactory;
 import subsistema.pdf.utils.factories.GeneradorFormularioFactory;
-import subsistema.pdf.utils.settings.Model;
+import subsistema.pdf.utils.settings.*;
 
 import java.awt.*;
 import java.io.File;
@@ -25,50 +24,18 @@ import java.util.List;
 
 public class FormularioCarpetaComentarios {
 
-    private final float maxY         = Model.MODEL_1.getMaxY();
-    private final float maxX         = Model.MODEL_1.getMaxX();
-    private final float thickness    = Model.MODEL_1.getThickness();
-    private final float marginStartX = Model.MODEL_1.getMarginStartX();
-    private final float marginEndX   = Model.MODEL_1.getMarginEndX();
-    private final float relativePositionX = 5f;
-    private final float relativePositionY = 5f;
+    private final float maxY         = Models.MODEL_1.getMaxY();
+    private final float maxX         = Models.MODEL_1.getMaxX();
+    private final float thickness    = Models.MODEL_1.getThickness();
+    private final float marginStartX = Models.MODEL_1.getMarginStartX();
+    private final float marginEndX   = Models.MODEL_1.getMarginEndX();
+    private final FontEnum fontEnum  = Models.MODEL_1.getFont();
 
-    private final PDFont fuenteBasica        = Model.MODEL_1.getFuenteBasica();
-    private final PDFont fuenteBasicaNegrita = Model.MODEL_1.getFuenteBasicaNegrita();
-
-    private final Style fuenteSubtitulo = Style.builder()
-            .addTextFont(fuenteBasicaNegrita)
-            .addFontSize(14f)
-            .addTextColor(Color.BLACK)
-            .addLeading(0.8f)
-            .build();
-
-    private final Style fuenteNormal = Style.builder()
-            .addTextFont(fuenteBasica)
-            .addFontSize(10.5f)
-            .addTextColor(Color.BLACK)
-            .addLeading(0.8f)
-            .build();
-
-    private final Style fuenteNormalEspaciada = Style.builder()
-            .addTextFont(fuenteBasica)
-            .addFontSize(10.5f)
-            .addTextColor(Color.BLACK)
-            .addLeading(1f)
-            .build();
-
-    private final Style fuenteNormalNegrita = Style.builder()
-            .addTextFont(fuenteBasicaNegrita)
-            .addFontSize(10.5f)
-            .addTextColor(Color.BLACK)
-            .addLeading(0.8f)
-            .build();
-
-    private final Style fuenteDiminuta = Style.builder()
-            .addFontSize(8)
-            .addTextFont(fuenteBasica)
-            .build();
-
+    private Style fuenteNormalSemiEspaciada;
+    private Style fuenteComentario;
+    private Style fuenteComentarioNegrita;
+    private Style fuenteInfoEspaciado;
+    private Style fuenteInfoNegritaEspaciado;
 
     public FormularioCarpetaComentarios(
             String ruta,
@@ -78,29 +45,38 @@ public class FormularioCarpetaComentarios {
             Date fechaExportacion) throws IOException {
 
         PDDocument doc = new PDDocument();
+
+        FontGroup fontGroup = FontGroup.getFontGroup(fontEnum,doc);
+
+        fuenteNormalSemiEspaciada  = Style.getStyle(fontGroup, StyleEnum.DATA_SEMI_SPACED);
+        fuenteComentario           = Style.getStyle(fontGroup, StyleEnum.MINIMAL_NORMAL);
+        fuenteComentarioNegrita    = Style.getStyle(fontGroup, StyleEnum.MINIMAL_BOLD);
+        fuenteInfoEspaciado        = Style.getStyle(fontGroup, StyleEnum.MINIMAL_NORMAL_SPACED);
+        fuenteInfoNegritaEspaciado = Style.getStyle(fontGroup, StyleEnum.MINIMAL_BOLD_SPACED);
+
         PDPage page = new PDPage(new PDRectangle(maxX,maxY));
 
         doc.addPage(page);
         PDPageContentStream contentStream = new PDPageContentStream(doc, page);
         List<PDPageContentStream> contentStreams = new LinkedList<>();
 
-        GeneradorFormularioFactory.crearCabecera(contentStream,doc, Model.MODEL_1);
-        GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Model.MODEL_1);
-        GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Model.MODEL_1);
-        GeneradorFormularioFactory.crearTitulo(contentStream,"COMENTARIOS\nDE CARPETA DE CREDITO", Model.MODEL_1);
+        GeneradorFormularioFactory.crearCabecera(contentStream,doc, Model1.MODEL_1);
+        GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Model1.MODEL_1);
+        GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Model1.MODEL_1);
+        GeneradorFormularioFactory.crearTitulo(contentStream,"COMENTARIOS\nDE CARPETA DE CREDITO", Model1.MODEL_1);
 
         crearInfoAfiliado(contentStream,comentarios);
         crearLineaSeparacionDesafiliado(contentStream);
 
-        crearTablaObservaciones(
+        crearTablaComentarios(
                 contentStream,
                 contentStreams,
                 doc,
                 comentarios);
 
         for(PDPageContentStream contentStream1 : contentStreams){
-            GeneradorFormularioFactory.crearMargen(contentStream1, Model.MODEL_1);
-            GeneradorFormularioFactory.crearInfo(contentStream1,sucursal, Model.MODEL_1);
+            GeneradorFormularioFactory.crearMargen(contentStream1, Model1.MODEL_1);
+            GeneradorFormularioFactory.crearInfo(contentStream1,sucursal, Model1.MODEL_1);
         }
 
         for(PDPageContentStream e : contentStreams)
@@ -115,20 +91,6 @@ public class FormularioCarpetaComentarios {
     private void crearInfoAfiliado(
             PDPageContentStream contentStream,
             ComentariosDTOPDF comentarios) throws IOException {
-
-        Style fuenteNormal = Style.builder()
-                .addTextFont(fuenteBasica)
-                .addFontSize(9.5f)
-                .addTextColor(Color.BLACK)
-                .addLeading(1.1f)
-                .build();
-
-        Style fuenteNormalNegrita = Style.builder()
-                .addTextFont(fuenteBasicaNegrita)
-                .addFontSize(9.5f)
-                .addTextColor(Color.BLACK)
-                .addLeading(1.1f)
-                .build();
 
         String prestamo        = comentarios.getPrestamoCodigo();
         String modalidad       = comentarios.getPrestamoModalidad();
@@ -145,43 +107,29 @@ public class FormularioCarpetaComentarios {
                 .addStartX(marginStartX + thickness)
                 .addStartY(initY)
                 .addWidth(width)
-                .addText(new Text("Prestamo",fuenteNormal))
-                .addText(new Text(prestamo + ",",fuenteNormalNegrita))
-                .addText(new Text("modalidad",fuenteNormal))
-                .addText(new Text(modalidad + ",",fuenteNormalNegrita))
-                .addText(new Text("con tipo de garantia",fuenteNormal))
-                .addText(new Text(garantia + ",",fuenteNormalNegrita))
-                .addText(new Text("fecha de inicio",fuenteNormal))
-                .addText(new Text(fechaInicio + ",",fuenteNormalNegrita))
-                .addText(new Text("en favor de",fuenteNormal))
-                .addText(new Text(grado,fuenteNormalNegrita))
-                .addText(new Text(nombreAfiliado + ",",fuenteNormalNegrita))
-                .addText(new Text("con numero de carnet de identidad",fuenteNormal))
-                .addText(new Text(carnetIdentidad + ".",fuenteNormalNegrita))
+                .addText(new Text("Prestamo",fuenteInfoEspaciado))
+                .addText(new Text(prestamo + ",",fuenteInfoNegritaEspaciado))
+                .addText(new Text("modalidad",fuenteInfoEspaciado))
+                .addText(new Text(modalidad + ",",fuenteInfoNegritaEspaciado))
+                .addText(new Text("con tipo de garantia",fuenteInfoEspaciado))
+                .addText(new Text(garantia + ",",fuenteInfoNegritaEspaciado))
+                .addText(new Text("fecha de inicio",fuenteInfoEspaciado))
+                .addText(new Text(fechaInicio + ",",fuenteInfoNegritaEspaciado))
+                .addText(new Text("en favor de",fuenteInfoEspaciado))
+                .addText(new Text(grado,fuenteInfoNegritaEspaciado))
+                .addText(new Text(nombreAfiliado + ",",fuenteInfoNegritaEspaciado))
+                .addText(new Text("con numero de carnet de identidad",fuenteInfoEspaciado))
+                .addText(new Text(carnetIdentidad + ".",fuenteInfoNegritaEspaciado))
                 .build();
 
         paragraph.draw(contentStream);
     }
 
-    private void crearTablaObservaciones(
+    private void crearTablaComentarios(
             PDPageContentStream contentStream,
             List<PDPageContentStream> contentStreams,
             PDDocument doc,
             ComentariosDTOPDF comentarios) throws IOException {
-
-        Style fuenteNormal = Style.builder()
-                .addTextFont(fuenteBasica)
-                .addFontSize(9.5f)
-                .addTextColor(Color.BLACK)
-                .addLeading(.85f)
-                .build();
-
-        Style fuenteNormalNegrita = Style.builder()
-                .addTextFont(fuenteBasicaNegrita)
-                .addFontSize(9.5f)
-                .addTextColor(Color.BLACK)
-                .addLeading(.85f)
-                .build();
 
         List<Column> bodyColumns = new LinkedList<>();
         Column column;
@@ -191,19 +139,19 @@ public class FormularioCarpetaComentarios {
                     EasyComponentsFactory.getSimpleCell(0f, 7.5f, false,
                             EasyComponentsFactory.getSimpleTable(0, 0,
                                     EasyComponentsFactory.getSimpleColumn(
-                                            EasyComponentsFactory.getSimpleCellFromText("Comentario realizado por: ",fuenteNormalNegrita,160f,5f,2.5f,Alignment.CENTER,false),
+                                            EasyComponentsFactory.getSimpleCellFromText("Comentario realizado por: ",fuenteComentarioNegrita,160f,5f,2.5f,Alignment.CENTER,false),
                                             EasyComponentsFactory.getSimpleCell(5f,2.5f,false,false,Color.BLACK,Color.WHITE,
                                                     ParagraphMultipleStyle.builder()
                                                             .addStartX(marginStartX + thickness)
                                                             .addStartY(0f)
                                                             .addWidth(340f-20f)
-                                                            .addText(new Text(comentario.getNombreUsuario(),fuenteNormal))
+                                                            .addText(new Text(comentario.getNombreUsuario(),fuenteComentario))
                                                             .addText(new Text(
                                                                     String.format("( %s - %s )",
                                                                         comentario.getNombreArea(),
                                                                         comentario.getNombreCargo()
-                                                                    )
-                                                                    ,fuenteNormalNegrita))
+                                                                    ),
+                                                                    fuenteComentarioNegrita))
                                                             .build()
                                                     )
                                     ),
@@ -216,10 +164,10 @@ public class FormularioCarpetaComentarios {
                                             ),
                                             Arrays.asList(60f,80f,80f,280f),
                                             Arrays.asList(
-                                                    fuenteNormalNegrita,
-                                                    fuenteNormal,
-                                                    fuenteNormal,
-                                                    fuenteNormal
+                                                    fuenteComentarioNegrita,
+                                                    fuenteComentario,
+                                                    fuenteComentario,
+                                                    fuenteComentario
                                             ),  Alignment.LEFT,
                                             5f, 2.5f,
                                             false,false,Color.BLACK,Color.WHITE),
@@ -228,7 +176,7 @@ public class FormularioCarpetaComentarios {
                                                     comentario.getContenidoComentario()
                                             ),
                                             Arrays.asList(500f),
-                                            Arrays.asList(fuenteNormal),  Alignment.LEFT,
+                                            Arrays.asList(fuenteNormalSemiEspaciada),  Alignment.LEFT,
                                             5f, 5f,
                                             false,false,Color.BLACK,Color.WHITE)
                             )

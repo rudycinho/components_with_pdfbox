@@ -12,7 +12,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import subsistema.pdf.utils.Fecha;
-import subsistema.pdf.utils.settings.Settings;
+import subsistema.pdf.utils.settings.Settings1;
 
 import java.awt.Color;
 import java.io.IOException;
@@ -26,7 +26,7 @@ public class GeneradorFormularioFactory {
 
     public static void crearMargen(
             PDPageContentStream contentStream,
-            Settings model) throws IOException {
+            Settings1 model) throws IOException {
         float marginStartX = model.getMarginStartX();
         float marginEndX   = model.getMarginEndX();
         float maxX         = model.getMaxX();
@@ -36,7 +36,7 @@ public class GeneradorFormularioFactory {
 
     public static void crearCabecera(
             PDPageContentStream contentStream,
-            PDDocument document, Settings model) throws IOException {
+            PDDocument document, Settings1 model) throws IOException {
 
         float marginStartX = model.getMarginStartX();
         float marginEndX   = model.getMarginEndX();
@@ -99,7 +99,7 @@ public class GeneradorFormularioFactory {
 
     public static void crearInfo(
             PDPageContentStream contentStream,
-            SucursalDTOPDF sucursalDTO, Settings model) throws IOException {
+            SucursalDTOPDF sucursalDTO, Settings1 model) throws IOException {
 
         PDFont fuenteBasica = model.getFuenteBasica();
         float marginStartX = model.getMarginStartX();
@@ -135,7 +135,7 @@ public class GeneradorFormularioFactory {
     public static void crearFechaExportacion(
             PDPageContentStream contentStream,
             Date fechaExportacion,
-            Settings model) throws IOException {
+            Settings1 model) throws IOException {
 
         PDFont fuenteBasica = model.getFuenteBasica();
         float marginEndX   = model.getMarginEndX();
@@ -166,7 +166,7 @@ public class GeneradorFormularioFactory {
     public static void crearUsuarioExportador(
             PDPageContentStream contentStream,
             UsuarioDTOPDF usuarioEditor,
-            Settings model) throws IOException {
+            Settings1 model) throws IOException {
 
         PDFont fuenteBasica = model.getFuenteBasica();
         PDFont fuenteBasicaNegrita = model.getFuenteBasicaNegrita();
@@ -213,7 +213,7 @@ public class GeneradorFormularioFactory {
     public static void crearTitulo(
             PDPageContentStream contentStream,
             String titulo,
-            Settings model) throws IOException {
+            Settings1 model) throws IOException {
 
         PDFont fuenteBasicaNegrita = model.getFuenteBasicaNegrita();
         float maxX         = model.getMaxX();
@@ -241,7 +241,7 @@ public class GeneradorFormularioFactory {
             PDPageContentStream contentStream,
             int numeroPagina,
             int totalPaginas,
-            Settings model
+            Settings1 model
     ) throws IOException {
 
         PDFont fuenteBasicaNegrita = model.getFuenteBasicaNegrita();

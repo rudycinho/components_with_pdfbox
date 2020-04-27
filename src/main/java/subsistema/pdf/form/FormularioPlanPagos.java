@@ -18,7 +18,7 @@ import subsistema.pdf.lib.tables.SimpleTable;
 import subsistema.pdf.lib.text.simple.MultipleParagraph;
 import subsistema.pdf.utils.factories.EasyComponentsFactory;
 import subsistema.pdf.utils.factories.GeneradorFormularioFactory;
-import subsistema.pdf.utils.settings.Model;
+import subsistema.pdf.utils.settings.*;
 
 import java.awt.Color;
 import java.io.File;
@@ -27,42 +27,19 @@ import java.util.*;
 
 public class FormularioPlanPagos {
 
-    private final float maxY         = Model.MODEL_2.getMaxY();
-    private final float maxX         = Model.MODEL_2.getMaxX();
-    private final float thickness    = Model.MODEL_2.getThickness();
-    private final float marginStartX = Model.MODEL_2.getMarginStartX();
-    private final float marginEndX   = Model.MODEL_2.getMarginEndX();
-    private final float relativePositionX = 5f;
-    private final float relativePositionY = 5f;
+    private final float maxY         = Models.MODEL_2.getMaxY();
+    private final float maxX         = Models.MODEL_2.getMaxX();
+    private final float thickness    = Models.MODEL_2.getThickness();
+    private final float marginStartX = Models.MODEL_2.getMarginStartX();
+    private final float marginEndX   = Models.MODEL_2.getMarginEndX();
+    private final FontEnum fontEnum  = Models.MODEL_2.getFont();
 
-    private final PDFont fuenteBasica        = Model.MODEL_2.getFuenteBasica();
-    private final PDFont fuenteBasicaNegrita = Model.MODEL_2.getFuenteBasicaNegrita();
-
-    private final Style fuenteSubtitulo = Style.builder()
-            .addTextFont(fuenteBasicaNegrita)
-            .addFontSize(14f)
-            .addTextColor(Color.BLACK)
-            .addLeading(0.8f)
-            .build();
-
-    private final Style fuenteNormal = Style.builder()
-            .addTextFont(fuenteBasica)
-            .addFontSize(10.5f)
-            .addTextColor(Color.BLACK)
-            .addLeading(0.8f)
-            .build();
-
-    private final Style fuenteNormalNegrita = Style.builder()
-            .addTextFont(fuenteBasicaNegrita)
-            .addFontSize(10.5f)
-            .addTextColor(Color.BLACK)
-            .addLeading(0.8f)
-            .build();
-
-    private final Style fuenteDiminuta = Style.builder()
-            .addFontSize(8)
-            .addTextFont(fuenteBasica)
-            .build();
+    private Style fuenteTituloTabla;
+    private Style fuenteMinimalEspaciado;
+    private Style fuenteMinimalExtraEspaciado;
+    private Style fuenteMinimalNegrita;
+    private Style fuenteMinimalNegritaExtraEspaciado;
+    private Style fuenteMinimalNegritaExtraEspaciadoRoja;
 
     public FormularioPlanPagos(
             String ruta,
@@ -73,16 +50,27 @@ public class FormularioPlanPagos {
             Date fechaExportacion) throws IOException {
 
         PDDocument doc = new PDDocument();
+
+        FontGroup fontGroup = FontGroup.getFontGroup(fontEnum,doc);
+
+        fuenteTituloTabla                     = Style.getStyle(fontGroup, StyleEnum.TABLE_BOLD_SPACED);
+        fuenteMinimalEspaciado                = Style.getStyle(fontGroup, StyleEnum.TABLE_MINIMAL_NORMAL_SPACED);
+        fuenteMinimalExtraEspaciado           = Style.getStyle(fontGroup, StyleEnum.TABLE_MINIMAL_NORMAL_EXTRA_SPACED);
+        fuenteMinimalNegrita                  = Style.getStyle(fontGroup, StyleEnum.TABLE_MINIMAL_BOLD);
+        fuenteMinimalNegritaExtraEspaciado    = Style.getStyle(fontGroup, StyleEnum.TABLE_MINIMAL_BOLD_EXTRA_SPACED);
+        fuenteMinimalNegritaExtraEspaciadoRoja= Style.getStyle(fontGroup, StyleEnum.TABLE_MINIMAL_BOLD_EXTRA_SPACED_RED);
+
+
         PDPage page = new PDPage(new PDRectangle(maxX,maxY));
 
         doc.addPage(page);
         PDPageContentStream contentStream = new PDPageContentStream(doc, page);
         List<PDPageContentStream> contentStreams = new LinkedList<>();
 
-        GeneradorFormularioFactory.crearCabecera(contentStream,doc, Model.MODEL_2);
-        GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Model.MODEL_2);
-        GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Model.MODEL_2);
-        GeneradorFormularioFactory.crearTitulo(contentStream,"PLAN DE PAGOS", Model.MODEL_2);
+        GeneradorFormularioFactory.crearCabecera(contentStream,doc, Model1.MODEL_2);
+        GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Model1.MODEL_2);
+        GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Model1.MODEL_2);
+        GeneradorFormularioFactory.crearTitulo(contentStream,"PLAN DE PAGOS", Model1.MODEL_2);
 
         crearClienteSeccionPlanDePagos(contentStream, dictamen);
         crearResumenDatosSeccionPlanDePagos(contentStream, dictamen);
@@ -91,8 +79,8 @@ public class FormularioPlanPagos {
         int index=1;
         int total=contentStreams.size();
         for(PDPageContentStream contentStream1 : contentStreams){
-            GeneradorFormularioFactory.crearMargen(contentStream1, Model.MODEL_2);
-            GeneradorFormularioFactory.enumerarPaginas(contentStream1,index,total,Model.MODEL_2);
+            GeneradorFormularioFactory.crearMargen(contentStream1, Model1.MODEL_2);
+            GeneradorFormularioFactory.enumerarPaginas(contentStream1,index,total, Model1.MODEL_2);
             index+=1;
         }
 

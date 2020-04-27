@@ -1,6 +1,5 @@
 package subsistema.pdf.form;
 
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import subsistema.pdf.dto.DesafiliadoDTOPDF;
 import subsistema.pdf.dto.SucursalDTOPDF;
 import subsistema.pdf.dto.UsuarioDTOPDF;
@@ -16,7 +15,7 @@ import subsistema.pdf.lib.tables.SimpleTable;
 import subsistema.pdf.lib.text.simple.MultipleParagraph;
 import subsistema.pdf.utils.factories.EasyComponentsFactory;
 import subsistema.pdf.utils.factories.GeneradorFormularioFactory;
-import subsistema.pdf.utils.settings.Model;
+import subsistema.pdf.utils.settings.*;
 
 import java.awt.Color;
 import java.io.File;
@@ -25,42 +24,19 @@ import java.util.Date;
 
 public class FormularioDesafiliacion {
 
-	private final float maxY         = Model.MODEL_1.getMaxY();
-	private final float maxX         = Model.MODEL_1.getMaxX();
-	private final float thickness    = Model.MODEL_1.getThickness();
-	private final float marginStartX = Model.MODEL_1.getMarginStartX();
-	private final float marginEndX   = Model.MODEL_1.getMarginEndX();
-	private final float relativePositionX = 5f;
-	private final float relativePositionY = 5f;
+	private final float maxY         = Models.MODEL_1.getMaxY();
+	private final float maxX         = Models.MODEL_1.getMaxX();
+	private final float thickness    = Models.MODEL_1.getThickness();
+	private final float marginStartX = Models.MODEL_1.getMarginStartX();
+	private final float marginEndX   = Models.MODEL_1.getMarginEndX();
+	private final FontEnum fontEnum  = Models.MODEL_1.getFont();
 
-	private final PDFont fuenteBasica        = Model.MODEL_1.getFuenteBasica();
-	private final PDFont fuenteBasicaNegrita = Model.MODEL_1.getFuenteBasicaNegrita();
-
-	private final Style fuenteSubtitulo = Style.builder()
-			.addTextFont(fuenteBasicaNegrita)
-			.addFontSize(14f)
-			.addTextColor(Color.BLACK)
-			.addLeading(0.8f)
-			.build();
-
-	private final Style fuenteNormal = Style.builder()
-			.addTextFont(fuenteBasica)
-			.addFontSize(10.5f)
-			.addTextColor(Color.BLACK)
-			.addLeading(0.8f)
-			.build();
-
-	private final Style fuenteNormalNegrita = Style.builder()
-			.addTextFont(fuenteBasicaNegrita)
-			.addFontSize(10.5f)
-			.addTextColor(Color.BLACK)
-			.addLeading(0.8f)
-			.build();
-
-	private final Style fuenteDiminuta = Style.builder()
-			.addFontSize(8)
-			.addTextFont(fuenteBasica)
-			.build();
+	private Style fuenteSubtitulo;
+	private Style fuenteNormalNegrita;
+	private Style fuenteNormal;
+	private Style fuenteNormalEspaciada;
+	private Style fuenteDiminuta;
+	private Style fuenteNormalSemiEspaciada;
 
 	public FormularioDesafiliacion(String ruta,
 								   DesafiliadoDTOPDF desafiliado,
@@ -69,17 +45,27 @@ public class FormularioDesafiliacion {
 								   Date fechaExportacion) throws IOException {
 
 		PDDocument doc = new PDDocument();
+
+		FontGroup fontGroup = FontGroup.getFontGroup(fontEnum,doc);
+
+		fuenteSubtitulo                = Style.getStyle(fontGroup, StyleEnum.SUBTITLE_BOLD);
+		fuenteNormal                   = Style.getStyle(fontGroup, StyleEnum.DATA_NORMAL);
+		fuenteNormalNegrita            = Style.getStyle(fontGroup, StyleEnum.DATA_BOLD);
+		fuenteNormalSemiEspaciada      = Style.getStyle(fontGroup, StyleEnum.DATA_SEMI_SPACED);
+		fuenteNormalEspaciada          = Style.getStyle(fontGroup, StyleEnum.DATA_NORMAL_SPACED);
+		fuenteDiminuta                 = Style.getStyle(fontGroup, StyleEnum.SMALL_NORMAL);
+
 		PDPage page = new PDPage(new PDRectangle(maxX,maxY));
 
 		doc.addPage(page);
 		PDPageContentStream contentStream = new PDPageContentStream(doc, page);
 
-		GeneradorFormularioFactory.crearMargen(contentStream, Model.MODEL_1);
-		GeneradorFormularioFactory.crearCabecera(contentStream,doc, Model.MODEL_1);
-		GeneradorFormularioFactory.crearInfo(contentStream,sucursal, Model.MODEL_1);
-		GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Model.MODEL_1);
-		GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Model.MODEL_1);
-		GeneradorFormularioFactory.crearTitulo(contentStream,"FORMULARIO C-01\nSOLICITUD DE DESAFILIACION", Model.MODEL_1);
+		GeneradorFormularioFactory.crearMargen(contentStream, Model1.MODEL_1);
+		GeneradorFormularioFactory.crearCabecera(contentStream,doc, Model1.MODEL_1);
+		GeneradorFormularioFactory.crearInfo(contentStream,sucursal, Model1.MODEL_1);
+		GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Model1.MODEL_1);
+		GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Model1.MODEL_1);
+		GeneradorFormularioFactory.crearTitulo(contentStream,"FORMULARIO C-01\nSOLICITUD DE DESAFILIACION", Model1.MODEL_1);
 
 		crearSubTitulosDesafiliado(contentStream);
 		crearFechaRegistroDesafiliado(contentStream, desafiliado);
@@ -103,8 +89,8 @@ public class FormularioDesafiliacion {
 			PDPageContentStream contentStream) throws IOException {
 
 		MultipleParagraph.builder()
-				.addStartX(marginStartX + thickness + relativePositionX)
-				.addStartY(maxY - 190 - relativePositionY)
+				.addStartX(marginStartX + thickness + 5f)
+				.addStartY(maxY - 190 - 5f)
 				.addWidth(180f)
 				.addTextContent("DATOS DEL SOLICITANTE")
 				.addAlignment(Alignment.LEFT)
@@ -146,13 +132,6 @@ public class FormularioDesafiliacion {
 			PDPageContentStream contentStream,
 			DesafiliadoDTOPDF desafiliado) throws IOException {
 
-		Style fuenteNormal = Style.builder()
-				.addTextFont(fuenteBasica)
-				.addFontSize(10.5f)
-				.addTextColor(Color.BLACK)
-				.addLeading(0.9f)
-				.build();
-
 		float width1 = 150f;
 		float width2 = 130f;
 		float width3 = 130f;
@@ -160,17 +139,17 @@ public class FormularioDesafiliacion {
 		float initY = 220;
 		boolean margin = false;
 
-		Cell c11 = EasyComponentsFactory.getSimpleCellFromText("GRADO: ", fuenteNormalNegrita, width1, 0f, 2.5f, margin);
+		Cell c11 = EasyComponentsFactory.getSimpleCellFromText("GRADO: "              , fuenteNormalNegrita, width1, 0f, 2.5f, margin);
 		Cell c12 = EasyComponentsFactory.getSimpleCellFromText("NOMBRES Y APELLIDOS: ", fuenteNormalNegrita, width1, 0f, 2.5f, margin);
-		Cell c13 = EasyComponentsFactory.getSimpleCellFromText("N* DE CI: ", fuenteNormalNegrita, width1, 0f, 2.5f, margin);
-		Cell c14 = EasyComponentsFactory.getSimpleCellFromText("UNIDAD POLICIAL: ", fuenteNormalNegrita, width1, 0f, 2.5f, margin);
-		Cell c15 = EasyComponentsFactory.getSimpleCellFromText("DEPARTAMENTO: ", fuenteNormalNegrita, width1, 0f, 2.5f, margin);
+		Cell c13 = EasyComponentsFactory.getSimpleCellFromText("N* DE CI: "           , fuenteNormalNegrita, width1, 0f, 2.5f, margin);
+		Cell c14 = EasyComponentsFactory.getSimpleCellFromText("UNIDAD POLICIAL: "    , fuenteNormalNegrita, width1, 0f, 2.5f, margin);
+		Cell c15 = EasyComponentsFactory.getSimpleCellFromText("DEPARTAMENTO: "       , fuenteNormalNegrita, width1, 0f, 2.5f, margin);
 
-		Cell c21 = EasyComponentsFactory.getSimpleCellFromText(desafiliado.getGrado(), fuenteNormal, width2 + width3 + width4, 0f, 2.5f, margin);
-		Cell c22 = EasyComponentsFactory.getSimpleCellFromText(desafiliado.getNombreCompleto(), fuenteNormal, width2 + width3 + width4, 0f, 2.5f, margin);
-		Cell c23 = EasyComponentsFactory.getSimpleCellFromText(desafiliado.getCarnetIdentidad(), fuenteNormal, width2 + width3 + width4, 0f, 2.5f, margin);
-		Cell c24 = EasyComponentsFactory.getSimpleCellFromText(desafiliado.getUnidadPolicial(), fuenteNormal, width2 + width3 + width4, 0f, 2.5f, margin);
-		Cell c25 = EasyComponentsFactory.getSimpleCellFromText(desafiliado.getDepartamento(), fuenteNormal, width2 + width3 + width4, 0f, 2.5f, margin);
+		Cell c21 = EasyComponentsFactory.getSimpleCellFromText(desafiliado.getGrado()          , fuenteNormalSemiEspaciada, width2 + width3 + width4, 0f, 2.5f, margin);
+		Cell c22 = EasyComponentsFactory.getSimpleCellFromText(desafiliado.getNombreCompleto() , fuenteNormalSemiEspaciada, width2 + width3 + width4, 0f, 2.5f, margin);
+		Cell c23 = EasyComponentsFactory.getSimpleCellFromText(desafiliado.getCarnetIdentidad(), fuenteNormalSemiEspaciada, width2 + width3 + width4, 0f, 2.5f, margin);
+		Cell c24 = EasyComponentsFactory.getSimpleCellFromText(desafiliado.getUnidadPolicial() , fuenteNormalSemiEspaciada, width2 + width3 + width4, 0f, 2.5f, margin);
+		Cell c25 = EasyComponentsFactory.getSimpleCellFromText(desafiliado.getDepartamento()   , fuenteNormalSemiEspaciada, width2 + width3 + width4, 0f, 2.5f, margin);
 
 		float auxY = maxY - initY  - 2.5f;
 
@@ -191,7 +170,7 @@ public class FormularioDesafiliacion {
 			DesafiliadoDTOPDF desafiliado) throws IOException {
 
 		MultipleParagraph.builder()
-				.addStartX(marginStartX + thickness + 2 * relativePositionX)
+				.addStartX(marginStartX + thickness + 2 * 5f)
 				.addStartY(maxY - 335)
 				.addWidth(300f)
 				.addTextContent("CAUSA DE DESAFILIACION")
@@ -201,7 +180,7 @@ public class FormularioDesafiliacion {
 				.draw(contentStream);
 
 		MultipleParagraph.builder()
-				.addStartX(marginStartX + thickness + (2 * relativePositionX))
+				.addStartX(marginStartX + thickness + (2 * 5f))
 				.addStartY(maxY - 350)
 				.addWidth(500f)
 				.addTextContent(desafiliado.getCausaDesafiliacion())
@@ -215,16 +194,9 @@ public class FormularioDesafiliacion {
 			PDPageContentStream contentStream,
 			DesafiliadoDTOPDF desafiliado) throws IOException {
 
-		Style fuenteNormal = Style.builder()
-				.addTextFont(fuenteBasica)
-				.addFontSize(10.5f)
-				.addTextColor(Color.BLACK)
-				.addLeading(.9f)
-				.build();
-
 		MultipleParagraph.builder()
-				.addStartX(marginStartX + thickness + 2 * relativePositionX)
-				.addStartY(maxY - 595 - 2 * relativePositionY)
+				.addStartX(marginStartX + thickness + 2 * 5f)
+				.addStartY(maxY - 595 - 2 * 5f)
 				.addWidth(135f)
 				.addTextContent("OBSERVACIONES")
 				.addAlignment(Alignment.LEFT)
@@ -233,12 +205,12 @@ public class FormularioDesafiliacion {
 				.draw(contentStream);
 
 		MultipleParagraph.builder()
-				.addStartX(marginStartX + thickness + (2 * relativePositionX))
-				.addStartY(maxY - 610 - (2 * relativePositionY))
+				.addStartX(marginStartX + thickness + (2 * 5f))
+				.addStartY(maxY - 610 - (2 * 5f))
 				.addWidth(500f)
 				.addTextContent(desafiliado.getObservaciones())
 				.addAlignment(Alignment.LEFT)
-				.addStyle(fuenteNormal)
+				.addStyle(fuenteNormalSemiEspaciada)
 				.build()
 				.draw(contentStream);
 	}
@@ -251,7 +223,7 @@ public class FormularioDesafiliacion {
 		boolean margin = false;
 
 		Cell c11 = EasyComponentsFactory.getSimpleCellFromText("........................", fuenteNormal, width1, 0f, 2.5f, Alignment.CENTER, margin);
-		Cell c12 = EasyComponentsFactory.getSimpleCellFromText("FIRMA DEL SOLICITANTE", fuenteNormalNegrita, width1, 0f, 2.5f, Alignment.CENTER, margin);
+		Cell c12 = EasyComponentsFactory.getSimpleCellFromText("FIRMA DEL SOLICITANTE"   , fuenteNormalNegrita, width1, 0f, 2.5f, Alignment.CENTER, margin);
 
 		float auxY = maxY - initY;
 		float left = marginStartX + (maxX - (marginStartX + marginEndX) - width1) / 2;
@@ -272,7 +244,7 @@ public class FormularioDesafiliacion {
 		boolean margin = false;
 
 		Cell c11 = EasyComponentsFactory.getSimpleCellFromText("CODIGO: ", fuenteNormalNegrita, width1, 0f, 2.5f, margin);
-		Cell c21 = EasyComponentsFactory.getSimpleCellFromText("", fuenteNormal, width2, 0f, 2.5f, margin);
+		Cell c21 = EasyComponentsFactory.getSimpleCellFromText(""        , fuenteNormalEspaciada, width2, 0f, 2.5f, margin);
 
 		float auxY = maxY - initY;
 
@@ -288,7 +260,6 @@ public class FormularioDesafiliacion {
 		new Line(initPoint, auxY, initPoint, auxY - 25).setThickness(2).draw(contentStream);
 		new Line(initPoint + 50, auxY - 5, initPoint + 50, auxY - 25).setThickness(2).draw(contentStream);
 		new Line(initPoint + 45, auxY, initPoint + 50, auxY - 5).setThickness(2).draw(contentStream);
-
 	}
 
 	private void crearNotaDesafiliado(
@@ -322,11 +293,11 @@ public class FormularioDesafiliacion {
 
 		float width1 = 100f;
 		float width2 = 150f;
-		float initY = 720f;
+		float initY  = 720f;
 		boolean margin = false;
 
 		Cell c11 = EasyComponentsFactory.getSimpleCellFromText("RECEPCIONADO: ", fuenteNormalNegrita, width1, 0f, 2.5f, margin);
-		Cell c21 = EasyComponentsFactory.getSimpleCellFromText("", fuenteNormal, width2, 0f, 2.5f, margin);
+		Cell c21 = EasyComponentsFactory.getSimpleCellFromText(""              , fuenteNormal, width2, 0f, 2.5f, margin);
 
 		float auxY = maxY - initY;
 
@@ -344,6 +315,5 @@ public class FormularioDesafiliacion {
 
 		new Line(marginStartX, auxY, maxX - marginEndX, auxY).setThickness(2).draw(contentStream);
 	}
-
 
 }

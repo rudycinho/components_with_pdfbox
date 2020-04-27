@@ -1,7 +1,5 @@
 package subsistema.pdf.form;
 
-import org.apache.pdfbox.pdmodel.font.PDFont;
-import subsistema.pdf.dto.ComentariosDTOPDF;
 import subsistema.pdf.dto.DatosCarpetaAfiliadioDTOPDF;
 import subsistema.pdf.dto.SucursalDTOPDF;
 import subsistema.pdf.dto.UsuarioDTOPDF;
@@ -19,7 +17,7 @@ import subsistema.pdf.lib.text.complex.Text;
 import subsistema.pdf.lib.text.simple.MultipleParagraph;
 import subsistema.pdf.utils.factories.EasyComponentsFactory;
 import subsistema.pdf.utils.factories.GeneradorFormularioFactory;
-import subsistema.pdf.utils.settings.Model;
+import subsistema.pdf.utils.settings.*;
 
 import java.awt.Color;
 import java.io.File;
@@ -28,42 +26,21 @@ import java.util.Date;
 
 public class FormularioCarpetaDatosAfiliadio {
 
-    private final float maxY         = Model.MODEL_1.getMaxY();
-    private final float maxX         = Model.MODEL_1.getMaxX();
-    private final float thickness    = Model.MODEL_1.getThickness();
-    private final float marginStartX = Model.MODEL_1.getMarginStartX();
-    private final float marginEndX   = Model.MODEL_1.getMarginEndX();
-    private final float relativePositionX = 5f;
-    private final float relativePositionY = 5f;
+    private final float maxY         = Models.MODEL_1.getMaxY();
+    private final float maxX         = Models.MODEL_1.getMaxX();
+    private final float thickness    = Models.MODEL_1.getThickness();
+    private final float marginStartX = Models.MODEL_1.getMarginStartX();
+    private final float marginEndX   = Models.MODEL_1.getMarginEndX();
+    private final FontEnum fontEnum  = Models.MODEL_1.getFont();
 
-    private final PDFont fuenteBasica        = Model.MODEL_1.getFuenteBasica();
-    private final PDFont fuenteBasicaNegrita = Model.MODEL_1.getFuenteBasicaNegrita();
+    private Style fuenteSubtitulo;
+    private Style fuenteNormalNegrita;
+    private Style fuenteNormalEspaciada;
+    private Style fuenteNormalSemiEspaciada;
 
-    private final Style fuenteSubtitulo = Style.builder()
-            .addTextFont(fuenteBasicaNegrita)
-            .addFontSize(14f)
-            .addTextColor(Color.BLACK)
-            .addLeading(0.8f)
-            .build();
+    private Style fuenteInfoEspaciado;
+    private Style fuenteInfoNegritaEspaciado;
 
-    private final Style fuenteNormal = Style.builder()
-            .addTextFont(fuenteBasica)
-            .addFontSize(10.5f)
-            .addTextColor(Color.BLACK)
-            .addLeading(0.8f)
-            .build();
-
-    private final Style fuenteNormalNegrita = Style.builder()
-            .addTextFont(fuenteBasicaNegrita)
-            .addFontSize(10.5f)
-            .addTextColor(Color.BLACK)
-            .addLeading(0.8f)
-            .build();
-
-    private final Style fuenteDiminuta = Style.builder()
-            .addFontSize(8)
-            .addTextFont(fuenteBasica)
-            .build();
 
     public FormularioCarpetaDatosAfiliadio(
             String ruta,
@@ -73,17 +50,28 @@ public class FormularioCarpetaDatosAfiliadio {
             Date fechaExportacion) throws IOException {
 
         PDDocument doc = new PDDocument();
+
+        FontGroup fontGroup = FontGroup.getFontGroup(fontEnum,doc);
+
+        fuenteSubtitulo                = Style.getStyle(fontGroup, StyleEnum.SUBTITLE_BOLD);
+        fuenteNormalNegrita            = Style.getStyle(fontGroup, StyleEnum.DATA_BOLD);
+        fuenteNormalSemiEspaciada      = Style.getStyle(fontGroup, StyleEnum.DATA_SEMI_SPACED);
+        fuenteNormalEspaciada          = Style.getStyle(fontGroup, StyleEnum.DATA_NORMAL_SPACED);
+
+        fuenteInfoEspaciado        = Style.getStyle(fontGroup, StyleEnum.MINIMAL_NORMAL_SPACED);
+        fuenteInfoNegritaEspaciado = Style.getStyle(fontGroup, StyleEnum.MINIMAL_BOLD_SPACED);
+
         PDPage page = new PDPage(new PDRectangle(maxX,maxY));
 
         doc.addPage(page);
         PDPageContentStream contentStream = new PDPageContentStream(doc, page);
 
-        GeneradorFormularioFactory.crearMargen(contentStream, Model.MODEL_1);
-        GeneradorFormularioFactory.crearCabecera(contentStream,doc, Model.MODEL_1);
-        GeneradorFormularioFactory.crearInfo(contentStream,sucursal, Model.MODEL_1);
-        GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Model.MODEL_1);
-        GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Model.MODEL_1);
-        GeneradorFormularioFactory.crearTitulo(contentStream,"DATOS\nDE CARPETA DE PRESTAMO", Model.MODEL_1);
+        GeneradorFormularioFactory.crearMargen(contentStream, Model1.MODEL_1);
+        GeneradorFormularioFactory.crearCabecera(contentStream,doc, Model1.MODEL_1);
+        GeneradorFormularioFactory.crearInfo(contentStream,sucursal, Model1.MODEL_1);
+        GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Model1.MODEL_1);
+        GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Model1.MODEL_1);
+        GeneradorFormularioFactory.crearTitulo(contentStream,"DATOS\nDE CARPETA DE PRESTAMO", Model1.MODEL_1);
 
         crearSubTitulosAfiliado(contentStream);
         crearInfoAfiliado(contentStream,datos);
@@ -103,8 +91,8 @@ public class FormularioCarpetaDatosAfiliadio {
             PDPageContentStream contentStream) throws IOException {
 
         MultipleParagraph.builder()
-                .addStartX(marginStartX + thickness + relativePositionX)
-                .addStartY(maxY - 265 - relativePositionY)
+                .addStartX(marginStartX + thickness + 5f)
+                .addStartY(maxY - 265 - 5f)
                 .addWidth(180f)
                 .addTextContent("DATOS DEL AFILIADO")
                 .addAlignment(Alignment.LEFT)
@@ -116,13 +104,6 @@ public class FormularioCarpetaDatosAfiliadio {
     private void crearDatosAfiliado(
             PDPageContentStream contentStream,
             DatosCarpetaAfiliadioDTOPDF datos) throws IOException {
-
-        Style fuenteNormal = Style.builder()
-                .addTextFont(fuenteBasica)
-                .addFontSize(10.5f)
-                .addTextColor(Color.BLACK)
-                .addLeading(0.9f)
-                .build();
 
         float width1 = 200f;
         float width2 = 280f;
@@ -146,22 +127,22 @@ public class FormularioCarpetaDatosAfiliadio {
         Cell c115 = EasyComponentsFactory.getSimpleCellFromText("TIPO DE AFILIACION: "   , fuenteNormalNegrita, width1, 0f, 2.5f, margin);
         Cell c116 = EasyComponentsFactory.getSimpleCellFromText("ESTADO DE AFILIACION: " , fuenteNormalNegrita, width1, 0f, 2.5f, margin);
 
-        Cell c201 = EasyComponentsFactory.getSimpleCellFromText(datos.getGrado()            , fuenteNormal, width2, 0f, 2.5f, margin);
-        Cell c202 = EasyComponentsFactory.getSimpleCellFromText(datos.getNombres()          , fuenteNormal, width2, 0f, 2.5f, margin);
-        Cell c203 = EasyComponentsFactory.getSimpleCellFromText(datos.getApellidoPaterno()  , fuenteNormal, width2, 0f, 2.5f, margin);
-        Cell c204 = EasyComponentsFactory.getSimpleCellFromText(datos.getApellidoMaterno()  , fuenteNormal, width2, 0f, 2.5f, margin);
-        Cell c205 = EasyComponentsFactory.getSimpleCellFromText(datos.getCarnetIdentidad()  , fuenteNormal, width2, 0f, 2.5f, margin);
-        Cell c206 = EasyComponentsFactory.getSimpleCellFromText(datos.getProcedenciaCarnet(), fuenteNormal, width2, 0f, 2.5f, margin);
-        Cell c207 = EasyComponentsFactory.getSimpleCellFromText(datos.getFechaNacimiento()  , fuenteNormal, width2, 0f, 2.5f, margin);
-        Cell c208 = EasyComponentsFactory.getSimpleCellFromText(datos.getEstadoPolicial()   , fuenteNormal, width2, 0f, 2.5f, margin);
-        Cell c209 = EasyComponentsFactory.getSimpleCellFromText(datos.getEstadoAfiliacion() , fuenteNormal, width2, 0f, 2.5f, margin);
-        Cell c210 = EasyComponentsFactory.getSimpleCellFromText(datos.getTelefono()         , fuenteNormal, width2, 0f, 2.5f, margin);
-        Cell c211 = EasyComponentsFactory.getSimpleCellFromText(datos.getTelefonoMovil()    , fuenteNormal, width2, 0f, 2.5f, margin);
-        Cell c212 = EasyComponentsFactory.getSimpleCellFromText(datos.getCorreoElectronico(), fuenteNormal, width2, 0f, 2.5f, margin);
-        Cell c213 = EasyComponentsFactory.getSimpleCellFromText(datos.getUnidadPolicial()   , fuenteNormal, width2, 0f, 2.5f, margin);
-        Cell c214 = EasyComponentsFactory.getSimpleCellFromText(datos.getDepartamento()     , fuenteNormal, width2, 0f, 2.5f, margin);
-        Cell c215 = EasyComponentsFactory.getSimpleCellFromText(datos.getTipoAfiliacion()   , fuenteNormal, width2, 0f, 2.5f, margin);
-        Cell c216 = EasyComponentsFactory.getSimpleCellFromText(datos.getEstadoAfiliacion() , fuenteNormal, width2, 0f, 2.5f, margin);
+        Cell c201 = EasyComponentsFactory.getSimpleCellFromText(datos.getGrado()            , fuenteNormalEspaciada, width2, 0f, 2.5f, margin);
+        Cell c202 = EasyComponentsFactory.getSimpleCellFromText(datos.getNombres()          , fuenteNormalEspaciada, width2, 0f, 2.5f, margin);
+        Cell c203 = EasyComponentsFactory.getSimpleCellFromText(datos.getApellidoPaterno()  , fuenteNormalEspaciada, width2, 0f, 2.5f, margin);
+        Cell c204 = EasyComponentsFactory.getSimpleCellFromText(datos.getApellidoMaterno()  , fuenteNormalEspaciada, width2, 0f, 2.5f, margin);
+        Cell c205 = EasyComponentsFactory.getSimpleCellFromText(datos.getCarnetIdentidad()  , fuenteNormalEspaciada, width2, 0f, 2.5f, margin);
+        Cell c206 = EasyComponentsFactory.getSimpleCellFromText(datos.getProcedenciaCarnet(), fuenteNormalEspaciada, width2, 0f, 2.5f, margin);
+        Cell c207 = EasyComponentsFactory.getSimpleCellFromText(datos.getFechaNacimiento()  , fuenteNormalEspaciada, width2, 0f, 2.5f, margin);
+        Cell c208 = EasyComponentsFactory.getSimpleCellFromText(datos.getEstadoPolicial()   , fuenteNormalEspaciada, width2, 0f, 2.5f, margin);
+        Cell c209 = EasyComponentsFactory.getSimpleCellFromText(datos.getEstadoAfiliacion() , fuenteNormalEspaciada, width2, 0f, 2.5f, margin);
+        Cell c210 = EasyComponentsFactory.getSimpleCellFromText(datos.getTelefono()         , fuenteNormalEspaciada, width2, 0f, 2.5f, margin);
+        Cell c211 = EasyComponentsFactory.getSimpleCellFromText(datos.getTelefonoMovil()    , fuenteNormalEspaciada, width2, 0f, 2.5f, margin);
+        Cell c212 = EasyComponentsFactory.getSimpleCellFromText(datos.getCorreoElectronico(), fuenteNormalEspaciada, width2, 0f, 2.5f, margin);
+        Cell c213 = EasyComponentsFactory.getSimpleCellFromText(datos.getUnidadPolicial()   , fuenteNormalEspaciada, width2, 0f, 2.5f, margin);
+        Cell c214 = EasyComponentsFactory.getSimpleCellFromText(datos.getDepartamento()     , fuenteNormalEspaciada, width2, 0f, 2.5f, margin);
+        Cell c215 = EasyComponentsFactory.getSimpleCellFromText(datos.getTipoAfiliacion()   , fuenteNormalEspaciada, width2, 0f, 2.5f, margin);
+        Cell c216 = EasyComponentsFactory.getSimpleCellFromText(datos.getEstadoAfiliacion() , fuenteNormalEspaciada, width2, 0f, 2.5f, margin);
 
         float auxY = maxY - initY  - 2.5f;
 
@@ -191,16 +172,9 @@ public class FormularioCarpetaDatosAfiliadio {
             PDPageContentStream contentStream,
             DatosCarpetaAfiliadioDTOPDF datos) throws IOException {
 
-        Style fuenteNormal = Style.builder()
-                .addTextFont(fuenteBasica)
-                .addFontSize(10.5f)
-                .addTextColor(Color.BLACK)
-                .addLeading(.9f)
-                .build();
-
         MultipleParagraph.builder()
-                .addStartX(marginStartX + thickness + 2 * relativePositionX)
-                .addStartY(maxY - 545 - 2 * relativePositionY)
+                .addStartX(marginStartX + thickness + 2 * 5f)
+                .addStartY(maxY - 545 - 2 * 5f)
                 .addWidth(135f)
                 .addTextContent("OBSERVACIONES")
                 .addAlignment(Alignment.LEFT)
@@ -209,12 +183,12 @@ public class FormularioCarpetaDatosAfiliadio {
                 .draw(contentStream);
 
         MultipleParagraph.builder()
-                .addStartX(marginStartX + thickness + (2 * relativePositionX))
-                .addStartY(maxY - 560 - (2 * relativePositionY))
+                .addStartX(marginStartX + thickness + (2 * 5f))
+                .addStartY(maxY - 560 - (2 * 5f))
                 .addWidth(500f)
                 .addTextContent(datos.getObservacion())
                 .addAlignment(Alignment.LEFT)
-                .addStyle(fuenteNormal)
+                .addStyle(fuenteNormalSemiEspaciada)
                 .build()
                 .draw(contentStream);
     }
@@ -232,20 +206,6 @@ public class FormularioCarpetaDatosAfiliadio {
             PDPageContentStream contentStream,
             DatosCarpetaAfiliadioDTOPDF datos) throws IOException {
 
-        Style fuenteNormal = Style.builder()
-                .addTextFont(fuenteBasica)
-                .addFontSize(9.5f)
-                .addTextColor(Color.BLACK)
-                .addLeading(1.1f)
-                .build();
-
-        Style fuenteNormalNegrita = Style.builder()
-                .addTextFont(fuenteBasicaNegrita)
-                .addFontSize(9.5f)
-                .addTextColor(Color.BLACK)
-                .addLeading(1.1f)
-                .build();
-
         String prestamo        = datos.getPrestamoCodigo();
         String modalidad       = datos.getPrestamoModalidad();
         String garantia        = datos.getPrestamoTipoGarantia();
@@ -261,23 +221,21 @@ public class FormularioCarpetaDatosAfiliadio {
                 .addStartX(marginStartX + thickness)
                 .addStartY(initY)
                 .addWidth(width)
-                .addText(new Text("Prestamo",fuenteNormal))
-                .addText(new Text(prestamo + ",",fuenteNormalNegrita))
-                .addText(new Text("modalidad",fuenteNormal))
-                .addText(new Text(modalidad + ",",fuenteNormalNegrita))
-                .addText(new Text("con tipo de garantia",fuenteNormal))
-                .addText(new Text(garantia + ",",fuenteNormalNegrita))
-                .addText(new Text("fecha de inicio",fuenteNormal))
-                .addText(new Text(fechaInicio + ",",fuenteNormalNegrita))
-                .addText(new Text("en favor de",fuenteNormal))
-                .addText(new Text(grado,fuenteNormalNegrita))
-                .addText(new Text(nombreAfiliado + ",",fuenteNormalNegrita))
-                .addText(new Text("con numero de carnet de identidad",fuenteNormal))
-                .addText(new Text(carnetIdentidad + ".",fuenteNormalNegrita))
+                .addText(new Text("Prestamo",fuenteInfoEspaciado))
+                .addText(new Text(prestamo + ",",fuenteInfoNegritaEspaciado))
+                .addText(new Text("modalidad",fuenteInfoEspaciado))
+                .addText(new Text(modalidad + ",",fuenteInfoNegritaEspaciado))
+                .addText(new Text("con tipo de garantia",fuenteInfoEspaciado))
+                .addText(new Text(garantia + ",",fuenteInfoNegritaEspaciado))
+                .addText(new Text("fecha de inicio",fuenteInfoEspaciado))
+                .addText(new Text(fechaInicio + ",",fuenteInfoNegritaEspaciado))
+                .addText(new Text("en favor de",fuenteInfoEspaciado))
+                .addText(new Text(grado,fuenteInfoNegritaEspaciado))
+                .addText(new Text(nombreAfiliado + ",",fuenteInfoNegritaEspaciado))
+                .addText(new Text("con numero de carnet de identidad",fuenteInfoEspaciado))
+                .addText(new Text(carnetIdentidad + ".",fuenteInfoNegritaEspaciado))
                 .build();
 
         paragraph.draw(contentStream);
     }
-
-
 }

@@ -9,7 +9,6 @@ import subsistema.pdf.lib.basic.Style;
 import subsistema.pdf.lib.text.complex.ParagraphMultipleStyle;
 import subsistema.pdf.lib.text.complex.Text;
 import subsistema.pdf.lib.text.complex.Word;
-import subsistema.pdf.lib.text.complex.WordLine;
 import subsistema.pdf.services.GeneradorFormulariosService;
 
 import java.awt.*;

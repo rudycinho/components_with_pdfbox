@@ -1,6 +1,5 @@
 package subsistema.pdf.form;
 
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import subsistema.pdf.dto.AfiliadoDTOPDF;
 import subsistema.pdf.dto.SucursalDTOPDF;
 import subsistema.pdf.dto.UsuarioDTOPDF;
@@ -19,7 +18,7 @@ import subsistema.pdf.lib.tables.SimpleTable;
 import subsistema.pdf.lib.text.simple.MultipleParagraph;
 import subsistema.pdf.utils.factories.EasyComponentsFactory;
 import subsistema.pdf.utils.factories.GeneradorFormularioFactory;
-import subsistema.pdf.utils.settings.Model;
+import subsistema.pdf.utils.settings.*;
 
 import java.awt.Color;
 import java.io.File;
@@ -29,42 +28,20 @@ import java.util.List;
 
 public class FormularioAfiliacion {
 
-	private final float maxY         = Model.MODEL_1.getMaxY();
-	private final float maxX         = Model.MODEL_1.getMaxX();
-	private final float thickness    = Model.MODEL_1.getThickness();
-	private final float marginStartX = Model.MODEL_1.getMarginStartX();
-	private final float marginEndX   = Model.MODEL_1.getMarginEndX();
-	private final float relativePositionX = 5f;
-	private final float relativePositionY = 5f;
+	private final float maxY         = Models.MODEL_1.getMaxY();
+	private final float maxX         = Models.MODEL_1.getMaxX();
+	private final float thickness    = Models.MODEL_1.getThickness();
+	private final float marginStartX = Models.MODEL_1.getMarginStartX();
+	private final float marginEndX   = Models.MODEL_1.getMarginEndX();
+	private final FontEnum fontEnum  = Models.MODEL_1.getFont();
 
-	private final PDFont fuenteBasica        = Model.MODEL_1.getFuenteBasica();
-	private final PDFont fuenteBasicaNegrita = Model.MODEL_1.getFuenteBasicaNegrita();
-
-	private final Style fuenteSubtitulo = Style.builder()
-			.addTextFont(fuenteBasicaNegrita)
-			.addFontSize(14f)
-			.addTextColor(Color.BLACK)
-			.addLeading(0.8f)
-			.build();
-
-	private final Style fuenteNormal = Style.builder()
-			.addTextFont(fuenteBasica)
-			.addFontSize(10.5f)
-			.addTextColor(Color.BLACK)
-			.addLeading(0.8f)
-			.build();
-
-	private final Style fuenteNormalNegrita = Style.builder()
-			.addTextFont(fuenteBasicaNegrita)
-			.addFontSize(10.5f)
-			.addTextColor(Color.BLACK)
-			.addLeading(0.8f)
-			.build();
-
-	private final Style fuenteDiminuta = Style.builder()
-			.addFontSize(8)
-			.addTextFont(fuenteBasica)
-			.build();
+	private Style fuenteSubtitulo;
+	private Style fuenteNormalNegrita;
+	private Style fuenteNormal;
+	private Style fuenteNormalEspaciada;
+	private Style fuenteDiminuta;
+	private Style fuenteNormalNegritaEspaciada;
+	private Style fuenteNormalSemiEspaciada;
 
 	public FormularioAfiliacion(String ruta,
                                 AfiliadoDTOPDF afiliado,
@@ -74,17 +51,28 @@ public class FormularioAfiliacion {
                                 Date fechaExportacion) throws IOException {
 
 		PDDocument doc = new PDDocument();
+
+		FontGroup fontGroup = FontGroup.getFontGroup(fontEnum,doc);
+
+		fuenteSubtitulo                = Style.getStyle(fontGroup, StyleEnum.SUBTITLE_BOLD);
+		fuenteNormal                   = Style.getStyle(fontGroup, StyleEnum.DATA_NORMAL);
+		fuenteNormalNegrita            = Style.getStyle(fontGroup, StyleEnum.DATA_BOLD);
+		fuenteNormalNegritaEspaciada   = Style.getStyle(fontGroup, StyleEnum.DATA_BOLD_SPACED);
+		fuenteNormalSemiEspaciada      = Style.getStyle(fontGroup, StyleEnum.DATA_SEMI_SPACED);
+		fuenteNormalEspaciada          = Style.getStyle(fontGroup, StyleEnum.DATA_NORMAL_SPACED);
+		fuenteDiminuta                 = Style.getStyle(fontGroup, StyleEnum.SMALL_NORMAL);
+
 		PDPage page1 = new PDPage(new PDRectangle(maxX,maxY));
 
 		doc.addPage(page1);
 		PDPageContentStream contentStream1 = new PDPageContentStream(doc, page1);
 
-		GeneradorFormularioFactory.crearMargen(contentStream1,Model.MODEL_1);
-		GeneradorFormularioFactory.crearCabecera(contentStream1,doc,Model.MODEL_1);
-		GeneradorFormularioFactory.crearInfo(contentStream1,sucursal,Model.MODEL_1);
-		GeneradorFormularioFactory.crearFechaExportacion(contentStream1,fechaExportacion,Model.MODEL_1);
-		GeneradorFormularioFactory.crearUsuarioExportador(contentStream1,usuarioEditor,Model.MODEL_1);
-		GeneradorFormularioFactory.crearTitulo(contentStream1,"FORMULARIO A-01\nSOLICITUD DE AFILIACION",Model.MODEL_1);
+		GeneradorFormularioFactory.crearMargen(contentStream1, Model1.MODEL_1);
+		GeneradorFormularioFactory.crearCabecera(contentStream1,doc, Model1.MODEL_1);
+		GeneradorFormularioFactory.crearInfo(contentStream1,sucursal, Model1.MODEL_1);
+		GeneradorFormularioFactory.crearFechaExportacion(contentStream1,fechaExportacion, Model1.MODEL_1);
+		GeneradorFormularioFactory.crearUsuarioExportador(contentStream1,usuarioEditor, Model1.MODEL_1);
+		GeneradorFormularioFactory.crearTitulo(contentStream1,"FORMULARIO A-01\nSOLICITUD DE AFILIACION", Model1.MODEL_1);
 
 		crearSubTitulosAfiliado(contentStream1);
 		crearFechaRegistroAfiliado(contentStream1, afiliado);
@@ -114,8 +102,8 @@ public class FormularioAfiliacion {
 					estados);
 
 			for(PDPageContentStream contentStream : contentStreams){
-				GeneradorFormularioFactory.crearMargen(contentStream, Model.MODEL_1);
-				GeneradorFormularioFactory.crearInfo(contentStream,sucursal, Model.MODEL_1);
+				GeneradorFormularioFactory.crearMargen(contentStream, Model1.MODEL_1);
+				GeneradorFormularioFactory.crearInfo(contentStream,sucursal, Model1.MODEL_1);
 			}
 
 			for(PDPageContentStream e : contentStreams)
@@ -130,8 +118,8 @@ public class FormularioAfiliacion {
 			PDPageContentStream contentStream) throws IOException {
 
 		MultipleParagraph.builder()
-				.addStartX(marginStartX + thickness + relativePositionX)
-				.addStartY(maxY - 190 - relativePositionY)
+				.addStartX(marginStartX + thickness + 5f)
+				.addStartY(maxY - 190 - 5f)
 				.addWidth(180f)
 				.addTextContent("DATOS DEL SOLICITANTE")
 				.addAlignment(Alignment.LEFT)
@@ -173,13 +161,6 @@ public class FormularioAfiliacion {
 			PDPageContentStream contentStream,
 			AfiliadoDTOPDF afiliado) throws IOException {
 
-		Style fuenteNormal = Style.builder()
-				.addTextFont(fuenteBasica)
-				.addFontSize(10.5f)
-				.addTextColor(Color.BLACK)
-				.addLeading(0.9f)
-				.build();
-
 		float width1 = 150f;
 		float width2 = 130f;
 		float width3 = 130f;
@@ -187,25 +168,25 @@ public class FormularioAfiliacion {
 		float initY = 220;
 		boolean margin = false;
 
-		Cell c11 = EasyComponentsFactory.getSimpleCellFromText("GRADO: ", fuenteNormalNegrita, width1, 0f, 2.5f, margin);
+		Cell c11 = EasyComponentsFactory.getSimpleCellFromText("GRADO: "              , fuenteNormalNegrita, width1, 0f, 2.5f, margin);
 		Cell c12 = EasyComponentsFactory.getSimpleCellFromText("NOMBRES Y APELLIDOS: ", fuenteNormalNegrita, width1, 0f, 2.5f, margin);
-		Cell c13 = EasyComponentsFactory.getSimpleCellFromText("N* DE CI: ", fuenteNormalNegrita, width1, 0f, 2.5f, margin);
-		Cell c14 = EasyComponentsFactory.getSimpleCellFromText("FECHA DE NACIMIENTO ", fuenteNormalNegrita, width3, 0f, 2.5f, margin);
-		Cell c15 = EasyComponentsFactory.getSimpleCellFromText("N* TELEFONICO : ", fuenteNormalNegrita, width1, 0f, 2.5f, margin);
-		Cell c16 = EasyComponentsFactory.getSimpleCellFromText("N* DE CELULAR: ", fuenteNormalNegrita, width3, 0f, 2.5f, margin);
-		Cell c17 = EasyComponentsFactory.getSimpleCellFromText("CORREO ELECTRONICO: ", fuenteNormalNegrita, width1, 0f, 2.5f, margin);
-		Cell c18 = EasyComponentsFactory.getSimpleCellFromText("UNIDAD POLICIAL: ", fuenteNormalNegrita, width1, 0f, 2.5f, margin);
-		Cell c19 = EasyComponentsFactory.getSimpleCellFromText("DEPARTAMENTO: ", fuenteNormalNegrita, width1, 0f, 2.5f, margin);
+		Cell c13 = EasyComponentsFactory.getSimpleCellFromText("N* DE CI: "           , fuenteNormalNegrita, width1, 0f, 2.5f, margin);
+		Cell c14 = EasyComponentsFactory.getSimpleCellFromText("FECHA DE NACIMIENTO " , fuenteNormalNegrita, width3, 0f, 2.5f, margin);
+		Cell c15 = EasyComponentsFactory.getSimpleCellFromText("N* TELEFONICO : "     , fuenteNormalNegrita, width1, 0f, 2.5f, margin);
+		Cell c16 = EasyComponentsFactory.getSimpleCellFromText("N* DE CELULAR: "      , fuenteNormalNegrita, width3, 0f, 2.5f, margin);
+		Cell c17 = EasyComponentsFactory.getSimpleCellFromText("CORREO ELECTRONICO: " , fuenteNormalNegrita, width1, 0f, 2.5f, margin);
+		Cell c18 = EasyComponentsFactory.getSimpleCellFromText("UNIDAD POLICIAL: "    , fuenteNormalNegrita, width1, 0f, 2.5f, margin);
+		Cell c19 = EasyComponentsFactory.getSimpleCellFromText("DEPARTAMENTO: "       , fuenteNormalNegrita, width1, 0f, 2.5f, margin);
 
-		Cell c21 = EasyComponentsFactory.getSimpleCellFromText(afiliado.getGrado(), fuenteNormal, width2 + width3 + width4, 0f, 2.5f, margin);
-		Cell c22 = EasyComponentsFactory.getSimpleCellFromText(afiliado.getNombreCompleto(), fuenteNormal, width2 + width3 + width4, 0f, 2.5f, margin);
-		Cell c23 = EasyComponentsFactory.getSimpleCellFromText(afiliado.getCarnetIdentidad(), fuenteNormal, width2, 0f, 2.5f, margin);
-		Cell c24 = EasyComponentsFactory.getSimpleCellFromText(afiliado.getFechaNacimiento(), fuenteNormal, width4, 0f, 2.5f, margin);
-		Cell c25 = EasyComponentsFactory.getSimpleCellFromText(afiliado.getTelefono(), fuenteNormal, width2, 0f, 2.5f, margin);
-		Cell c26 = EasyComponentsFactory.getSimpleCellFromText(afiliado.getCelular(), fuenteNormal, width4, 0f, 2.5f, margin);
-		Cell c27 = EasyComponentsFactory.getSimpleCellFromText(afiliado.getCorreoElectronico(), fuenteNormal, width2 + width3 + width4, 0f, 2.5f, margin);
-		Cell c28 = EasyComponentsFactory.getSimpleCellFromText(afiliado.getUnidadPolicial(), fuenteNormal, width2 + width3 + width4, 0f, 2.5f, margin);
-		Cell c29 = EasyComponentsFactory.getSimpleCellFromText(afiliado.getDepartamento(), fuenteNormal, width2 + width3 + width4, 0f, 2.5f, margin);
+		Cell c21 = EasyComponentsFactory.getSimpleCellFromText(afiliado.getGrado()             , fuenteNormalSemiEspaciada, width2 + width3 + width4, 0f, 2.5f, margin);
+		Cell c22 = EasyComponentsFactory.getSimpleCellFromText(afiliado.getNombreCompleto()    , fuenteNormalSemiEspaciada, width2 + width3 + width4, 0f, 2.5f, margin);
+		Cell c23 = EasyComponentsFactory.getSimpleCellFromText(afiliado.getCarnetIdentidad()   , fuenteNormalSemiEspaciada, width2, 0f, 2.5f, margin);
+		Cell c24 = EasyComponentsFactory.getSimpleCellFromText(afiliado.getFechaNacimiento()   , fuenteNormalSemiEspaciada, width4, 0f, 2.5f, margin);
+		Cell c25 = EasyComponentsFactory.getSimpleCellFromText(afiliado.getTelefono()          , fuenteNormalSemiEspaciada, width2, 0f, 2.5f, margin);
+		Cell c26 = EasyComponentsFactory.getSimpleCellFromText(afiliado.getCelular()           , fuenteNormalSemiEspaciada, width4, 0f, 2.5f, margin);
+		Cell c27 = EasyComponentsFactory.getSimpleCellFromText(afiliado.getCorreoElectronico() , fuenteNormalSemiEspaciada, width2 + width3 + width4, 0f, 2.5f, margin);
+		Cell c28 = EasyComponentsFactory.getSimpleCellFromText(afiliado.getUnidadPolicial()    , fuenteNormalSemiEspaciada, width2 + width3 + width4, 0f, 2.5f, margin);
+		Cell c29 = EasyComponentsFactory.getSimpleCellFromText(afiliado.getDepartamento()      , fuenteNormalSemiEspaciada, width2 + width3 + width4, 0f, 2.5f, margin);
 
 		float auxY = maxY - initY - 2.5f;
 
@@ -226,16 +207,9 @@ public class FormularioAfiliacion {
 			PDPageContentStream contentStream,
 			AfiliadoDTOPDF afiliado) throws IOException {
 
-		Style fuenteNormal = Style.builder()
-				.addTextFont(fuenteBasica)
-				.addFontSize(10.5f)
-				.addTextColor(Color.BLACK)
-				.addLeading(0.9f)
-				.build();
-
 		MultipleParagraph.builder()
-				.addStartX(marginStartX + thickness + 2 * relativePositionX)
-				.addStartY(maxY - 595- 2 * relativePositionY)
+				.addStartX(marginStartX + thickness + 2 * 5f)
+				.addStartY(maxY - 595- 2 * 5f)
 				.addWidth(135f)
 				.addTextContent("OBSERVACIONES")
 				.addAlignment(Alignment.LEFT)
@@ -244,8 +218,8 @@ public class FormularioAfiliacion {
 				.draw(contentStream);
 
 		MultipleParagraph.builder()
-				.addStartX(marginStartX + thickness + (2 * relativePositionX))
-				.addStartY(maxY - 610 - (2 * relativePositionY))
+				.addStartX(marginStartX + thickness + (2 * 5f))
+				.addStartY(maxY - 610 - (2 * 5f))
 				.addWidth(500f)
 				.addTextContent(afiliado.getObservaciones())
 				.addAlignment(Alignment.LEFT)
@@ -257,12 +231,12 @@ public class FormularioAfiliacion {
 	private void crearFirmaAfiliado(
 			PDPageContentStream contentStream) throws IOException {
 
-		float width1 = 160f;
-		float initY = 510;
+		float width1   = 160f;
+		float initY    = 510;
 		boolean margin = false;
 
 		Cell c11 = EasyComponentsFactory.getSimpleCellFromText("........................", fuenteNormal, width1, 0f, 2.5f, Alignment.CENTER, margin);
-		Cell c12 = EasyComponentsFactory.getSimpleCellFromText("FIRMA DEL SOLICITANTE", fuenteNormalNegrita, width1, 0f, 2.5f, Alignment.CENTER, margin);
+		Cell c12 = EasyComponentsFactory.getSimpleCellFromText("FIRMA DEL SOLICITANTE"   , fuenteNormalNegrita, width1, 0f, 2.5f, Alignment.CENTER, margin);
 
 		float auxY = maxY - initY;
 		float left = marginStartX + (maxX - (marginStartX + marginEndX) - width1) / 2;
@@ -276,12 +250,6 @@ public class FormularioAfiliacion {
 
 	private void crearCodigoAfiliado(
 			PDPageContentStream contentStream) throws IOException {
-		Style fuenteNormal = Style.builder()
-				.addTextFont(fuenteBasica)
-				.addFontSize(10.5f)
-				.addTextColor(Color.BLACK)
-				.addLeading(1f)
-				.build();
 
 		float width1 = 75f;
 		float width2 = 75f;
@@ -289,7 +257,7 @@ public class FormularioAfiliacion {
 		boolean margin = false;
 
 		Cell c11 = EasyComponentsFactory.getSimpleCellFromText("CODIGO: ", fuenteNormalNegrita, width1, 0f, 2.5f, margin);
-		Cell c21 = EasyComponentsFactory.getSimpleCellFromText("", fuenteNormal, width2, 0f, 2.5f, margin);
+		Cell c21 = EasyComponentsFactory.getSimpleCellFromText(""        , fuenteNormalEspaciada, width2, 0f, 2.5f, margin);
 
 		float auxY = maxY - initY;
 
@@ -342,7 +310,7 @@ public class FormularioAfiliacion {
 		boolean margin = false;
 
 		Cell c11 = EasyComponentsFactory.getSimpleCellFromText("RECEPCIONADO: ", fuenteNormalNegrita, width1, 0f, 2.5f, margin);
-		Cell c21 = EasyComponentsFactory.getSimpleCellFromText("", fuenteNormal, width2, 0f, 2.5f, margin);
+		Cell c21 = EasyComponentsFactory.getSimpleCellFromText(""              , fuenteNormal       , width2, 0f, 2.5f, margin);
 
 		float auxY = maxY - initY;
 
@@ -365,8 +333,8 @@ public class FormularioAfiliacion {
 			PDPageContentStream contentStream) throws IOException {
 
 		MultipleParagraph.builder()
-				.addStartX(marginStartX + thickness + relativePositionX)
-				.addStartY(maxY - 40 - relativePositionY)
+				.addStartX(marginStartX + thickness + 5f)
+				.addStartY(maxY - 40 - 5f)
 				.addWidth(250f)
 				.addTextContent("HISTORIAL REAFILIACIONES")
 				.addAlignment(Alignment.LEFT)
@@ -396,30 +364,16 @@ public class FormularioAfiliacion {
 		List<Float> widths  = Arrays.asList(30f, 195f, 195f,85f);
 		List<String> header = Arrays.asList("N*", "Causa Reafiliacion", "Observaciones","Fecha Solicitud");
 
-		Style fuenteNormal = Style.builder()
-				.addTextFont(fuenteBasica)
-				.addFontSize(10.5f)
-				.addTextColor(Color.BLACK)
-				.addLeading(1f)
-				.build();
-
-		Style fuenteNormalNegrita = Style.builder()
-				.addTextFont(fuenteBasicaNegrita)
-				.addFontSize(10.5f)
-				.addTextColor(Color.BLACK)
-				.addLeading(0.95f)
-				.build();
-
 		Column headerColumn = EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyle(
-				header, widths, fuenteNormalNegrita, Alignment.LEFT);
+				header, widths, fuenteNormalNegritaEspaciada, Alignment.LEFT);
 
 		Column anotherHeaderColumn = EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyle(
-				header, widths, fuenteNormalNegrita, Alignment.LEFT);
+				header, widths, fuenteNormalNegritaEspaciada, Alignment.LEFT);
 
 		List<Column> bodyColumns = new LinkedList<>();
 
 		for (List<String> auxList : listOfList)
-			bodyColumns.add(EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyle(auxList, widths, fuenteNormal, Alignment.LEFT));
+			bodyColumns.add(EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyle(auxList, widths, fuenteNormalEspaciada, Alignment.LEFT));
 
 		List<RecursiveTable> tables = EasyComponentsFactory.getHeaderTable(
 				marginStartX + thickness, maxY - 65, maxY - 40, headerColumn, anotherHeaderColumn, bodyColumns, 45);

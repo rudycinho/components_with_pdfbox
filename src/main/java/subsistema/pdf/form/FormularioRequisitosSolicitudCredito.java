@@ -7,7 +7,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import subsistema.pdf.utils.factories.GeneradorFormularioFactory;
-import subsistema.pdf.utils.settings.Model;
+import subsistema.pdf.utils.settings.Model1;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,13 +35,13 @@ public class FormularioRequisitosSolicitudCredito {
         for(int i=0;i<totalPages;i++) {
             page = doc.getPage(i);
             contentStream = new PDPageContentStream(doc, page, true, true);
-            GeneradorFormularioFactory.crearInfo(contentStream, sucursal, Model.MODEL_1);
-            GeneradorFormularioFactory.crearMargen(contentStream, Model.MODEL_1);
+            GeneradorFormularioFactory.crearInfo(contentStream, sucursal, Model1.MODEL_1);
+            GeneradorFormularioFactory.crearMargen(contentStream, Model1.MODEL_1);
             if(i==0) {
-                GeneradorFormularioFactory.crearCabecera(contentStream, doc, Model.MODEL_1);
-                GeneradorFormularioFactory.crearFechaExportacion(contentStream, fechaExportacion, Model.MODEL_1);
-                GeneradorFormularioFactory.crearUsuarioExportador(contentStream, usuarioEditor, Model.MODEL_1);
-                GeneradorFormularioFactory.crearTitulo(contentStream, "REQUISITOS PARA\nSOLITICITUD DE CREDITO", Model.MODEL_1);
+                GeneradorFormularioFactory.crearCabecera(contentStream, doc, Model1.MODEL_1);
+                GeneradorFormularioFactory.crearFechaExportacion(contentStream, fechaExportacion, Model1.MODEL_1);
+                GeneradorFormularioFactory.crearUsuarioExportador(contentStream, usuarioEditor, Model1.MODEL_1);
+                GeneradorFormularioFactory.crearTitulo(contentStream, "REQUISITOS PARA\nSOLITICITUD DE CREDITO", Model1.MODEL_1);
             }
             contentStream.close();
         }

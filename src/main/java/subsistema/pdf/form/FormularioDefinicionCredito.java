@@ -56,13 +56,13 @@ public class FormularioDefinicionCredito {
         for(int i=0;i<totalPages;i++) {
             page = doc.getPage(i);
             contentStream = new PDPageContentStream(doc, page, true, true);
-            GeneradorFormularioFactory.crearInfo(contentStream, sucursal, Model1.MODEL_1);
-            GeneradorFormularioFactory.crearMargen(contentStream, Model1.MODEL_1);
+            GeneradorFormularioFactory.crearInfo(contentStream, sucursal, Models.MODEL_1, Style.getStyle(fontGroup,StyleEnum.FOOTER));
+            GeneradorFormularioFactory.crearMargen(contentStream, Models.MODEL_1);
             if(i==0) {
-                GeneradorFormularioFactory.crearCabecera(contentStream, doc, Model1.MODEL_1);
-                GeneradorFormularioFactory.crearFechaExportacion(contentStream, fechaExportacion, Model1.MODEL_1);
-                GeneradorFormularioFactory.crearUsuarioExportador(contentStream, usuarioEditor, Model1.MODEL_1);
-                GeneradorFormularioFactory.crearTitulo(contentStream, "DOCUMENTOS INICIALES\nRECEPCIONADOS", Model1.MODEL_1);
+                GeneradorFormularioFactory.crearCabecera(contentStream, doc, Models.MODEL_1,Style.getStyle(fontGroup,StyleEnum.HEADER));
+                GeneradorFormularioFactory.crearFechaExportacion(contentStream, fechaExportacion, Models.MODEL_1,Style.getStyle(fontGroup,StyleEnum.OWNER));
+                GeneradorFormularioFactory.crearUsuarioExportador(contentStream, usuarioEditor, Models.MODEL_1, Style.getStyle(fontGroup,StyleEnum.OWNER_BOLD),Style.getStyle(fontGroup,StyleEnum.OWNER));
+                GeneradorFormularioFactory.crearTitulo(contentStream, "DOCUMENTOS INICIALES\nRECEPCIONADOS", Models.MODEL_1, Style.getStyle(fontGroup,StyleEnum.TITLE));
 
                 crearSubTitulosDatos(contentStream);
                 crearDatosAfiliadoDefinicion(contentStream, definicion);

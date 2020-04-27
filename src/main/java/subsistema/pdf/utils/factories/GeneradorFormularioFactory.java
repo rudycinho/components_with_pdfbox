@@ -10,9 +10,8 @@ import subsistema.pdf.lib.text.simple.MultipleParagraph;
 import subsistema.pdf.lib.shapes.Rectangle;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import subsistema.pdf.utils.Fecha;
-import subsistema.pdf.utils.settings.Settings1;
+import subsistema.pdf.utils.settings.Model;
 
 import java.awt.Color;
 import java.io.IOException;
@@ -23,10 +22,12 @@ public class GeneradorFormularioFactory {
             "/home/rudy/polbol.png";
     private static final String imagenCovipol =
             "/home/rudy/covipol.png";
+    private static final String imagenFecha =
+            "/home/rudy/empresasim/sip/backendsip/src/main/resources/north_arrow.png";
 
     public static void crearMargen(
             PDPageContentStream contentStream,
-            Settings1 model) throws IOException {
+            Model model) throws IOException {
         float marginStartX = model.getMarginStartX();
         float marginEndX   = model.getMarginEndX();
         float maxX         = model.getMaxX();
@@ -36,22 +37,14 @@ public class GeneradorFormularioFactory {
 
     public static void crearCabecera(
             PDPageContentStream contentStream,
-            PDDocument document, Settings1 model) throws IOException {
+            PDDocument document,
+            Model model, Style fuenteCabecera) throws IOException {
 
         float marginStartX = model.getMarginStartX();
         float marginEndX   = model.getMarginEndX();
         float maxX         = model.getMaxX();
         float maxY         = model.getMaxY();
         float thickness    = model.getThickness();
-
-        PDFont fuenteBasicaNegrita = model.getFuenteBasicaNegrita();
-
-        Style fuenteCabecera = Style.builder()
-                .addTextFont(fuenteBasicaNegrita)
-                .addFontSize(18)
-                .addLeading(1f)
-                .addTextColor(Color.BLACK)
-                .build();
 
         EasyComponentsFactory.drawImage(
                 contentStream, document, imagenPolicia,
@@ -99,17 +92,12 @@ public class GeneradorFormularioFactory {
 
     public static void crearInfo(
             PDPageContentStream contentStream,
-            SucursalDTOPDF sucursalDTO, Settings1 model) throws IOException {
+            SucursalDTOPDF sucursalDTO,
+            Model model, Style footer) throws IOException {
 
-        PDFont fuenteBasica = model.getFuenteBasica();
         float marginStartX = model.getMarginStartX();
         float marginEndX   = model.getMarginEndX();
         float maxX         = model.getMaxX();
-
-        Style fuenteDiminuta = Style.builder()
-                .addFontSize(8)
-                .addTextFont(fuenteBasica)
-                .build();
 
         String informacion = String.format(
                 "%s: %s\n%s: %s  -  %s: %s  -  %s: %s",
@@ -127,7 +115,7 @@ public class GeneradorFormularioFactory {
                 .addWidth(maxX - marginStartX - marginEndX - (2 * distance))
                 .addAlignment(Alignment.CENTER)
                 .addTextContent(informacion)
-                .addStyle(fuenteDiminuta)
+                .addStyle(footer)
                 .build()
                 .draw(contentStream);
     }
@@ -135,9 +123,9 @@ public class GeneradorFormularioFactory {
     public static void crearFechaExportacion(
             PDPageContentStream contentStream,
             Date fechaExportacion,
-            Settings1 model) throws IOException {
+            Model model,
+            Style fuenteNormal) throws IOException {
 
-        PDFont fuenteBasica = model.getFuenteBasica();
         float marginEndX   = model.getMarginEndX();
         float maxX         = model.getMaxX();
         float maxY         = model.getMaxY();
@@ -145,12 +133,6 @@ public class GeneradorFormularioFactory {
 
         float auxWidth = 120f;
         Fecha fecha = new Fecha(fechaExportacion);
-
-        Style fuenteNormal = Style.builder()
-                .addFontSize(8.5f)
-                .addTextFont(fuenteBasica)
-                .addTextColor(Color.BLACK)
-                .build();
 
         MultipleParagraph.builder()
                 .addStartX(maxX - (marginEndX + thickness + auxWidth) + 5)
@@ -166,25 +148,13 @@ public class GeneradorFormularioFactory {
     public static void crearUsuarioExportador(
             PDPageContentStream contentStream,
             UsuarioDTOPDF usuarioEditor,
-            Settings1 model) throws IOException {
+            Model model,
+            Style fuenteNegrita,
+            Style fuente) throws IOException {
 
-        PDFont fuenteBasica = model.getFuenteBasica();
-        PDFont fuenteBasicaNegrita = model.getFuenteBasicaNegrita();
         float marginStartX = model.getMarginStartX();
         float maxY         = model.getMaxY();
         float thickness    = model.getThickness();
-
-        Style fuenteNormal = Style.builder()
-                .addFontSize(8.5f)
-                .addTextFont(fuenteBasica)
-                .addTextColor(Color.BLACK)
-                .build();
-
-        Style fuenteNormalNegrita = Style.builder()
-                .addFontSize(8.5f)
-                .addTextFont(fuenteBasicaNegrita)
-                .addTextColor(Color.BLACK)
-                .build();
 
         float width1 = 100f;
         float width2 = 240f;
@@ -195,7 +165,7 @@ public class GeneradorFormularioFactory {
                 .addWidth(width1)
                 .addTextContent("Generado por: ")
                 .addAlignment(Alignment.LEFT)
-                .addStyle(fuenteNormalNegrita)
+                .addStyle(fuenteNegrita)
                 .build()
                 .draw(contentStream);
 
@@ -205,7 +175,7 @@ public class GeneradorFormularioFactory {
                 .addWidth(width2)
                 .addTextContent(usuarioEditor.getNombreCompleto())
                 .addAlignment(Alignment.LEFT)
-                .addStyle(fuenteNormal)
+                .addStyle(fuente)
                 .build()
                 .draw(contentStream);
     }
@@ -213,18 +183,10 @@ public class GeneradorFormularioFactory {
     public static void crearTitulo(
             PDPageContentStream contentStream,
             String titulo,
-            Settings1 model) throws IOException {
+            Model model, Style fuenteTitulo) throws IOException {
 
-        PDFont fuenteBasicaNegrita = model.getFuenteBasicaNegrita();
         float maxX         = model.getMaxX();
         float maxY         = model.getMaxY();
-
-        Style fuenteTitulo = Style.builder()
-                .addTextFont(fuenteBasicaNegrita)
-                .addFontSize(15)
-                .addTextColor(Color.BLACK)
-                .addLeading(0.9f)
-                .build();
 
         MultipleParagraph.builder()
                 .addStartX(100 + 80 + 5)
@@ -241,29 +203,21 @@ public class GeneradorFormularioFactory {
             PDPageContentStream contentStream,
             int numeroPagina,
             int totalPaginas,
-            Settings1 model
-    ) throws IOException {
+            Model model,
+            Style fuenteNumero) throws IOException {
 
-        PDFont fuenteBasicaNegrita = model.getFuenteBasicaNegrita();
         float maxY         = model.getMaxY();
-
-        Style fuenteNormalNegrita = Style.builder()
-                .addTextFont(fuenteBasicaNegrita)
-                .addFontSize(9f)
-                .addTextColor(Color.BLACK)
-                .addLeading(1f)
-                .build();
 
         Cell cell1 = EasyComponentsFactory.getSimpleCellFromText(
                 "SISTEMA INTEGRAL DE PRESTAMOS",
-                fuenteNormalNegrita,
+                fuenteNumero,
                 700,
                 0, 0,
                 Alignment.CENTER, false);
 
         Cell cell2 = EasyComponentsFactory.getSimpleCellFromText(
                 String.format("%d/%d", numeroPagina, totalPaginas),
-                fuenteNormalNegrita,
+                fuenteNumero,
                 30,
                 0, 0,
                 Alignment.CENTER, false);
@@ -279,6 +233,22 @@ public class GeneradorFormularioFactory {
                 .draw(contentStream);
     }
 
+    public static void dibujarFlecha(
+            PDPageContentStream contentStream,
+            PDDocument document,
+            Model model) throws IOException {
+
+
+        float marginEndX = model.getMarginStartX();
+        float maxX       = model.getMaxX();
+        float maxY       = model.getMaxY();
+        float thickness  = model.getThickness();
+
+        EasyComponentsFactory.drawImage(
+                contentStream, document, imagenFecha,
+                maxX - (marginEndX+thickness+70),maxY-440-90,60,80);
+
+    }
 
 
 }

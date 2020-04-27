@@ -60,10 +60,10 @@ public class FormularioCarpetaComentarios {
         PDPageContentStream contentStream = new PDPageContentStream(doc, page);
         List<PDPageContentStream> contentStreams = new LinkedList<>();
 
-        GeneradorFormularioFactory.crearCabecera(contentStream,doc, Model1.MODEL_1);
-        GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Model1.MODEL_1);
-        GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Model1.MODEL_1);
-        GeneradorFormularioFactory.crearTitulo(contentStream,"COMENTARIOS\nDE CARPETA DE CREDITO", Model1.MODEL_1);
+        GeneradorFormularioFactory.crearCabecera(contentStream,doc, Models.MODEL_1, Style.getStyle(fontGroup,StyleEnum.HEADER));
+        GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Models.MODEL_1, Style.getStyle(fontGroup,StyleEnum.OWNER));
+        GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Models.MODEL_1, Style.getStyle(fontGroup,StyleEnum.OWNER_BOLD),Style.getStyle(fontGroup,StyleEnum.OWNER));
+        GeneradorFormularioFactory.crearTitulo(contentStream,"COMENTARIOS\nDE CARPETA DE CREDITO", Models.MODEL_1, Style.getStyle(fontGroup,StyleEnum.TITLE));
 
         crearInfoAfiliado(contentStream,comentarios);
         crearLineaSeparacionDesafiliado(contentStream);
@@ -75,8 +75,8 @@ public class FormularioCarpetaComentarios {
                 comentarios);
 
         for(PDPageContentStream contentStream1 : contentStreams){
-            GeneradorFormularioFactory.crearMargen(contentStream1, Model1.MODEL_1);
-            GeneradorFormularioFactory.crearInfo(contentStream1,sucursal, Model1.MODEL_1);
+            GeneradorFormularioFactory.crearMargen(contentStream1, Models.MODEL_1);
+            GeneradorFormularioFactory.crearInfo(contentStream1,sucursal, Models.MODEL_1, Style.getStyle(fontGroup,StyleEnum.FOOTER));
         }
 
         for(PDPageContentStream e : contentStreams)
@@ -136,7 +136,7 @@ public class FormularioCarpetaComentarios {
 
         for (ComentarioDTOPDF comentario : comentarios.getComentarios()) {
             column = EasyComponentsFactory.getSimpleColumn(
-                    EasyComponentsFactory.getSimpleCell(0f, 7.5f, false,
+                    EasyComponentsFactory.getSimpleCell(0f, 10f, false,
                             EasyComponentsFactory.getSimpleTable(0, 0,
                                     EasyComponentsFactory.getSimpleColumn(
                                             EasyComponentsFactory.getSimpleCellFromText("Comentario realizado por: ",fuenteComentarioNegrita,160f,5f,2.5f,Alignment.CENTER,false),
@@ -178,7 +178,10 @@ public class FormularioCarpetaComentarios {
                                             Arrays.asList(500f),
                                             Arrays.asList(fuenteNormalSemiEspaciada),  Alignment.LEFT,
                                             5f, 5f,
-                                            false,false,Color.BLACK,Color.WHITE)
+                                            false,false,Color.BLACK,Color.WHITE),
+                                    EasyComponentsFactory.getSimpleColumn(
+                                            EasyComponentsFactory.getSimpleCellRectangle(500f,0f,0f,false)
+                                    )
                             )
                     )
             );

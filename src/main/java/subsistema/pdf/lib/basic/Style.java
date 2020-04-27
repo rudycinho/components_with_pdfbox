@@ -143,11 +143,87 @@ public class Style {
             style.fontSize = 9.5f;
             style.textFont = fontGroup.getBold();
             style.leading  = 0.8f;
+        }else if(styleEnum == StyleEnum.TABLE_MINIMAL_BOLD_SPACED){
+            style.fontSize = 9.5f;
+            style.textFont = fontGroup.getBold();
+            style.leading  = 1.0f;
         }else if(styleEnum == StyleEnum.TABLE_MINIMAL_BOLD_EXTRA_SPACED){
             style.fontSize = 9.5f;
             style.textFont = fontGroup.getBold();
             style.leading  = 1.2f;
+        }else if(styleEnum == StyleEnum.TABLE_LESS_MINIMAL_NORMAL_SPACED){
+            style.fontSize = 9f;
+            style.textFont = fontGroup.getBold();
+            style.leading  = 1.0f;
+        }else if(styleEnum == StyleEnum.TABLE_LESS_MINIMAL_BOLD){
+            style.fontSize = 9f;
+            style.textFont = fontGroup.getBold();
+            style.leading  = 0.8f;
+        }else if(styleEnum == StyleEnum.CUSTOMISED_FORM_BOLD_SPACED){
+            style.fontSize = 10.5f;
+            style.textFont = fontGroup.getBold();
+            style.leading  = 0.9f;
+        }else if(styleEnum == StyleEnum.CUSTOMISED_FORM_LESS_BOLD_SPACED){
+            style.fontSize = 9.5f;
+            style.textFont = fontGroup.getBold();
+            style.leading  = 0.9f;
+        }else if(styleEnum == StyleEnum.CUSTOMISED_FORM_NARROW_BOLD){
+            style.fontSize = 9f;
+            style.textFont = fontGroup.getBold();
+            style.leading  = 0.8f;
+        }else if(styleEnum == StyleEnum.CUSTOMISED_FORM_NARROW_BOLD_GRAY){
+            style.fontSize = 9f;
+            style.textFont = fontGroup.getBold();
+            style.leading  = 0.8f;
+            style.textColor= new Color(60,60,60);
+        }else if(styleEnum == StyleEnum.CUSTOMISED_FORM_NARROW_BOLD_SPACED_GRAY){
+            style.fontSize = 9f;
+            style.textFont = fontGroup.getBold();
+            style.leading  = 0.9f;
+            style.textColor= new Color(60,60,60);
+        }else if(styleEnum == StyleEnum.CUSTOMISED_FORM_NARROW){
+            style.fontSize = 9f;
+            style.textFont = fontGroup.getNormal();
+            style.leading  = 0.8f;
+        }else if(styleEnum == StyleEnum.CUSTOMISED_FORM_OBLIQUE){
+            style.fontSize = 9f;
+            style.textFont = fontGroup.getItalic();
+            style.leading  = 0.8f;
+        }else if(styleEnum == StyleEnum.CUSTOMISED_FORM_TINY){
+            style.fontSize = 7f;
+            style.textFont = fontGroup.getNormal();
+            style.leading  = 0.8f;
+        }else if(styleEnum == StyleEnum.CUSTOMISED_FORM_TINY_SPACED){
+            style.fontSize = 7f;
+            style.textFont = fontGroup.getNormal();
+            style.leading  = 0.9f;
+        }else if(styleEnum == StyleEnum.HEADER){
+            style.fontSize = 18f;
+            style.textFont = fontGroup.getBold();
+            style.leading  = 1f;
+        }else if(styleEnum == StyleEnum.FOOTER){
+            style.fontSize = 8f;
+            style.textFont = fontGroup.getNormal();
+            style.leading  = 1f;
+        }else if(styleEnum == StyleEnum.OWNER){
+            style.fontSize = 8.5f;
+            style.textFont = fontGroup.getNormal();
+            style.leading  = 1f;
+        }else if(styleEnum == StyleEnum.OWNER_BOLD){
+            style.fontSize = 8.5f;
+            style.textFont = fontGroup.getBold();
+            style.leading  = 1f;
+        }else if(styleEnum == StyleEnum.TITLE){
+            style.fontSize = 15f;
+            style.textFont = fontGroup.getBold();
+            style.leading  = 0.95f;
+        }else if(styleEnum == StyleEnum.NUMBER){
+            style.fontSize = 9f;
+            style.textFont = fontGroup.getBold();
+            style.leading  = 0.95f;
         }
+
+
 
         return style;
     }

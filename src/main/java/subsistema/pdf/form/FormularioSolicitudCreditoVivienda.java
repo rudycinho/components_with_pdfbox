@@ -1,6 +1,5 @@
 package subsistema.pdf.form;
 
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import subsistema.pdf.dto.SucursalDTOPDF;
 import subsistema.pdf.dto.UsuarioDTOPDF;
 import subsistema.pdf.dto.SolicitudCreditoViviendaDTOPDF;
@@ -19,7 +18,7 @@ import subsistema.pdf.utils.enums.TipoCreditoEnum;
 import subsistema.pdf.utils.enums.TipoGarantiaEnum;
 import subsistema.pdf.utils.factories.EasyComponentsFactory;
 import subsistema.pdf.utils.factories.GeneradorFormularioFactory;
-import subsistema.pdf.utils.settings.Model1;
+import subsistema.pdf.utils.settings.*;
 
 import java.awt.Color;
 import java.io.File;
@@ -30,87 +29,22 @@ import java.util.Date;
 
 public class FormularioSolicitudCreditoVivienda {
 
-	private final float maxY         = Model1.MODEL_3.getMaxY();
-	private final float maxX         = Model1.MODEL_3.getMaxX();
-	private final float thickness    = Model1.MODEL_3.getThickness();
-	private final float marginStartX = Model1.MODEL_3.getMarginStartX();
-	private final float marginEndX   = Model1.MODEL_3.getMarginEndX();
-	private final float relativePositionX = 5f;
-	private final float relativePositionY = 5f;
+	private final float maxY         = Models.MODEL_3.getMaxY();
+	private final float maxX         = Models.MODEL_3.getMaxX();
+	private final float thickness    = Models.MODEL_3.getThickness();
+	private final float marginStartX = Models.MODEL_3.getMarginStartX();
+	private final float marginEndX   = Models.MODEL_3.getMarginEndX();
+	private final FontEnum fontEnum  = Models.MODEL_3.getFont();
 
-	private final PDFont fuenteBasica        = Model1.MODEL_3.getFuenteBasica();
-	private final PDFont fuenteBasicaNegrita = Model1.MODEL_3.getFuenteBasicaNegrita();
-	private final PDFont fuenteBasicaOblicua = Model1.MODEL_3.getFuenteBasicaNegrita();
-
-	/*private final Style fuenteSubtitulo = Style.builder()
-			.addTextFont(fuenteBasicaNegrita)
-			.addFontSize(14f)
-			.addTextColor(Color.BLACK)
-			.addLeading(0.8f)
-			.build();
-
-	private final Style fuenteNormal = Style.builder()
-			.addTextFont(fuenteBasica)
-			.addFontSize(10.5f)
-			.addTextColor(Color.BLACK)
-			.addLeading(0.8f)
-			.build();
-
-	private final Style fuenteNormalNegrita = Style.builder()
-			.addTextFont(fuenteBasicaNegrita)
-			.addFontSize(10.5f)
-			.addTextColor(Color.BLACK)
-			.addLeading(0.8f)
-			.build();
-
-	private final Style fuenteDiminuta = Style.builder()
-			.addFontSize(8)
-			.addTextFont(fuenteBasica)
-			.build();
-*/
-
-	Style fuenteNegrita = Style.builder()
-			.addTextFont(fuenteBasicaNegrita)
-			.addFontSize(10.5f)
-			.addTextColor(Color.BLACK)
-			.addLeading(0.9f)
-			.build();
-
-	Style fuenteEstrechaNegrita = Style.builder()
-			.addTextFont(fuenteBasicaNegrita)
-			.addFontSize(9f)
-			.addTextColor(Color.BLACK)
-			.addLeading(0.8f)
-			.build();
-
-	Style fuenteMinimal = Style.builder()
-			.addTextFont(fuenteBasica)
-			.addFontSize(7f)
-			.addTextColor(Color.BLACK)
-			.addLeading(0.8f)
-			.build();
-
-	Style fuenteMinimalNegrita = Style.builder()
-			.addTextFont(fuenteBasicaNegrita)
-			.addFontSize(9f)
-			.addTextColor(new Color(60,60,60))
-			.addLeading(0.8f)
-			.build();
-
-	Style fuenteEstrecha = Style.builder()
-			.addTextFont(fuenteBasica)
-			.addFontSize(9f)
-			.addTextColor(Color.BLACK)
-			.addLeading(0.8f)
-			.build();
-
-	Style fuenteEstrechaInclinada = Style.builder()
-			.addTextFont(fuenteBasicaOblicua)
-			.addFontSize(9f)
-			.addTextColor(Color.BLACK)
-			.addLeading(0.8f)
-			.build();
-
+	private final Style fuenteMinimalEspaciada;
+	private final Style fuenteNegrita;
+	private final Style fuenteEstrechaNegrita;
+	private final Style fuenteMinimal;
+	private final Style fuenteMinimalNegrita;
+	private final Style fuenteMinimalNegritaEspaciada;
+	private final Style fuenteEstrecha;
+	private final Style fuenteEstrechaInclinada;
+	private Style fuenteNegritaMayor;
 
 	public FormularioSolicitudCreditoVivienda(
 			String ruta,
@@ -121,6 +55,17 @@ public class FormularioSolicitudCreditoVivienda {
 
 		PDDocument doc = new PDDocument();
 
+		FontGroup fontGroup    = FontGroup.getFontGroup(fontEnum,doc);
+		fuenteNegrita                 = Style.getStyle(fontGroup, StyleEnum.CUSTOMISED_FORM_BOLD_SPACED);
+		fuenteEstrechaNegrita         = Style.getStyle(fontGroup, StyleEnum.CUSTOMISED_FORM_NARROW_BOLD);
+		fuenteMinimalNegrita          = Style.getStyle(fontGroup, StyleEnum.CUSTOMISED_FORM_NARROW_BOLD_GRAY);
+		fuenteMinimalNegritaEspaciada = Style.getStyle(fontGroup, StyleEnum.CUSTOMISED_FORM_NARROW_BOLD_SPACED_GRAY);
+		fuenteMinimal                 = Style.getStyle(fontGroup, StyleEnum.CUSTOMISED_FORM_TINY);
+		fuenteMinimalEspaciada        = Style.getStyle(fontGroup, StyleEnum.CUSTOMISED_FORM_TINY_SPACED);
+		fuenteEstrecha                = Style.getStyle(fontGroup, StyleEnum.CUSTOMISED_FORM_NARROW);
+		fuenteEstrechaInclinada       = Style.getStyle(fontGroup, StyleEnum.CUSTOMISED_FORM_OBLIQUE);
+		fuenteNegritaMayor            = Style.getStyle(fontGroup, StyleEnum.CUSTOMISED_FORM_LESS_BOLD_SPACED);
+
 		PDPage page1 = new PDPage(new PDRectangle(maxX,maxY));
 		PDPage page2 = new PDPage(new PDRectangle(maxX,maxY));
 
@@ -130,15 +75,15 @@ public class FormularioSolicitudCreditoVivienda {
 		PDPageContentStream contentStream1 = new PDPageContentStream(doc, page1);
 		PDPageContentStream contentStream2 = new PDPageContentStream(doc, page2);
 
-		GeneradorFormularioFactory.crearMargen(contentStream1, Model1.MODEL_3);
-		GeneradorFormularioFactory.crearCabecera(contentStream1, doc, Model1.MODEL_3);
-		GeneradorFormularioFactory.crearInfo(contentStream1, sucursal, Model1.MODEL_3);
-		GeneradorFormularioFactory.crearFechaExportacion(contentStream1, fechaExportacion, Model1.MODEL_3);
-		GeneradorFormularioFactory.crearUsuarioExportador(contentStream1, usuarioEditor, Model1.MODEL_3);
-		GeneradorFormularioFactory.crearTitulo(contentStream1, "FORMULARIO Nro. B-01\nSOLICITUD DE CREDITO PARA VIVIENDA", Model1.MODEL_3);
+		GeneradorFormularioFactory.crearMargen(contentStream1, Models.MODEL_3);
+		GeneradorFormularioFactory.crearCabecera(contentStream1, doc, Models.MODEL_3,Style.getStyle(fontGroup,StyleEnum.HEADER));
+		GeneradorFormularioFactory.crearInfo(contentStream1, sucursal, Models.MODEL_3, Style.getStyle(fontGroup,StyleEnum.FOOTER));
+		GeneradorFormularioFactory.crearFechaExportacion(contentStream1, fechaExportacion, Models.MODEL_3, Style.getStyle(fontGroup,StyleEnum.OWNER));
+		GeneradorFormularioFactory.crearUsuarioExportador(contentStream1, usuarioEditor, Models.MODEL_3, Style.getStyle(fontGroup,StyleEnum.OWNER_BOLD),Style.getStyle(fontGroup,StyleEnum.OWNER));
+		GeneradorFormularioFactory.crearTitulo(contentStream1, "FORMULARIO Nro. B-01\nSOLICITUD DE CREDITO PARA VIVIENDA", Models.MODEL_3, Style.getStyle(fontGroup,StyleEnum.TITLE));
 
-		GeneradorFormularioFactory.crearMargen(contentStream2, Model1.MODEL_3);
-		GeneradorFormularioFactory.crearInfo(contentStream2, sucursal, Model1.MODEL_3);
+		GeneradorFormularioFactory.crearMargen(contentStream2, Models.MODEL_3);
+		GeneradorFormularioFactory.crearInfo(contentStream2, sucursal, Models.MODEL_3, Style.getStyle(fontGroup,StyleEnum.FOOTER));
 
 		crearCuadroCarpeta(solicitud,contentStream1);
 		
@@ -147,7 +92,7 @@ public class FormularioSolicitudCreditoVivienda {
 		crearMontoPrestamoSolicitado(solicitud, contentStream1);
 		crearDatosSolicitado(solicitud, contentStream1);
 
-		GeneradorFormularioFactory.crearMargen(contentStream2, Model1.MODEL_3);
+		GeneradorFormularioFactory.crearMargen(contentStream2, Models.MODEL_3);
 		crearDatosGarantesPersonales(solicitud, contentStream2);
 		crearCroquis(contentStream2,doc);
         crearNotas(contentStream2);
@@ -157,6 +102,7 @@ public class FormularioSolicitudCreditoVivienda {
 		contentStream2.close();
 
         doc.save(new File(ruta));
+        doc.close();
 	}
 
 	private void crearTipoCredito(
@@ -1006,7 +952,7 @@ public class FormularioSolicitudCreditoVivienda {
 										EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyleAndRelativePosition(
 												Arrays.asList(solicitud.getObservaciones()),
 												Arrays.asList(300f),
-												fuenteMinimalNegrita,  Alignment.LEFT,
+												fuenteMinimalNegritaEspaciada,  Alignment.LEFT,
 												5f, 2.5f,
 												false,false,colorGrisClaro,colorGrisClaro)
 								)
@@ -1396,6 +1342,8 @@ public class FormularioSolicitudCreditoVivienda {
 		);
 
 		tabla.draw(contentStream);
+
+		GeneradorFormularioFactory.dibujarFlecha(contentStream,doc,Models.MODEL_3);
 	}
 
 	private void crearNotas(
@@ -1406,26 +1354,26 @@ public class FormularioSolicitudCreditoVivienda {
 				EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStylesAndRelativePosition(
 						Arrays.asList("NOTA 1:","Elaborar el croquis con referencias a un punto especifico (Avenida calle principal, plazas, parques, iglesias, parada de buses y otros)"),
 						Arrays.asList(80f,420f) ,
-						Arrays.asList(fuenteMinimal,fuenteMinimal),
+						Arrays.asList(fuenteMinimal,fuenteMinimalEspaciada),
 						Alignment.LEFT,10f,5f,false,false,Color.WHITE,Color.WHITE
 				),
 				EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStylesAndRelativePosition(
 						Arrays.asList("NOTA 2:","Cualquier tachadura, raspadura o borron, INVALIDA el presente formulario"),
 						Arrays.asList(80f,420f) ,
-						Arrays.asList(fuenteMinimal,fuenteMinimal),
+						Arrays.asList(fuenteMinimal,fuenteMinimalEspaciada),
 						Alignment.LEFT,10f,5f,false,false,Color.WHITE,Color.WHITE
 				),
 				EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStylesAndRelativePosition(
 						Arrays.asList("NOTA 3:","Los datos consignados en la presenta solicitud son veraces y tienen el rango de declaracion jurada, asimismo se compromete" +
 								"hacer el buen uso del objeto de credito"),
 						Arrays.asList(80f,420f) ,
-						Arrays.asList(fuenteMinimal,fuenteMinimal),
+						Arrays.asList(fuenteMinimal,fuenteMinimalEspaciada),
 						Alignment.LEFT,10f,5f,false,false,Color.WHITE,Color.WHITE
 				),
 				EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStylesAndRelativePosition(
 						Arrays.asList("NOTA 4:","El solicitante debe cumplir con los requisitos exigidos de acuerdo a la modalidad del credito"),
 						Arrays.asList(80f,420f) ,
-						Arrays.asList(fuenteMinimal,fuenteMinimal),
+						Arrays.asList(fuenteMinimal,fuenteMinimalEspaciada),
 						Alignment.LEFT,10f,0f,false,false,Color.WHITE,Color.WHITE
 				)
 		);
@@ -1437,18 +1385,11 @@ public class FormularioSolicitudCreditoVivienda {
 		float initX = marginStartX + thickness;
 		float witdh = 500f;
 
-		Style fuenteNegrita = Style.builder()
-				.addTextFont(fuenteBasicaNegrita)
-				.addFontSize(9.5f)
-				.addTextColor(Color.BLACK)
-				.addLeading(0.9f)
-				.build();
-
 		SimpleTable tabla = EasyComponentsFactory.getSimpleTable(initX, maxY - 800,
 				EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStylesAndRelativePosition(
 						Arrays.asList("EL PRESENTE FORMULARIO TIENE VALIDEZ DE TRES(3) MESES A PARTIR DE SU ADQUISICION"),
 						Arrays.asList(witdh) ,
-						Arrays.asList(fuenteNegrita),
+						Arrays.asList(fuenteNegritaMayor),
 						Alignment.CENTER,10f,5f,false,false,Color.WHITE,Color.WHITE
 				)
 		);
@@ -1462,40 +1403,17 @@ public class FormularioSolicitudCreditoVivienda {
 
 		float initX  = marginStartX+thickness;
 
-		Color colorGris      = new Color(60,60,60);
-
-		Style fuenteNegrita = Style.builder()
-				.addTextFont(fuenteBasicaNegrita)
-				.addFontSize(9.5f)
-				.addTextColor(Color.BLACK)
-				.addLeading(0.9f)
-				.build();
-
-		Style fuenteMinimal = Style.builder()
-				.addTextFont(fuenteBasica)
-				.addFontSize(7f)
-				.addTextColor(Color.BLACK)
-				.addLeading(0.8f)
-				.build();
-
-		Style fuenteMinimalNegrita = Style.builder()
-				.addTextFont(fuenteBasicaNegrita)
-				.addFontSize(9f)
-				.addTextColor(colorGris)
-				.addLeading(0.8f)
-				.build();
-
 		SimpleTable tabla = EasyComponentsFactory.getSimpleTable(initX, maxY - 200,
 				EasyComponentsFactory.getSimpleColumn(
-						EasyComponentsFactory.getSimpleCellFromText("Carpeta Nro",fuenteNegrita,80f,5f,2.5f,Alignment.LEFT,false,false,Color.BLACK,Color.WHITE),
+						EasyComponentsFactory.getSimpleCellFromText("Carpeta Nro",fuenteNegritaMayor,80f,5f,2.5f,Alignment.LEFT,false,false,Color.BLACK,Color.WHITE),
 						EasyComponentsFactory.getSimpleCellFromText(
 								solicitud.getNumeroCarpeta(),
-								fuenteMinimalNegrita,75f,5f,2.5f,Alignment.LEFT,true,false,Color.BLACK,Color.WHITE),
-						EasyComponentsFactory.getSimpleCellFromText("",fuenteMinimalNegrita,200f,5f,2.5f,Alignment.LEFT,false,false,Color.BLACK,Color.WHITE),
-						EasyComponentsFactory.getSimpleCellFromText("Registro Nro",fuenteNegrita,80f,5f,2.5f,Alignment.LEFT,false,false,Color.BLACK,Color.WHITE),
+								fuenteEstrechaNegrita,75f,5f,2.5f,Alignment.LEFT,true,false,Color.BLACK,Color.WHITE),
+						EasyComponentsFactory.getSimpleCellFromText("",fuenteEstrechaNegrita,200f,5f,2.5f,Alignment.LEFT,false,false,Color.BLACK,Color.WHITE),
+						EasyComponentsFactory.getSimpleCellFromText("Registro Nro",fuenteNegritaMayor,80f,5f,2.5f,Alignment.LEFT,false,false,Color.BLACK,Color.WHITE),
 						EasyComponentsFactory.getSimpleCellFromText(
 								solicitud.getNumeroRegistro(),
-								fuenteMinimalNegrita,60f,5f,2.5f,Alignment.LEFT,true,false,Color.BLACK,Color.WHITE)
+								fuenteEstrechaNegrita,60f,5f,2.5f,Alignment.LEFT,true,false,Color.BLACK,Color.WHITE)
 				)
 		);
 		tabla.draw(contentStream);

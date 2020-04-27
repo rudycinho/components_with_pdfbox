@@ -67,12 +67,12 @@ public class FormularioAfiliacion {
 		doc.addPage(page1);
 		PDPageContentStream contentStream1 = new PDPageContentStream(doc, page1);
 
-		GeneradorFormularioFactory.crearMargen(contentStream1, Model1.MODEL_1);
-		GeneradorFormularioFactory.crearCabecera(contentStream1,doc, Model1.MODEL_1);
-		GeneradorFormularioFactory.crearInfo(contentStream1,sucursal, Model1.MODEL_1);
-		GeneradorFormularioFactory.crearFechaExportacion(contentStream1,fechaExportacion, Model1.MODEL_1);
-		GeneradorFormularioFactory.crearUsuarioExportador(contentStream1,usuarioEditor, Model1.MODEL_1);
-		GeneradorFormularioFactory.crearTitulo(contentStream1,"FORMULARIO A-01\nSOLICITUD DE AFILIACION", Model1.MODEL_1);
+		GeneradorFormularioFactory.crearMargen(contentStream1, Models.MODEL_1);
+		GeneradorFormularioFactory.crearCabecera(contentStream1,doc, Models.MODEL_1, Style.getStyle(fontGroup,StyleEnum.HEADER));
+		GeneradorFormularioFactory.crearInfo(contentStream1,sucursal, Models.MODEL_1, Style.getStyle(fontGroup,StyleEnum.FOOTER));
+		GeneradorFormularioFactory.crearFechaExportacion(contentStream1,fechaExportacion, Models.MODEL_1, Style.getStyle(fontGroup,StyleEnum.OWNER));
+		GeneradorFormularioFactory.crearUsuarioExportador(contentStream1,usuarioEditor, Models.MODEL_1, Style.getStyle(fontGroup,StyleEnum.OWNER_BOLD),Style.getStyle(fontGroup,StyleEnum.OWNER));
+		GeneradorFormularioFactory.crearTitulo(contentStream1,"FORMULARIO A-01\nSOLICITUD DE AFILIACION", Models.MODEL_1, Style.getStyle(fontGroup,StyleEnum.TITLE));
 
 		crearSubTitulosAfiliado(contentStream1);
 		crearFechaRegistroAfiliado(contentStream1, afiliado);
@@ -102,8 +102,8 @@ public class FormularioAfiliacion {
 					estados);
 
 			for(PDPageContentStream contentStream : contentStreams){
-				GeneradorFormularioFactory.crearMargen(contentStream, Model1.MODEL_1);
-				GeneradorFormularioFactory.crearInfo(contentStream,sucursal, Model1.MODEL_1);
+				GeneradorFormularioFactory.crearMargen(contentStream, Models.MODEL_1);
+				GeneradorFormularioFactory.crearInfo(contentStream,sucursal, Models.MODEL_1, Style.getStyle(fontGroup,StyleEnum.FOOTER));
 			}
 
 			for(PDPageContentStream e : contentStreams)

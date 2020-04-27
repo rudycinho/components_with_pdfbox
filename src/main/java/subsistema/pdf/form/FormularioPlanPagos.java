@@ -1,6 +1,5 @@
 package subsistema.pdf.form;
 
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import subsistema.pdf.dto.DictamenDTOPDF;
 import subsistema.pdf.dto.SucursalDTOPDF;
 import subsistema.pdf.dto.UsuarioDTOPDF;
@@ -36,10 +35,9 @@ public class FormularioPlanPagos {
 
     private Style fuenteTituloTabla;
     private Style fuenteMinimalEspaciado;
-    private Style fuenteMinimalExtraEspaciado;
     private Style fuenteMinimalNegrita;
-    private Style fuenteMinimalNegritaExtraEspaciado;
-    private Style fuenteMinimalNegritaExtraEspaciadoRoja;
+    private Style fuenteMenorEspaciado;
+    private Style fuenteMenorNegrita;
 
     public FormularioPlanPagos(
             String ruta,
@@ -55,11 +53,9 @@ public class FormularioPlanPagos {
 
         fuenteTituloTabla                     = Style.getStyle(fontGroup, StyleEnum.TABLE_BOLD_SPACED);
         fuenteMinimalEspaciado                = Style.getStyle(fontGroup, StyleEnum.TABLE_MINIMAL_NORMAL_SPACED);
-        fuenteMinimalExtraEspaciado           = Style.getStyle(fontGroup, StyleEnum.TABLE_MINIMAL_NORMAL_EXTRA_SPACED);
+        fuenteMenorEspaciado                  = Style.getStyle(fontGroup, StyleEnum.TABLE_LESS_MINIMAL_NORMAL_SPACED);
+        fuenteMenorNegrita                    = Style.getStyle(fontGroup, StyleEnum.TABLE_LESS_MINIMAL_BOLD);
         fuenteMinimalNegrita                  = Style.getStyle(fontGroup, StyleEnum.TABLE_MINIMAL_BOLD);
-        fuenteMinimalNegritaExtraEspaciado    = Style.getStyle(fontGroup, StyleEnum.TABLE_MINIMAL_BOLD_EXTRA_SPACED);
-        fuenteMinimalNegritaExtraEspaciadoRoja= Style.getStyle(fontGroup, StyleEnum.TABLE_MINIMAL_BOLD_EXTRA_SPACED_RED);
-
 
         PDPage page = new PDPage(new PDRectangle(maxX,maxY));
 
@@ -67,10 +63,10 @@ public class FormularioPlanPagos {
         PDPageContentStream contentStream = new PDPageContentStream(doc, page);
         List<PDPageContentStream> contentStreams = new LinkedList<>();
 
-        GeneradorFormularioFactory.crearCabecera(contentStream,doc, Model1.MODEL_2);
-        GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Model1.MODEL_2);
-        GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Model1.MODEL_2);
-        GeneradorFormularioFactory.crearTitulo(contentStream,"PLAN DE PAGOS", Model1.MODEL_2);
+        GeneradorFormularioFactory.crearCabecera(contentStream,doc, Models.MODEL_2,  Style.getStyle(fontGroup,StyleEnum.HEADER));
+        GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Models.MODEL_2, Style.getStyle(fontGroup,StyleEnum.FOOTER));
+        GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Models.MODEL_2,  Style.getStyle(fontGroup,StyleEnum.OWNER_BOLD), Style.getStyle(fontGroup,StyleEnum.OWNER));
+        GeneradorFormularioFactory.crearTitulo(contentStream,"PLAN DE PAGOS", Models.MODEL_2,  Style.getStyle(fontGroup,StyleEnum.TITLE));
 
         crearClienteSeccionPlanDePagos(contentStream, dictamen);
         crearResumenDatosSeccionPlanDePagos(contentStream, dictamen);
@@ -79,8 +75,8 @@ public class FormularioPlanPagos {
         int index=1;
         int total=contentStreams.size();
         for(PDPageContentStream contentStream1 : contentStreams){
-            GeneradorFormularioFactory.crearMargen(contentStream1, Model1.MODEL_2);
-            GeneradorFormularioFactory.enumerarPaginas(contentStream1,index,total, Model1.MODEL_2);
+            GeneradorFormularioFactory.crearMargen(contentStream1, Models.MODEL_2);
+            GeneradorFormularioFactory.enumerarPaginas(contentStream1,index,total, Models.MODEL_2,  Style.getStyle(fontGroup,StyleEnum.NUMBER));
             index+=1;
         }
 
@@ -97,41 +93,27 @@ public class FormularioPlanPagos {
             PDDocument doc,
             PlanDePagosDTOPDF planDePagos) throws IOException {
 
-        Style fuenteNormal = Style.builder()
-                .addTextFont(fuenteBasica)
-                .addFontSize(9.5f)
-                .addTextColor(Color.BLACK)
-                .addLeading(1f)
-                .build();
-
-        Style fuenteNormalNegrita = Style.builder()
-                .addTextFont(fuenteBasicaNegrita)
-                .addFontSize(9.5f)
-                .addTextColor(Color.BLACK)
-                .addLeading(0.8f)
-                .build();
-
         MultipleParagraph multipleParagraph = EasyComponentsFactory.getSimpleMultipleParagraph(
                 "DETALLES",
                 marginStartX + thickness, maxY - 380,
-                fuenteNormalNegrita,
+                fuenteMinimalNegrita,
                 100,
                 Alignment.LEFT);
         multipleParagraph.draw(contentStream);
 
         List<List<String>> listOfList = planDePagos.getContenido();
-        List<Float>  widths = Arrays.asList(new Float[]{40f, 80f, 90f, 70f, 50f, 70f, 90f, 80f, 60f, 80f});
+        List<Float>  widths = Arrays.asList(40f, 80f, 90f, 70f, 50f, 70f, 90f, 80f, 60f, 80f);
         List<String> header = planDePagos.getContenidoCabecera();
         List<String> footer = planDePagos.getSumatoria();
 
         Column headerColumn = EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyle(
-                header, widths, fuenteNormalNegrita, Alignment.CENTER);
+                header, widths, fuenteMinimalNegrita, Alignment.CENTER);
 
         Column anotherHeaderColumn = EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyle(
-                header, widths, fuenteNormalNegrita, Alignment.CENTER);
+                header, widths, fuenteMinimalNegrita, Alignment.CENTER);
 
         Column footerColumn = EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyle(
-                footer, widths, fuenteNormalNegrita, Alignment.CENTER);
+                footer, widths, fuenteMinimalNegrita, Alignment.CENTER);
 
         headerColumn.getCells().forEach(s -> {
             s.setColorFilling(Color.ORANGE);
@@ -146,7 +128,7 @@ public class FormularioPlanPagos {
         List<Column> bodyColumns = new LinkedList<>();
 
         for (List<String> auxList : listOfList)
-            bodyColumns.add(EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyle(auxList, widths, fuenteNormal, Alignment.LEFT));
+            bodyColumns.add(EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyle(auxList, widths, fuenteMinimalEspaciado, Alignment.LEFT));
 
         bodyColumns.add(footerColumn);
 
@@ -186,20 +168,6 @@ public class FormularioPlanPagos {
         String liquidoPagable = dictamen.getSueldoLiquidoPagable();
         String moneda = "Bolivianos";
 
-        Style fuenteNormal = Style.builder()
-                .addTextFont(fuenteBasica)
-                .addFontSize(9f)
-                .addTextColor(Color.BLACK)
-                .addLeading(1f)
-                .build();
-
-        Style fuenteNormalNegrita = Style.builder()
-                .addTextFont(fuenteBasicaNegrita)
-                .addFontSize(9f)
-                .addTextColor(Color.BLACK)
-                .addLeading(0.8f)
-                .build();
-
         float width1 = 90f;
         float width2 = 60f;
         float width3 = 90f;
@@ -209,37 +177,37 @@ public class FormularioPlanPagos {
         float initY = 200f;
         boolean margin = false;
 
-        Cell c11 = EasyComponentsFactory.getSimpleCellFromText("Nombre Cliente", fuenteNormalNegrita, width1 + width2 / 2, 1f, 5f, margin);
-        Cell c12 = EasyComponentsFactory.getSimpleCellFromText("CI", fuenteNormalNegrita, width1 + width2 / 2, 1f, 5f, margin);
-        Cell c13 = EasyComponentsFactory.getSimpleCellFromText("Tipo de Amortizacion", fuenteNormalNegrita, width1 + width2 / 2, 1f, 5f, margin);
-        Cell c14 = EasyComponentsFactory.getSimpleCellFromText("Moneda", fuenteNormalNegrita, width1, 1f, 5f, margin);
-        Cell c15 = EasyComponentsFactory.getSimpleCellFromText("Amortizacion cada", fuenteNormalNegrita, width1, 1f, 5f, margin);
-        Cell c16 = EasyComponentsFactory.getSimpleCellFromText("Interes fijo", fuenteNormalNegrita, width1, 1f, 5f, margin);
-        Cell c17 = EasyComponentsFactory.getSimpleCellFromText("Total Cuota Mensual", fuenteNormalNegrita, width1, 1f, 5f, margin);
+        Cell c11 = EasyComponentsFactory.getSimpleCellFromText("Nombre Cliente"      , fuenteMenorNegrita, width1 + width2 / 2, 1f, 5f, margin);
+        Cell c12 = EasyComponentsFactory.getSimpleCellFromText("CI"                  , fuenteMenorNegrita, width1 + width2 / 2, 1f, 5f, margin);
+        Cell c13 = EasyComponentsFactory.getSimpleCellFromText("Tipo de Amortizacion", fuenteMenorNegrita, width1 + width2 / 2, 1f, 5f, margin);
+        Cell c14 = EasyComponentsFactory.getSimpleCellFromText("Moneda"              , fuenteMenorNegrita, width1, 1f, 5f, margin);
+        Cell c15 = EasyComponentsFactory.getSimpleCellFromText("Amortizacion cada"   , fuenteMenorNegrita, width1, 1f, 5f, margin);
+        Cell c16 = EasyComponentsFactory.getSimpleCellFromText("Interes fijo"        , fuenteMenorNegrita, width1, 1f, 5f, margin);
+        Cell c17 = EasyComponentsFactory.getSimpleCellFromText("Total Cuota Mensual" , fuenteMenorNegrita, width1, 1f, 5f, margin);
 
-        Cell c21 = EasyComponentsFactory.getSimpleCellFromText(usuario, fuenteNormal, width3 + width4 + width5 + width6 + width2 / 2, 1f, 5f, margin);
-        Cell c22 = EasyComponentsFactory.getSimpleCellFromText(ci, fuenteNormal, width3 + width4 + width5 + width6 + width2 / 2, 1f, 5f, margin);
-        Cell c23 = EasyComponentsFactory.getSimpleCellFromText("PRESTAMO AMORTIZABLE - METODO FRANCES", fuenteNormal, width3 + width4 + width5 + width6 + width2 / 2, 1f, 5f, margin);
-        Cell c24 = EasyComponentsFactory.getSimpleCellFromText(moneda, fuenteNormal, width2, 1f, 5f, margin);
-        Cell c25 = EasyComponentsFactory.getSimpleCellFromText(amortizacionFrecuencia, fuenteNormal, width2, 1f, 5f, margin);
-        Cell c26 = EasyComponentsFactory.getSimpleCellFromText(interesFijo, fuenteNormal, width2, 1f, 5f, margin);
-        Cell c27 = EasyComponentsFactory.getSimpleCellFromText(totalCuotaMensual, fuenteNormal, width2, 1f, 5f, margin);
+        Cell c21 = EasyComponentsFactory.getSimpleCellFromText(usuario                                      , fuenteMenorEspaciado, width3 + width4 + width5 + width6 + width2 / 2, 1f, 5f, margin);
+        Cell c22 = EasyComponentsFactory.getSimpleCellFromText(ci                                           , fuenteMenorEspaciado, width3 + width4 + width5 + width6 + width2 / 2, 1f, 5f, margin);
+        Cell c23 = EasyComponentsFactory.getSimpleCellFromText("PRESTAMO AMORTIZABLE - METODO FRANCES", fuenteMenorEspaciado, width3 + width4 + width5 + width6 + width2 / 2, 1f, 5f, margin);
+        Cell c24 = EasyComponentsFactory.getSimpleCellFromText(moneda                                       , fuenteMenorEspaciado, width2, 1f, 5f, margin);
+        Cell c25 = EasyComponentsFactory.getSimpleCellFromText(amortizacionFrecuencia                       , fuenteMenorEspaciado, width2, 1f, 5f, margin);
+        Cell c26 = EasyComponentsFactory.getSimpleCellFromText(interesFijo                                  , fuenteMenorEspaciado, width2, 1f, 5f, margin);
+        Cell c27 = EasyComponentsFactory.getSimpleCellFromText(totalCuotaMensual                            , fuenteMenorEspaciado, width2, 1f, 5f, margin);
 
-        Cell c34 = EasyComponentsFactory.getSimpleCellFromText("Tipo de cambio(Bs.)", fuenteNormalNegrita, width3, 1f, 5f, margin);
-        Cell c35 = EasyComponentsFactory.getSimpleCellFromText("Plazo(cuotas)", fuenteNormalNegrita, width3, 1f, 5f, margin);
-        Cell c36 = EasyComponentsFactory.getSimpleCellFromText("Seg. desgravamen", fuenteNormalNegrita, width3, 1f, 5f, margin);
+        Cell c34 = EasyComponentsFactory.getSimpleCellFromText("Tipo de cambio(Bs.)", fuenteMenorNegrita, width3, 1f, 5f, margin);
+        Cell c35 = EasyComponentsFactory.getSimpleCellFromText("Plazo(cuotas)"      , fuenteMenorNegrita, width3, 1f, 5f, margin);
+        Cell c36 = EasyComponentsFactory.getSimpleCellFromText("Seg. desgravamen"   , fuenteMenorNegrita, width3, 1f, 5f, margin);
 
-        Cell c44 = EasyComponentsFactory.getSimpleCellFromText(tipoCambio, fuenteNormal, width4, 1f, 5f, margin);
-        Cell c45 = EasyComponentsFactory.getSimpleCellFromText(totalCuotas, fuenteNormal, width4, 1f, 5f, margin);
-        Cell c46 = EasyComponentsFactory.getSimpleCellFromText(segDesgravamen, fuenteNormal, width4, 1f, 5f, margin);
+        Cell c44 = EasyComponentsFactory.getSimpleCellFromText(tipoCambio    , fuenteMenorEspaciado, width4, 1f, 5f, margin);
+        Cell c45 = EasyComponentsFactory.getSimpleCellFromText(totalCuotas   , fuenteMenorEspaciado, width4, 1f, 5f, margin);
+        Cell c46 = EasyComponentsFactory.getSimpleCellFromText(segDesgravamen, fuenteMenorEspaciado, width4, 1f, 5f, margin);
 
-        Cell c54 = EasyComponentsFactory.getSimpleCellFromText("Liquido pagable(Bs)", fuenteNormalNegrita, width5, 1f, 5f, margin);
-        Cell c55 = EasyComponentsFactory.getSimpleCellFromText("Tipo de Interes", fuenteNormalNegrita, width5, 1f, 5f, margin);
-        Cell c56 = EasyComponentsFactory.getSimpleCellFromText("CIP", fuenteNormalNegrita, width5, 1f, 5f, margin);
+        Cell c54 = EasyComponentsFactory.getSimpleCellFromText("Liquido pagable(Bs)", fuenteMenorNegrita, width5, 1f, 5f, margin);
+        Cell c55 = EasyComponentsFactory.getSimpleCellFromText("Tipo de Interes", fuenteMenorNegrita, width5, 1f, 5f, margin);
+        Cell c56 = EasyComponentsFactory.getSimpleCellFromText("CIP", fuenteMenorNegrita, width5, 1f, 5f, margin);
 
-        Cell c64 = EasyComponentsFactory.getSimpleCellFromText(liquidoPagable, fuenteNormal, width6, 1f, 5f, margin);
-        Cell c65 = EasyComponentsFactory.getSimpleCellFromText(tipoInteres, fuenteNormal, width6, 1f, 5f, margin);
-        Cell c66 = EasyComponentsFactory.getSimpleCellFromText(cipMensual, fuenteNormal, width6, 1f, 5f, margin);
+        Cell c64 = EasyComponentsFactory.getSimpleCellFromText(liquidoPagable, fuenteMenorEspaciado, width6, 1f, 5f, margin);
+        Cell c65 = EasyComponentsFactory.getSimpleCellFromText(tipoInteres   , fuenteMenorEspaciado, width6, 1f, 5f, margin);
+        Cell c66 = EasyComponentsFactory.getSimpleCellFromText(cipMensual    , fuenteMenorEspaciado, width6, 1f, 5f, margin);
 
         EasyComponentsFactory.cambiarColor(new Color(77, 175, 134), c23, c24, c44, c64, c25, c45, c65, c26, c46, c66);
 
@@ -275,27 +243,6 @@ public class FormularioPlanPagos {
         String fechaInicio = "";
         String fechaFin = "";
 
-        Style fuenteNormal = Style.builder()
-                .addTextFont(fuenteBasica)
-                .addFontSize(9f)
-                .addTextColor(Color.BLACK)
-                .addLeading(1f)
-                .build();
-
-        Style fuenteNormalNegrita = Style.builder()
-                .addTextFont(fuenteBasicaNegrita)
-                .addFontSize(9f)
-                .addTextColor(Color.BLACK)
-                .addLeading(0.8f)
-                .build();
-
-        Style fuenteTitulo = Style.builder()
-                .addTextFont(fuenteBasicaNegrita)
-                .addFontSize(10.5f)
-                .addTextColor(Color.BLACK)
-                .addLeading(1f)
-                .build();
-
         float width1 = 100f;
         float width2 = 80f;
         float initY = 200f;
@@ -303,22 +250,22 @@ public class FormularioPlanPagos {
 
         Cell cLine = EasyComponentsFactory.getSimpleCellRectangle(width1 + width2, 2f, 1f, margin);
 
-        Cell c11 = EasyComponentsFactory.getSimpleCellFromText("RESUMEN DE DATOS", fuenteTitulo, width1 + width2, 1f, 5f, Alignment.CENTER, margin);
-        Cell c12 = EasyComponentsFactory.getSimpleCellFromText("Capital a pagar", fuenteNormalNegrita, width1, 1f, 5f, margin);
-        Cell c13 = EasyComponentsFactory.getSimpleCellFromText("Interes a pagar", fuenteNormalNegrita, width1, 1f, 5f, margin);
-        Cell c14 = EasyComponentsFactory.getSimpleCellFromText("Seg. desgravamen", fuenteNormalNegrita, width1, 1f, 5f, margin);
-        Cell c15 = EasyComponentsFactory.getSimpleCellFromText("CIP", fuenteNormalNegrita, width1, 1f, 5f, margin);
-        Cell c16 = EasyComponentsFactory.getSimpleCellFromText("Total a pagar", fuenteNormalNegrita, width1, 1f, 5f, margin);
-        Cell c17 = EasyComponentsFactory.getSimpleCellFromText("Fecha inicio pago", fuenteNormalNegrita, width1, 1f, 5f, margin);
-        Cell c18 = EasyComponentsFactory.getSimpleCellFromText("Fecha fin pago", fuenteNormalNegrita, width1, 1f, 5f, margin);
+        Cell c11 = EasyComponentsFactory.getSimpleCellFromText("RESUMEN DE DATOS" , fuenteTituloTabla, width1 + width2, 1f, 5f, Alignment.CENTER, margin);
+        Cell c12 = EasyComponentsFactory.getSimpleCellFromText("Capital a pagar"  , fuenteMenorNegrita, width1, 1f, 5f, margin);
+        Cell c13 = EasyComponentsFactory.getSimpleCellFromText("Interes a pagar"  , fuenteMenorNegrita, width1, 1f, 5f, margin);
+        Cell c14 = EasyComponentsFactory.getSimpleCellFromText("Seg. desgravamen" , fuenteMenorNegrita, width1, 1f, 5f, margin);
+        Cell c15 = EasyComponentsFactory.getSimpleCellFromText("CIP"              , fuenteMenorNegrita, width1, 1f, 5f, margin);
+        Cell c16 = EasyComponentsFactory.getSimpleCellFromText("Total a pagar"    , fuenteMenorNegrita, width1, 1f, 5f, margin);
+        Cell c17 = EasyComponentsFactory.getSimpleCellFromText("Fecha inicio pago", fuenteMenorNegrita, width1, 1f, 5f, margin);
+        Cell c18 = EasyComponentsFactory.getSimpleCellFromText("Fecha fin pago"   , fuenteMenorNegrita, width1, 1f, 5f, margin);
 
-        Cell c22 = EasyComponentsFactory.getSimpleCellFromText(capitalAPagar, fuenteNormal, width2, 1f, 5f, margin);
-        Cell c23 = EasyComponentsFactory.getSimpleCellFromText(interesAPagar, fuenteNormal, width2, 1f, 5f, margin);
-        Cell c24 = EasyComponentsFactory.getSimpleCellFromText(segDesgravamen, fuenteNormal, width2, 1f, 5f, margin);
-        Cell c25 = EasyComponentsFactory.getSimpleCellFromText(cip, fuenteNormal, width2, 1f, 5f, margin);
-        Cell c26 = EasyComponentsFactory.getSimpleCellFromText(totalAPagar, fuenteNormal, width2, 1f, 5f, margin);
-        Cell c27 = EasyComponentsFactory.getSimpleCellFromText(fechaInicio, fuenteNormal, width2, 1f, 5f, margin);
-        Cell c28 = EasyComponentsFactory.getSimpleCellFromText(fechaFin, fuenteNormal, width2, 1f, 5f, margin);
+        Cell c22 = EasyComponentsFactory.getSimpleCellFromText(capitalAPagar , fuenteMenorEspaciado, width2, 1f, 5f, margin);
+        Cell c23 = EasyComponentsFactory.getSimpleCellFromText(interesAPagar , fuenteMenorEspaciado, width2, 1f, 5f, margin);
+        Cell c24 = EasyComponentsFactory.getSimpleCellFromText(segDesgravamen, fuenteMenorEspaciado, width2, 1f, 5f, margin);
+        Cell c25 = EasyComponentsFactory.getSimpleCellFromText(cip           , fuenteMenorEspaciado, width2, 1f, 5f, margin);
+        Cell c26 = EasyComponentsFactory.getSimpleCellFromText(totalAPagar   , fuenteMenorEspaciado, width2, 1f, 5f, margin);
+        Cell c27 = EasyComponentsFactory.getSimpleCellFromText(fechaInicio   , fuenteMenorEspaciado, width2, 1f, 5f, margin);
+        Cell c28 = EasyComponentsFactory.getSimpleCellFromText(fechaFin      , fuenteMenorEspaciado, width2, 1f, 5f, margin);
 
         float auxY = maxY - initY;
 

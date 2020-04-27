@@ -60,10 +60,10 @@ public class FormularioInformacionPerfil {
         PDPageContentStream contentStream = new PDPageContentStream(doc, page);
         List<PDPageContentStream> contentStreams = new LinkedList<>();
 
-        GeneradorFormularioFactory.crearCabecera(contentStream,doc, Model1.MODEL_1);
-        GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Model1.MODEL_1);
-        GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Model1.MODEL_1);
-        GeneradorFormularioFactory.crearTitulo(contentStream,"INFORMACION DE PERMISOS\nPOR PERFIL", Model1.MODEL_1);
+        GeneradorFormularioFactory.crearCabecera(contentStream,doc, Models.MODEL_1, Style.getStyle(fontGroup,StyleEnum.HEADER));
+        GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Models.MODEL_1, Style.getStyle(fontGroup,StyleEnum.OWNER));
+        GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Models.MODEL_1, Style.getStyle(fontGroup,StyleEnum.OWNER_BOLD),Style.getStyle(fontGroup,StyleEnum.OWNER));
+        GeneradorFormularioFactory.crearTitulo(contentStream,"INFORMACION DE PERMISOS\nPOR PERFIL", Models.MODEL_1, Style.getStyle(fontGroup,StyleEnum.TITLE));
 
         crearSubTitulosPerfil(contentStream);
         crearDatosPerfil(contentStream,perfil);
@@ -76,8 +76,8 @@ public class FormularioInformacionPerfil {
                 perfil);
 
         for(PDPageContentStream contentStream1 : contentStreams){
-            GeneradorFormularioFactory.crearMargen(contentStream1, Model1.MODEL_1);
-            GeneradorFormularioFactory.crearInfo(contentStream1,sucursal, Model1.MODEL_1);
+            GeneradorFormularioFactory.crearMargen(contentStream1, Models.MODEL_1);
+            GeneradorFormularioFactory.crearInfo(contentStream1,sucursal, Models.MODEL_1, Style.getStyle(fontGroup,StyleEnum.FOOTER));
         }
 
         for(PDPageContentStream e : contentStreams)
@@ -174,7 +174,7 @@ public class FormularioInformacionPerfil {
         List<Column> bodyColumns = new LinkedList<>();
 
         for (List<String> auxList : listOfList)
-            bodyColumns.add(EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyle(auxList, widths, fuenteNormal, Alignment.LEFT));
+            bodyColumns.add(EasyComponentsFactory.getSimpleColumnFromTextAndWithsAndStyle(auxList, widths, fuenteNormalEspaciada, Alignment.LEFT));
 
         List<RecursiveTable> tables = EasyComponentsFactory.getHeaderTable(
                 marginStartX + thickness, maxY - 345, maxY - 40, headerColumn, anotherHeaderColumn, bodyColumns, 45);

@@ -51,12 +51,12 @@ public class FormularioInformacionUsuario {
         fuenteNormalNegrita   = Style.getStyle(fontGroup, StyleEnum.DATA_BOLD);
         fuenteNormalEspaciada = Style.getStyle(fontGroup, StyleEnum.DATA_NORMAL_SPACED);
 
-        GeneradorFormularioFactory.crearMargen(contentStream, Model1.MODEL_1);
-        GeneradorFormularioFactory.crearCabecera(contentStream,doc, Model1.MODEL_1);
-        GeneradorFormularioFactory.crearInfo(contentStream,sucursal, Model1.MODEL_1);
-        GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Model1.MODEL_1);
-        GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Model1.MODEL_1);
-        GeneradorFormularioFactory.crearTitulo(contentStream,"DATOS DE REGISTRO\nDE USUARIO DEL SISTEMA", Model1.MODEL_1);
+        GeneradorFormularioFactory.crearMargen(contentStream, Models.MODEL_1);
+        GeneradorFormularioFactory.crearCabecera(contentStream,doc, Models.MODEL_1, Style.getStyle(fontGroup,StyleEnum.HEADER));
+        GeneradorFormularioFactory.crearInfo(contentStream,sucursal, Models.MODEL_1, Style.getStyle(fontGroup,StyleEnum.FOOTER));
+        GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Models.MODEL_1, Style.getStyle(fontGroup,StyleEnum.OWNER));
+        GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Models.MODEL_1, Style.getStyle(fontGroup,StyleEnum.OWNER_BOLD),Style.getStyle(fontGroup,StyleEnum.OWNER));
+        GeneradorFormularioFactory.crearTitulo(contentStream,"DATOS DE REGISTRO\nDE USUARIO DEL SISTEMA", Models.MODEL_1, Style.getStyle(fontGroup,StyleEnum.TITLE));
 
         crearSubTituloUsuario(contentStream);
         crearFechaRegistroUsuario(contentStream, usuarioEditado);

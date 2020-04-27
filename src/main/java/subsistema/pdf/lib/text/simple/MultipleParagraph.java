@@ -90,9 +90,9 @@ public class MultipleParagraph implements Component {
     public void draw(PDPageContentStream contentStream) throws IOException {
         for(Paragraph paragraph : paragraphs)
             paragraph.draw(contentStream);
-        contentStream.setStrokingColor(Color.ORANGE);
-        contentStream.addRect(startX,startY,width,height);
-        contentStream.stroke();
+        //contentStream.setStrokingColor(Color.ORANGE);
+        //contentStream.addRect(startX,startY,width,height);
+        //contentStream.stroke();
     }
 
     public static class MultipleParagraphBuilder{

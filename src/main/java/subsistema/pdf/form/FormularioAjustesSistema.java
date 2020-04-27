@@ -52,12 +52,12 @@ public class FormularioAjustesSistema {
 		doc.addPage(page);
 		PDPageContentStream contentStream = new PDPageContentStream(doc, page);
 
-		GeneradorFormularioFactory.crearMargen(contentStream, Model1.MODEL_1);
-		GeneradorFormularioFactory.crearCabecera(contentStream,doc, Model1.MODEL_1);
-		GeneradorFormularioFactory.crearInfo(contentStream,sucursal, Model1.MODEL_1);
-		GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Model1.MODEL_1);
-		GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Model1.MODEL_1);
-		GeneradorFormularioFactory.crearTitulo(contentStream,"AJUSTES DEL SISTEMA", Model1.MODEL_1);
+		GeneradorFormularioFactory.crearMargen(contentStream, Models.MODEL_1);
+		GeneradorFormularioFactory.crearCabecera(contentStream,doc, Models.MODEL_1, Style.getStyle(fontGroup,StyleEnum.HEADER));
+		GeneradorFormularioFactory.crearInfo(contentStream,sucursal, Models.MODEL_1, Style.getStyle(fontGroup,StyleEnum.FOOTER));
+		GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Models.MODEL_1,Style.getStyle(fontGroup,StyleEnum.OWNER));
+		GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Models.MODEL_1,Style.getStyle(fontGroup,StyleEnum.OWNER_BOLD),Style.getStyle(fontGroup,StyleEnum.OWNER));
+		GeneradorFormularioFactory.crearTitulo(contentStream,"AJUSTES DEL SISTEMA", Models.MODEL_1, Style.getStyle(fontGroup,StyleEnum.TITLE));
 
 		crearSubTituloAjustesSistema(contentStream);
 		crearDatosAjustesSistema(contentStream,ajustes);

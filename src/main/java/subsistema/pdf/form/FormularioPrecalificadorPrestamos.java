@@ -59,12 +59,12 @@ public class FormularioPrecalificadorPrestamos {
 		doc.addPage(page);
 		PDPageContentStream contentStream = new PDPageContentStream(doc, page);
 
-		GeneradorFormularioFactory.crearMargen(contentStream, Model1.MODEL_2);
-		GeneradorFormularioFactory.crearCabecera(contentStream,doc, Model1.MODEL_2);
-		GeneradorFormularioFactory.crearInfo(contentStream,sucursal, Model1.MODEL_2);
-		GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Model1.MODEL_2);
-		GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Model1.MODEL_2);
-		GeneradorFormularioFactory.crearTitulo(contentStream,"PRECALIFICADOR DE PRESTAMOS", Model1.MODEL_2);
+		GeneradorFormularioFactory.crearMargen(contentStream, Models.MODEL_2);
+		GeneradorFormularioFactory.crearCabecera(contentStream,doc, Models.MODEL_2,  Style.getStyle(fontGroup,StyleEnum.HEADER));
+		GeneradorFormularioFactory.crearInfo(contentStream,sucursal, Models.MODEL_2,  Style.getStyle(fontGroup,StyleEnum.FOOTER));
+		GeneradorFormularioFactory.crearFechaExportacion(contentStream,fechaExportacion, Models.MODEL_2,  Style.getStyle(fontGroup,StyleEnum.OWNER));
+		GeneradorFormularioFactory.crearUsuarioExportador(contentStream,usuarioEditor, Models.MODEL_2,  Style.getStyle(fontGroup,StyleEnum.OWNER_BOLD), Style.getStyle(fontGroup,StyleEnum.OWNER));
+		GeneradorFormularioFactory.crearTitulo(contentStream,"PRECALIFICADOR DE PRESTAMOS", Models.MODEL_2,  Style.getStyle(fontGroup,StyleEnum.TITLE));
 
 		crearPlanPagosSeccionDictamen(contentStream, dictamen);
 		crearPrecalicacionSeccionDictamen(contentStream, dictamen);

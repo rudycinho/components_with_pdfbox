@@ -42,7 +42,7 @@ public class Model {
         model.thickness    = Data.THICKNESS_MODEL_WIDE;
         model.marginStartX = Data.MARGIN_START_X_MODEL_WIDE;
         model.marginEndX   = Data.MARGIN_END_X_MODEL_WIDE;
-        model.font         = Data.FONT_COURIER;
+        model.font         = Data.FONT_ARIAL;
         return model;
     }
     public static Model getModel2(){
@@ -52,7 +52,7 @@ public class Model {
         model.thickness    = Data.THICKNESS_MODEL_WIDE;
         model.marginStartX = Data.MARGIN_START_X_MODEL_NARROW;
         model.marginEndX   = Data.MARGIN_END_X_MODEL_WIDE;
-        model.font         = Data.FONT_COURIER;
+        model.font         = Data.FONT_ARIAL;
         return model;
     }
     public static Model getModel3(){
@@ -62,7 +62,7 @@ public class Model {
         model.thickness    = Data.THICKNESS_MODEL_WIDE;
         model.marginStartX = Data.MARGIN_START_X_MODEL_WIDE;
         model.marginEndX   = Data.MARGIN_END_X_MODEL_WIDE;
-        model.font         = Data.FONT_COURIER;
+        model.font         = Data.FONT_ARIAL;
         return model;
     }
 
